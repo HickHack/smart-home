@@ -17,12 +17,14 @@ public class JacuzziService implements JacuzziServerListener {
     private int port;
     private JacuzziServer server;
     private JacuzziController controller;
+    private JacuzziServiceDiscovery serviceDiscovery;
     private Gson gson;
 
     public JacuzziService(int port) {
         this.port = port;
         server = new JacuzziServer(port);
         controller = new JacuzziController();
+        serviceDiscovery = new JacuzziServiceDiscovery();
         gson = new Gson();
     }
 

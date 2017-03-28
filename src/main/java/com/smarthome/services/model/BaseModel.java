@@ -9,10 +9,8 @@ public class BaseModel {
     private long UUID;
     private String serviceName;
 
-    public BaseModel(int servicePort, long UUID, String serviceName) {
-        this.servicePort = servicePort;
-        this.UUID = UUID;
-        this.serviceName = serviceName;
+    public BaseModel() {
+
     }
 
     public long getUUID() {
@@ -25,5 +23,17 @@ public class BaseModel {
 
     public String getServiceName() {
         return serviceName;
+    }
+
+    public void setServicePort(int servicePort) {
+        this.servicePort = servicePort;
+    }
+
+    public void setUUID(long UUID) {
+        this.UUID = UUID;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
     }
 }

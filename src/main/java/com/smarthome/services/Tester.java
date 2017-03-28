@@ -21,7 +21,7 @@ public class Tester {
     }
 
     public static void connectToService(int port) throws IOException {
-        ServiceRequestModel request = new ServiceRequestModel(2, "Tester", 1);
+        ServiceRequestModel request = new ServiceRequestModel(0, "Tester", 1);
         String json = gson.toJson(request);
 
         Socket clientSocket = new Socket("localhost", port);

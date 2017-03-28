@@ -6,16 +6,20 @@ package com.smarthome.services.model;
  */
 public class JacuzziModel extends BaseModel {
 
-    private static int servicePort = 9090;
+    private static int PORT = 9090;
     private static long UUID = 1;
-    private static String serviceName = "Jacuzzi_Service";
+    private static String NAME = "Jacuzzi_Service";
     private int waterDepth;
     private boolean isWaterRunning;
     private boolean isJetsRunning;
     private int jetPower;
 
     public JacuzziModel() {
-        super(servicePort, UUID, serviceName);
+
+        super();
+        setServiceName(NAME);
+        setServicePort(PORT);
+        setUUID(UUID);
     }
 
     public void setWaterDepth(int waterDepth) {
