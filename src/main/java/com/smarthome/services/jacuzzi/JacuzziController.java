@@ -17,48 +17,6 @@ public class JacuzziController {
         model = new JacuzziModel();
     }
 
-    public void turnWaterOn() {
-        if (model.getWaterDepth() == 0 && !model.isWaterRunning()) {
-            model.setWaterDepth(80);
-            model.setWaterRunning(true);
-            turnJetsOn();
-        }
-    }
-
-    public void turnWaterOff() {
-        if (model.isWaterRunning()) {
-            model.setWaterDepth(0);
-            model.setWaterRunning(false);
-            turnJetsOff();
-        }
-    }
-
-    public void turnJetsOn() {
-        if (!model.isJetsRunning() && model.getWaterDepth()> 0) {
-            model.setJetPower(40);
-            model.setJetsRunning(true);
-        }
-    }
-
-    public void turnJetsOff() {
-        if (model.isJetsRunning()) {
-            model.setJetPower(0);
-            model.setJetsRunning(false);
-        }
-    }
-
-    public void increaseJetPower() {
-        if (model.getJetPower() < 100 && model.isJetsRunning() && model.getWaterDepth() > 0) {
-            model.setJetPower(model.getJetPower() + 20);
-        }
-    }
-
-    public void decreaseJetPower() {
-        if (model.getJetPower() > 0) {
-            model.setJetPower(model.getJetPower() - 20);
-        }
-    }
-
     public ServiceResponseModel performOperation(ServiceRequestModel request) {
         switch (request.getOperation()) {
             case 0:
@@ -85,5 +43,47 @@ public class JacuzziController {
         }
 
         return new ServiceResponseModel(model);
+    }
+
+    private void turnWaterOn() {
+        if (model.getWaterDepth() == 0 && !model.isWaterRunning()) {
+            model.setWaterDepth(80);
+            model.setWaterRunning(true);
+            turnJetsOn();
+        }
+    }
+
+    private void turnWaterOff() {
+        if (model.isWaterRunning()) {
+            model.setWaterDepth(0);
+            model.setWaterRunning(false);
+            turnJetsOff();
+        }
+    }
+
+    private void turnJetsOn() {
+        if (!model.isJetsRunning() && model.getWaterDepth()> 0) {
+            model.setJetPower(40);
+            model.setJetsRunning(true);
+        }
+    }
+
+    private void turnJetsOff() {
+        if (model.isJetsRunning()) {
+            model.setJetPower(0);
+            model.setJetsRunning(false);
+        }
+    }
+
+    private void increaseJetPower() {
+        if (model.getJetPower() < 100 && model.isJetsRunning() && model.getWaterDepth() > 0) {
+            model.setJetPower(model.getJetPower() + 20);
+        }
+    }
+
+    private void decreaseJetPower() {
+        if (model.getJetPower() > 0) {
+            model.setJetPower(model.getJetPower() - 20);
+        }
     }
 }
