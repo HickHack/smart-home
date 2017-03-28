@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>smart-home-project</groupId>
-    <artifactId>smart-home</artifactId>
+    <artifactId>jacuzzi-service</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <properties>
