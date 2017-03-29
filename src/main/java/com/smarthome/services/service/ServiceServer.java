@@ -1,4 +1,4 @@
-package com.smarthome.services.jacuzzi;
+package com.smarthome.services.service;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -10,18 +10,16 @@ import java.util.List;
  * @author Graham Murray
  * @descripion Jacuzzi service server
  *
- * The event listener implementation using the observer pattern
- *  is based on http://stackoverflow.com/questions/6270132/create-a-custom-event-in-java
  */
-public class JacuzziServer {
+public class ServiceServer {
 
     private ServerSocket listener;
     private Socket socket;
-    private List<JacuzziServerListener> listeners;
+    private List<ServiceServerListener> listeners;
     private String request;
     private int port;
 
-    public JacuzziServer(int port) {
+    public ServiceServer(int port) {
         this.port = port;
         listeners = new ArrayList<>();
         request = "";
@@ -60,7 +58,7 @@ public class JacuzziServer {
         return request;
     }
 
-    public void addListener(JacuzziServerListener listener) {
+    public void addListener(ServiceServerListener listener) {
         listeners.add(listener);
     }
 
@@ -98,7 +96,7 @@ public class JacuzziServer {
     }
 
     private void notifyListeners() {
-        for (JacuzziServerListener listener : listeners) {
+        for (ServiceServerListener listener : listeners) {
             respond(listener.processRequest());
         }
     }

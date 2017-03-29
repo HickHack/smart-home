@@ -1,4 +1,4 @@
-package com.smarthome.services.jacuzzi;
+package com.smarthome.services.service;
 
 /**
  * @author Graham Murray
@@ -6,6 +6,6 @@ package com.smarthome.services.jacuzzi;
  * that a message has been received so it can process it so the server can process
  * a response
  */
-public interface JacuzziServerListener {
+public interface ServiceServerListener {
     String processRequest();
 }
