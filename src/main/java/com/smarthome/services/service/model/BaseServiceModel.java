@@ -1,15 +1,15 @@
-package com.smarthome.services.model;
+package com.smarthome.services.service.model;
 
 /**
  * Created by graham on 28/03/17.
  */
-public class BaseModel {
+public class BaseServiceModel {
 
     private int servicePort;
     private long UUID;
     private String serviceName;
 
-    public BaseModel() {
+    public BaseServiceModel() {
 
     }
 

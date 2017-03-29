@@ -1,10 +1,12 @@
-package com.smarthome.services.model;
+package com.smarthome.services.jacuzzi.model;
+
+import com.smarthome.services.service.model.BaseServiceModel;
 
 /**
  * @author Graham Murray
  * @descripion Jacuzzi service controller
  */
-public class JacuzziModel extends BaseModel {
+public class JacuzziModel extends BaseServiceModel {
 
     private static int PORT = 9090;
     private static long UUID = 1;

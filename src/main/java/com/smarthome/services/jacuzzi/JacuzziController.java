@@ -1,15 +1,16 @@
 package com.smarthome.services.jacuzzi;
 
-import com.smarthome.services.model.JacuzziModel;
-import com.smarthome.services.model.ServiceRequestModel;
-import com.smarthome.services.model.ServiceResponseModel;
+import com.smarthome.services.jacuzzi.model.JacuzziModel;
+import com.smarthome.services.service.ServiceController;
+import com.smarthome.services.service.ServiceOperation;
+import com.smarthome.services.service.ServiceResponse;
 
 /**
  * @author Graham Murray
  * @descripion Jacuzzi service controller. This class holds the logic for
  * handling an operation and manipulating the jacuzzi.
  */
-public class JacuzziController {
+public class JacuzziController implements ServiceController {
 
     private JacuzziModel model;
 
@@ -17,8 +18,9 @@ public class JacuzziController {
         model = new JacuzziModel();
     }
 
-    public ServiceResponseModel performOperation(ServiceRequestModel request) {
-        switch (request.getOperation()) {
+    @Override
+    public ServiceResponse performOperation(ServiceOperation operation) {
+        switch (operation.getOperationCode()) {
             case 0:
                 turnWaterOn();
                 break;
@@ -42,7 +44,7 @@ public class JacuzziController {
 
         }
 
-        return new ServiceResponseModel(model);
+        return new ServiceResponse(model);
     }
 
     private void turnWaterOn() {
