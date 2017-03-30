@@ -17,47 +17,60 @@ import java.util.List;
  */
 public class DNSServiceDiscovery {
 
-    private Listener serviceListener;
+    private List<DNSListener> listeners;
 
-    public DNSServiceDiscovery(ServiceRequest serviceRequest) {
-        serviceListener = new Listener();
-        setup();
+    public DNSServiceDiscovery() {
+        listeners = new ArrayList<>();
     }
 
-    public ServiceInfo getServiceInfo(String serviceName) {
-        return serviceListener.getServiceByName(serviceName);
+    public ServiceInfo getServiceInfo(ServiceType serviceType) {
+        for (DNSListener listener : listeners) {
+            if (listener.doesServiceExist(serviceType)) {
+                return listener.getServiceByType(serviceType);
+            }
+        }
+
+        return null;
     }
 
-    public boolean doesServiceExist(String serviceName) {
-        return serviceListener.doesServiceExist(serviceName);
+    public boolean hasDiscoveredService(ServiceType serviceType) {
+        for (DNSListener listener : listeners) {
+            if (listener.doesServiceExist(serviceType)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    private void setup() {
+    public void addServiceListener(ServiceType serviceType) {
         try {
             JmDNS jmdns = JmDNS.create(InetAddress.getLocalHost());
 
             // Add a service listener
-            jmdns.addServiceListener("_smart_home._tcp.local.", serviceListener);
-
-        } catch (UnknownHostException e) {
+            DNSListener listener = new DNSListener();
+            jmdns.addServiceListener(serviceType.toString(), listener);
+            listeners.add(listener);
+            Thread.sleep(9000);
+        } catch (UnknownHostException | InterruptedException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static class Listener implements ServiceListener {
+    private static class DNSListener implements ServiceListener {
 
         private List<ServiceInfo> services;
 
-        public Listener() {
+        public DNSListener() {
             services = new ArrayList<>();
         }
 
-        public ServiceInfo getServiceByName(String serviceName) {
+        public ServiceInfo getServiceByType(ServiceType serviceType) {
 
             for (ServiceInfo service : services) {
-                if (service.getName().equals(serviceName)) {
+                if (service.getType().equals(serviceType.toString())) {
                     return service;
                 }
             }
@@ -67,12 +80,12 @@ public class DNSServiceDiscovery {
 
         @Override
         public void serviceAdded(ServiceEvent event) {
-            addService(event.getInfo());
+            System.out.println("Service added " + event.getInfo().getName());
         }
 
         @Override
         public void serviceRemoved(ServiceEvent event) {
-            removeService(event.getInfo().getName());
+            removeService(ServiceType.valueOf(event.getInfo().getType()));
         }
 
         @Override
@@ -82,17 +95,17 @@ public class DNSServiceDiscovery {
 
         private void addService(ServiceInfo serviceInfo) {
 
-            if (!doesServiceExist(serviceInfo.getName())) {
+            if (!doesServiceExist(ServiceType.fromString(serviceInfo.getType()))) {
                 services.add(serviceInfo);
             }
         }
 
-        private void removeService(String serviceName) {
+        private void removeService(ServiceType serviceType) {
             int position = 0;
 
-            if (doesServiceExist(serviceName)) {
+            if (doesServiceExist(serviceType)) {
                 for(ServiceInfo discoveredService : services) {
-                    if (discoveredService.getName().equals(serviceName)) {
+                    if (discoveredService.getType().equals(serviceType.toString())) {
                         services.remove(position);
                     }
 
@@ -101,10 +114,10 @@ public class DNSServiceDiscovery {
             }
         }
 
-        private boolean doesServiceExist(String serviceName) {
+        private boolean doesServiceExist(ServiceType serviceType) {
 
-            for(ServiceInfo discoveredService : services) {
-                if (discoveredService.getName().equals(serviceName)) {
+             for(ServiceInfo discoveredService : services) {
+                if (discoveredService.getType().equals(serviceType.toString())) {
                     return true;
                 }
             }

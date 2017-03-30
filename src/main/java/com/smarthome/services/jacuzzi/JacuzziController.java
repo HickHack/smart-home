@@ -1,9 +1,9 @@
 package com.smarthome.services.jacuzzi;
 
 import com.smarthome.services.jacuzzi.model.JacuzziModel;
-import com.smarthome.services.service.ServiceController;
-import com.smarthome.services.service.ServiceOperation;
-import com.smarthome.services.service.ServiceResponse;
+import com.smarthome.services.service.*;
+
+import javax.jmdns.ServiceInfo;
 
 /**
  * @author Graham Murray
@@ -13,8 +13,10 @@ import com.smarthome.services.service.ServiceResponse;
 public class JacuzziController implements ServiceController {
 
     private JacuzziModel model;
+    private TCPService service;
 
-    public JacuzziController() {
+    public JacuzziController(TCPService service) {
+        this.service = service;
         model = new JacuzziModel();
     }
 
@@ -52,6 +54,8 @@ public class JacuzziController implements ServiceController {
             model.setWaterDepth(80);
             model.setWaterRunning(true);
             turnJetsOn();
+            String response = service.connectToService(new ServiceOperation(0), ServiceType.LIGHTING);
+            System.out.println(response);
         }
     }
 

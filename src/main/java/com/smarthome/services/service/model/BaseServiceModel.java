@@ -6,15 +6,10 @@ package com.smarthome.services.service.model;
 public class BaseServiceModel {
 
     private int servicePort;
-    private long UUID;
     private String serviceName;
 
     public BaseServiceModel() {
 
-    }
-
-    public long getUUID() {
-        return UUID;
     }
 
     public int getServicePort() {
@@ -27,10 +22,6 @@ public class BaseServiceModel {
 
     public void setServicePort(int servicePort) {
         this.servicePort = servicePort;
-    }
-
-    public void setUUID(long UUID) {
-        this.UUID = UUID;
     }
 
     public void setServiceName(String serviceName) {
