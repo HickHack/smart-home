@@ -52,9 +52,7 @@ public class DNSServiceDiscovery {
             jmdns.addServiceListener(serviceType.toString(), listener);
             listeners.add(listener);
             Thread.sleep(9000);
-        } catch (UnknownHostException | InterruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (InterruptedException | IOException e) {
             e.printStackTrace();
         }
     }

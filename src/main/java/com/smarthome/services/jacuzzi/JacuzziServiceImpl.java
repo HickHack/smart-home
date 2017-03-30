@@ -9,11 +9,12 @@ import com.smarthome.services.service.*;
 public class JacuzziServiceImpl implements Service {
 
     private TCPService tcpService;
+    String name;
+    int port;
 
     public JacuzziServiceImpl(String name, int port) {
-        tcpService = new TCPServiceImpl(name, port, ServiceType.JACUZZI);
-        tcpService.addSubscriber(ServiceType.LIGHTING);
-        tcpService.setController(new JacuzziControllerImpl(tcpService));
+        this.name = name;
+        this.port = port;
     }
 
     @Override
@@ -23,11 +24,16 @@ public class JacuzziServiceImpl implements Service {
 
     @Override
     public void start() {
-        tcpService.start();
+        if (tcpService != null) {
+            tcpService.start();
+        }
     }
 
-    public static void main(String[] args) {
-        JacuzziServiceImpl jacuzziService = new JacuzziServiceImpl("Jacuzzi_Service1", 9090);
-        jacuzziService.start();
+    @Override
+    public void run() {
+        tcpService = new TCPServiceImpl(name, port, ServiceType.JACUZZI);
+        tcpService.addSubscriber(ServiceType.LIGHTING);
+        tcpService.setController(new JacuzziControllerImpl(tcpService));
+        start();
     }
 }

@@ -7,7 +7,7 @@ import javax.jmdns.ServiceInfo;
 /**
  * Created by graham on 30/03/17.
  */
-public class TCPServiceImpl implements TCPService, ServiceServerListener {
+public class TCPServiceImpl implements Runnable, TCPService, ServiceServerListener {
 
     private String name;
     private int port;
@@ -82,5 +82,10 @@ public class TCPServiceImpl implements TCPService, ServiceServerListener {
     public String processRequest() {
         ServiceOperation operation = gson.fromJson(server.getRequest(), ServiceOperation.class);
         return gson.toJson(controller.performOperation(operation));
+    }
+
+    @Override
+    public void run() {
+        start();
     }
 }

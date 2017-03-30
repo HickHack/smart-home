@@ -12,9 +12,6 @@ public enum ServiceType {
 
     private final String text;
 
-    /**
-     * @param text
-     */
     ServiceType(final String text) {
         this.text = text;
     }
