@@ -9,10 +9,13 @@ import com.smarthome.services.service.*;
 public class LightingServiceImpl implements Service {
 
     private TCPService tcpService;
+    String name;
+    int port;
+
 
     public LightingServiceImpl(String name, int port) {
-        tcpService = new TCPServiceImpl(name, port, ServiceType.LIGHTING);
-        tcpService.setController(new LightingControllerImpl(tcpService));
+       this.name = name;
+        this.port = port;
     }
 
     @Override
@@ -22,12 +25,15 @@ public class LightingServiceImpl implements Service {
 
     @Override
     public void start() {
-        tcpService.start();
+        if (tcpService != null) {
+            tcpService.start();
+        }
     }
 
-    public static void main(String[] args) {
-        LightingServiceImpl lightingService = new LightingServiceImpl("LightingService1", 9091);
-        lightingService.start();
+    @Override
+    public void run() {
+        tcpService = new TCPServiceImpl(name, port, ServiceType.LIGHTING);
+        tcpService.setController(new LightingControllerImpl(tcpService));
     }
 }
 

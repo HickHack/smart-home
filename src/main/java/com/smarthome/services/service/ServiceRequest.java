@@ -31,7 +31,7 @@ public class ServiceRequest {
         String json = gson.toJson(serviceOperation);
 
         try {
-            Socket clientSocket = new Socket("127.0.0.1", serviceInfo.getPort());
+            Socket clientSocket = new Socket(serviceInfo.getHostAddresses()[0], serviceInfo.getPort());
             DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
