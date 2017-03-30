@@ -1,7 +1,5 @@
 package com.smarthome.services.service;
 
-import com.smarthome.services.service.Service;
-
 /**
  * Created by graham on 29/03/17.
  */

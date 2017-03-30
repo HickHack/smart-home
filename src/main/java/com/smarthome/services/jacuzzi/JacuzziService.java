@@ -1,49 +1,33 @@
 package com.smarthome.services.jacuzzi;
 
-import com.google.gson.Gson;
 import com.smarthome.services.service.*;
 
 /**
  * @author Graham Murray
  * @descripion Jacuzzi service main entry point used for starting the service
  */
-public class JacuzziService implements Service, ServiceServerListener {
+public class JacuzziService implements Service {
 
-    private int port;
-    private ServiceServer server;
-    private JacuzziController controller;
-    private DNSServiceRegistry registry;
-    private Gson gson;
-    private DNSServiceDiscovery serviceDiscovery;
+    private TCPService tcpService;
 
-    public JacuzziService(int port) {
-        this.port = port;
-        server = new ServiceServer(port);
-        controller = new JacuzziController();
-        gson = new Gson();
-        registry = new DNSServiceRegistry();
+    public JacuzziService(String name, int port) {
+        tcpService = new TCPServiceImpl(name, port, ServiceType.JACUZZI);
+        tcpService.addSubscriber(ServiceType.LIGHTING);
+        tcpService.setController(new JacuzziController(tcpService));
     }
 
     @Override
-    public void launch() {
-        server.addListener(this);
-        register();
-        server.start();
+    public void stop() {
+        tcpService.stop();
     }
 
     @Override
-    public String processRequest() {
-        ServiceOperation operation = gson.fromJson(server.getRequest(), ServiceOperation.class);
-        return gson.toJson(controller.performOperation(operation));
-    }
-
-    @Override
-    public void register() {
-        registry.register("_smart_home._tcp.local.", "Jacuzzi_Service", port);
+    public void start() {
+        tcpService.start();
     }
 
     public static void main(String[] args) {
-        JacuzziService jacuzziService = new JacuzziService(9090);
-        jacuzziService.launch();
+        JacuzziService jacuzziService = new JacuzziService("Jacuzzi_Service1", 9090);
+        jacuzziService.start();
     }
 }

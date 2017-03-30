@@ -34,6 +34,7 @@ public class ServiceServer {
     }
 
     public void start() {
+        System.out.println("Starting server on port " + port);
         try {
             listen();
         } catch (IOException e) {

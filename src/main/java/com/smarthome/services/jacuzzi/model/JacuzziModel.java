@@ -9,7 +9,6 @@ import com.smarthome.services.service.model.BaseServiceModel;
 public class JacuzziModel extends BaseServiceModel {
 
     private static int PORT = 9090;
-    private static long UUID = 1;
     private static String NAME = "Jacuzzi_Service";
     private int waterDepth;
     private boolean isWaterRunning;
@@ -17,11 +16,9 @@ public class JacuzziModel extends BaseServiceModel {
     private int jetPower;
 
     public JacuzziModel() {
-
         super();
         setServiceName(NAME);
         setServicePort(PORT);
-        setUUID(UUID);
     }
 
     public void setWaterDepth(int waterDepth) {
