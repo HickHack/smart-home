@@ -39,9 +39,9 @@ public class TCPServiceImpl implements TCPService, ServiceServerListener {
 
     @Override
     public void start() {
+        register();
         server.addListener(this);
         server.start();
-        register();
     }
 
     @Override

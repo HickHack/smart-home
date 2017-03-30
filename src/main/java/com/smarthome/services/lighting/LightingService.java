@@ -13,7 +13,6 @@ public class LightingService implements Service {
 
     public LightingService(String name, int port) {
         tcpService = new TCPServiceImpl(name, port, ServiceType.LIGHTING);
-        tcpService.addSubscriber(ServiceType.LIGHTING);
         tcpService.setController(new JacuzziController(tcpService));
     }
 

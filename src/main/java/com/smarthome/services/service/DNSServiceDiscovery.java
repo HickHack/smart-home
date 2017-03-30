@@ -17,14 +17,14 @@ import java.util.List;
  */
 public class DNSServiceDiscovery {
 
-    private List<Listener> listeners;
+    private List<DNSListener> listeners;
 
     public DNSServiceDiscovery() {
         listeners = new ArrayList<>();
     }
 
     public ServiceInfo getServiceInfo(ServiceType serviceType) {
-        for (Listener listener : listeners) {
+        for (DNSListener listener : listeners) {
             if (listener.doesServiceExist(serviceType)) {
                 return listener.getServiceByType(serviceType);
             }
@@ -34,7 +34,7 @@ public class DNSServiceDiscovery {
     }
 
     public boolean hasDiscoveredService(ServiceType serviceType) {
-        for (Listener listener : listeners) {
+        for (DNSListener listener : listeners) {
             if (listener.doesServiceExist(serviceType)) {
                 return true;
             }
@@ -48,7 +48,7 @@ public class DNSServiceDiscovery {
             JmDNS jmdns = JmDNS.create(InetAddress.getLocalHost());
 
             // Add a service listener
-            Listener listener = new Listener();
+            DNSListener listener = new DNSListener();
             jmdns.addServiceListener(serviceType.toString(), listener);
             listeners.add(listener);
             Thread.sleep(9000);
@@ -59,11 +59,11 @@ public class DNSServiceDiscovery {
         }
     }
 
-    private static class Listener implements ServiceListener {
+    private static class DNSListener implements ServiceListener {
 
         private List<ServiceInfo> services;
 
-        public Listener() {
+        public DNSListener() {
             services = new ArrayList<>();
         }
 
