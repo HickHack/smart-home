@@ -6,7 +6,6 @@ import javax.jmdns.ServiceInfo;
 import javax.jmdns.ServiceListener;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,7 +113,7 @@ public class DNSServiceDiscovery {
 
         private boolean doesServiceExist(ServiceType serviceType) {
 
-             for(ServiceInfo discoveredService : services) {
+            for(ServiceInfo discoveredService : services) {
                 if (discoveredService.getType().equals(serviceType.toString())) {
                     return true;
                 }
