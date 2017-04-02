@@ -30,20 +30,20 @@ public class ServiceRequest {
         Gson gson = new Gson();
         String json = gson.toJson(serviceOperation);
 
-        try {
-            Socket clientSocket = new Socket(serviceInfo.getHostAddresses()[0], serviceInfo.getPort());
-            DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            try {
+                Socket clientSocket = new Socket(serviceInfo.getHostAddresses()[0], serviceInfo.getPort());
+                DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-            outputStream.writeBytes(json + '\n');
-            response = bufferedReader.readLine();
-            clientSocket.close();
+                outputStream.writeBytes(json + '\n');
+                response = bufferedReader.readLine();
+                clientSocket.close();
 
-            isSuccess = true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            isSuccess = false;
-        }
+                isSuccess = true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                isSuccess = false;
+            }
     }
 
     public boolean isSuccessful() {
