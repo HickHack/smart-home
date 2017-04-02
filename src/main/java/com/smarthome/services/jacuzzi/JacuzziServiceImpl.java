@@ -1,6 +1,9 @@
 package com.smarthome.services.jacuzzi;
 
-import com.smarthome.services.service.*;
+import com.smarthome.services.service.Service;
+import com.smarthome.services.service.ServiceType;
+import com.smarthome.services.service.TCPService;
+import com.smarthome.services.service.TCPServiceImpl;
 
 /**
  * @author Graham Murray
@@ -33,6 +36,7 @@ public class JacuzziServiceImpl implements Service {
     public void run() {
         tcpService = new TCPServiceImpl(name, port, ServiceType.JACUZZI);
         tcpService.addSubscriber(ServiceType.LIGHTING);
+        tcpService.addSubscriber(ServiceType.TELEVISION);
         tcpService.setController(new JacuzziControllerImpl(tcpService));
         start();
     }

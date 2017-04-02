@@ -1,6 +1,9 @@
 package com.smarthome.services.lighting;
 
-import com.smarthome.services.service.*;
+import com.smarthome.services.service.Service;
+import com.smarthome.services.service.ServiceType;
+import com.smarthome.services.service.TCPService;
+import com.smarthome.services.service.TCPServiceImpl;
 
 /**
  * @author Graham Murray
@@ -14,7 +17,7 @@ public class LightingServiceImpl implements Service {
 
 
     public LightingServiceImpl(String name, int port) {
-       this.name = name;
+        this.name = name;
         this.port = port;
     }
 
@@ -34,6 +37,7 @@ public class LightingServiceImpl implements Service {
     public void run() {
         tcpService = new TCPServiceImpl(name, port, ServiceType.LIGHTING);
         tcpService.setController(new LightingControllerImpl(tcpService));
+        start();
     }
 }
 

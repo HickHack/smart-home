@@ -3,8 +3,6 @@ package com.smarthome.services.lighting;
 import com.smarthome.services.lighting.model.LightingModel;
 import com.smarthome.services.service.*;
 
-import javax.jmdns.ServiceInfo;
-
 /**
  * @author Graham Murray
  * @descripion Jacuzzi service controller. This class holds the logic for
