@@ -51,7 +51,7 @@ public class DNSServiceDiscovery {
             DNSListener listener = new DNSListener();
             jmdns.addServiceListener(serviceType.toString(), listener);
             listeners.add(listener);
-            Thread.sleep(9000);
+            Thread.sleep(15000);
         } catch (InterruptedException | IOException e) {
             e.printStackTrace();
         }
