@@ -26,18 +26,25 @@ public class TelevisionControllerImpl implements ServiceController {
                 break;
             case 1:
                 turnTelevisionOff();
+                break;
             case 2:
                 turnMuteOn();
+                break;
             case 3:
                 turnMuteOff();
+                break;
             case 4:
                 decreaseVolume();
+                break;
             case 5:
                 increaseVolumne();
+                break;
             case 6:
                 decreaseScreenBrightness();
+                break;
             case 7:
                 increaseScreenBrightness();
+                break;
             default:
                 break;
 
