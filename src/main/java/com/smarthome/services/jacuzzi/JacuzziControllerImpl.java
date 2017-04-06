@@ -52,8 +52,8 @@ public class JacuzziControllerImpl implements ServiceController {
             model.setWaterDepth(80);
             model.setWaterRunning(true);
             turnJetsOn();
-            String response = service.connectToService(new ServiceOperation(0), ServiceType.LIGHTING);
-            System.out.println(response);
+            service.connectToService(new ServiceOperation(0), ServiceType.LIGHTING);
+            service.connectToService(new ServiceOperation(0), ServiceType.TELEVISION);
         }
     }
 
@@ -62,6 +62,8 @@ public class JacuzziControllerImpl implements ServiceController {
             model.setWaterDepth(0);
             model.setWaterRunning(false);
             turnJetsOff();
+            service.connectToService(new ServiceOperation(1), ServiceType.LIGHTING);
+            service.connectToService(new ServiceOperation(1), ServiceType.TELEVISION);
         }
     }
 
