@@ -6,8 +6,6 @@ package com.smarthome.services.service;
  * used to find other services.
  */
 public interface TCPService extends Service {
-    void stop();
-    void start();
     void register();
     void addSubscriber(ServiceType subscriberType);
     void setController(ServiceController controller);
