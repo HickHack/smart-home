@@ -90,7 +90,6 @@ public class ServiceServer {
             BufferedReader br = new BufferedReader(inputStreamReader);
             request = br.readLine();
 
-
             notifyListeners();
         } catch (IOException e) {
             e.printStackTrace();
