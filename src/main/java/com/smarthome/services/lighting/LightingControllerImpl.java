@@ -18,6 +18,7 @@ public class LightingControllerImpl implements ServiceController {
         model = new LightingModel();
     }
 
+    @Override
     public ServiceResponse performOperation(ServiceOperation request) {
         switch (request.getOperationCode()) {
             case 0:

@@ -7,7 +7,7 @@ import javax.jmdns.ServiceInfo;
 /**
  * Created by graham on 30/03/17.
  */
-public class TCPServiceImpl implements Runnable, TCPService, ServiceServerListener {
+public class TCPServiceImpl implements TCPService, ServiceServerListener {
 
     private String name;
     private int port;
