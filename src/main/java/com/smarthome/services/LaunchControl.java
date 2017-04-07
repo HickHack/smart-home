@@ -25,6 +25,8 @@ public class LaunchControl {
         launchTelevision();
         addSubscribers();
 
+        Thread.sleep(12000);
+
         testJacuzziService();
         testLightingService();
         testTelevisionService();
