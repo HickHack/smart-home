@@ -3,20 +3,17 @@ package com.smarthome.services.mediaplayer;
 import com.smarthome.services.mediaplayer.model.MediaplayerModel;
 import com.smarthome.services.mediaplayer.model.Playlist;
 import com.smarthome.services.service.*;
-import com.smarthome.services.television.model.TelevisionModel;
 
 /**
  * Created by Ian C on 06/04/2017.
  */
-public class MediaplayerControllerImpl implements ServiceController {
+public class MediaPlayerControllerImpl implements ServiceController {
 
     private MediaplayerModel mpModel;
-    private Service service;
     private int volumeLevel;
 
-    public MediaplayerControllerImpl(TCPService service) {
+    public MediaPlayerControllerImpl() {
         mpModel = new MediaplayerModel();
-        this.service = service;
     }
 
     @Override
@@ -24,21 +21,31 @@ public class MediaplayerControllerImpl implements ServiceController {
 
         switch (request.getOperationCode()) {
             case 0:
+                turnMediaPlayerOn();
                 break;
             case 1:
+                turnMediaPlayerOff();
                 break;
             case 2:
+                turnMuteOn();
                 break;
             case 3:
+                turnMuteOff();
                 break;
             case 4:
+                decreaseVolume();
                 break;
             case 5:
+                increaseVolume();
                 break;
             case 6:
+                previousTrack();
                 break;
             case 7:
+                nextTrack();
                 break;
+            case 8:
+                randomTrack();
             default:
                 break;
 
@@ -46,7 +53,7 @@ public class MediaplayerControllerImpl implements ServiceController {
         return new ServiceResponse(mpModel);
     }
 
-    private void turnMediaplayerOn() {
+    private void turnMediaPlayerOn() {
         if (!mpModel.isMediaplayerOn()) {
             mpModel.setMediaplayerOn(true);
             mpModel.setMuteOn(false);
@@ -54,7 +61,7 @@ public class MediaplayerControllerImpl implements ServiceController {
         }
     }
 
-    private void turnMediaplayerOff() {
+    private void turnMediaPlayerOff() {
         if (mpModel.isMediaplayerOn()) {
             mpModel.setMediaplayerOn(false);
             mpModel.setVolume(0);
@@ -88,7 +95,7 @@ public class MediaplayerControllerImpl implements ServiceController {
 
     }
 
-    private void increaseVolumne() {
+    private void increaseVolume() {
         if (mpModel.isMediaplayerOn() && mpModel.getVolume() < 100) {
 
             if (mpModel.getVolume() + 1 == 100) {
@@ -118,7 +125,7 @@ public class MediaplayerControllerImpl implements ServiceController {
             }
         }
 
-        mpModel.setTrack(mpModel.getTrack() - 1);
+        mpModel.setTrack(mpModel.getTrack() + 1);
     }
 
     private void randomTrack() {

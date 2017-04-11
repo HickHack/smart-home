@@ -15,7 +15,7 @@ public class ServiceServer {
 
     private ServerSocket listener;
     private Socket socket;
-    private List<ServiceServerListener> listeners;
+    private List<ServiceControllerListener> listeners;
     private String request;
     private int port;
 
@@ -59,7 +59,7 @@ public class ServiceServer {
         return request;
     }
 
-    public void addListener(ServiceServerListener listener) {
+    public void addListener(ServiceControllerListener listener) {
         listeners.add(listener);
     }
 
@@ -97,7 +97,7 @@ public class ServiceServer {
     }
 
     private void notifyListeners() {
-        for (ServiceServerListener listener : listeners) {
+        for (ServiceControllerListener listener : listeners) {
             respond(listener.processRequest());
         }
     }

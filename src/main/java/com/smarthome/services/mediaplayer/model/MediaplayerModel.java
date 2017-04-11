@@ -24,7 +24,7 @@ public class MediaplayerModel extends BaseServiceModel {
         setServicePort(PORT);
         setServiceName(NAME);
 
-        playlist = new Playlist();
+       // playlist = new Playlist();
     }
 
     public boolean isMediaplayerOn() {
