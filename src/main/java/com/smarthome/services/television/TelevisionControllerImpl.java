@@ -1,5 +1,7 @@
 package com.smarthome.services.television;
 
+import com.google.gson.Gson;
+import com.smarthome.services.mediaplayer.MediaPlayerServiceImpl;
 import com.smarthome.services.service.*;
 import com.smarthome.services.television.model.TelevisionModel;
 
@@ -10,7 +12,12 @@ public class TelevisionControllerImpl implements ServiceController {
 
     private TelevisionModel tvModel;
     private Service service;
+    MediaPlayerServiceImpl mp;
     private int volumeLevel;
+
+    MediaPlayerServiceImpl mediaPlayerService;
+    ServiceServer server;
+    Gson gson;
 
     public TelevisionControllerImpl(TCPService service) {
         tvModel = new TelevisionModel();
@@ -26,18 +33,25 @@ public class TelevisionControllerImpl implements ServiceController {
                 break;
             case 1:
                 turnTelevisionOff();
+                break;
             case 2:
                 turnMuteOn();
+                break;
             case 3:
                 turnMuteOff();
+                break;
             case 4:
                 decreaseVolume();
+                break;
             case 5:
                 increaseVolumne();
+                break;
             case 6:
                 decreaseScreenBrightness();
+                break;
             case 7:
                 increaseScreenBrightness();
+                break;
             default:
                 break;
 

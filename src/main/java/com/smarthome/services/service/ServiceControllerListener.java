@@ -6,6 +6,6 @@ package com.smarthome.services.service;
  * that a message has been received so it can process it so the server can process
  * a response
  */
-public interface ServiceServerListener {
+public interface ServiceControllerListener {
     String processRequest();
 }
