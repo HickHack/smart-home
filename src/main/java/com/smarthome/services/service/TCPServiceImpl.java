@@ -3,6 +3,8 @@ package com.smarthome.services.service;
 import com.google.gson.Gson;
 
 import javax.jmdns.ServiceInfo;
+import java.io.IOException;
+import java.net.ServerSocket;
 
 /**
  * Created by graham on 30/03/17.
@@ -19,16 +21,19 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
     private Gson gson;
 
     public TCPServiceImpl(String name,
-                          int port,
                           ServiceType serviceType) {
-        this.port = port;
-        this.name = name;
-        this.serviceType = serviceType;
-        server = new ServiceServer(port);
-        dnsServiceDiscovery = new DNSServiceDiscovery();
-        gson = new Gson();
+        try {
+            this.port = findAvailablePort();
+            this.name = name;
+            this.serviceType = serviceType;
+            server = new ServiceServer(port);
+            dnsServiceDiscovery = new DNSServiceDiscovery();
+            gson = new Gson();
 
-        registry = new DNSServiceRegistry();
+            registry = new DNSServiceRegistry();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -85,7 +90,25 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
     }
 
     @Override
+    public int getPort() {
+        return port;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
     public void run() {
         start();
+    }
+
+    private int findAvailablePort() throws IOException {
+        ServerSocket server = new ServerSocket(0);
+        int port = server.getLocalPort();
+        server.close();
+
+        return port;
     }
 }

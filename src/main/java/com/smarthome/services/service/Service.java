@@ -6,4 +6,5 @@ package com.smarthome.services.service;
 public interface Service extends Runnable {
     void stop();
     void start();
+    String getName();
 }

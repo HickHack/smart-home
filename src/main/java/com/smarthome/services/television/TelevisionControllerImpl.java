@@ -1,7 +1,5 @@
 package com.smarthome.services.television;
 
-import com.google.gson.Gson;
-import com.smarthome.services.mediaplayer.MediaPlayerServiceImpl;
 import com.smarthome.services.service.*;
 import com.smarthome.services.television.model.TelevisionModel;
 
@@ -12,15 +10,10 @@ public class TelevisionControllerImpl implements ServiceController {
 
     private TelevisionModel tvModel;
     private Service service;
-    MediaPlayerServiceImpl mp;
-    private int volumeLevel;
-
-    MediaPlayerServiceImpl mediaPlayerService;
-    ServiceServer server;
-    Gson gson;
+    private int previousVolumeLevel;
 
     public TelevisionControllerImpl(TCPService service) {
-        tvModel = new TelevisionModel();
+        tvModel = new TelevisionModel(service.getName(), service.getPort());
         this.service = service;
     }
 
@@ -78,7 +71,7 @@ public class TelevisionControllerImpl implements ServiceController {
     private void turnMuteOn() {
         if (tvModel.isTelevisionOn() && !tvModel.isMuteOn()) {
             tvModel.setMuteOn(true);
-            volumeLevel = tvModel.getVolume();
+            previousVolumeLevel = tvModel.getVolume();
             tvModel.setVolume(0);
         }
     }
@@ -86,7 +79,7 @@ public class TelevisionControllerImpl implements ServiceController {
     private void turnMuteOff() {
         if (tvModel.isTelevisionOn() && tvModel.isMuteOn()) {
             tvModel.setMuteOn(false);
-            tvModel.setVolume(volumeLevel);
+            tvModel.setVolume(previousVolumeLevel);
         }
     }
 

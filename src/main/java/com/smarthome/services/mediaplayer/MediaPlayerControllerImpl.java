@@ -1,7 +1,7 @@
 package com.smarthome.services.mediaplayer;
 
 import com.smarthome.services.mediaplayer.model.MediaplayerModel;
-import com.smarthome.services.mediaplayer.model.Playlist;
+import com.smarthome.services.mediaplayer.model.PlaylistModel;
 import com.smarthome.services.service.*;
 
 /**
@@ -13,7 +13,7 @@ public class MediaPlayerControllerImpl implements ServiceController {
     private int volumeLevel;
 
     public MediaPlayerControllerImpl() {
-        mpModel = new MediaplayerModel();
+        mpModel = new MediaplayerModel("");
     }
 
     @Override
@@ -130,7 +130,7 @@ public class MediaPlayerControllerImpl implements ServiceController {
 
     private void randomTrack() {
         if (mpModel.isMediaplayerOn()) {
-            Playlist playlist = new Playlist();
+            PlaylistModel playlist = new PlaylistModel();
             mpModel.setTrack(playlist.selectRandomTrack());
         }
     }

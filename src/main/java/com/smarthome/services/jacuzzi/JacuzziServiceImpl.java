@@ -13,11 +13,9 @@ public class JacuzziServiceImpl implements Service {
 
     private TCPService tcpService;
     String name;
-    int port;
 
-    public JacuzziServiceImpl(String name, int port) {
+    public JacuzziServiceImpl(String name) {
         this.name = name;
-        this.port = port;
     }
 
     @Override
@@ -33,8 +31,13 @@ public class JacuzziServiceImpl implements Service {
     }
 
     @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
     public void run() {
-        tcpService = new TCPServiceImpl(name, port, ServiceType.JACUZZI);
+        tcpService = new TCPServiceImpl(name, ServiceType.JACUZZI);
         tcpService.addSubscriber(ServiceType.LIGHTING);
         tcpService.addSubscriber(ServiceType.TELEVISION);
         tcpService.setController(new JacuzziControllerImpl(tcpService));
