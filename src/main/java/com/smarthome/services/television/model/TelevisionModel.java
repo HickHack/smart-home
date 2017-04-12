@@ -7,22 +7,17 @@ import com.smarthome.services.service.model.BaseServiceModel;
  */
 public class TelevisionModel extends BaseServiceModel {
 
-    private static int PORT = 9092;
-    private static String NAME = "Television_Service";
     private boolean isTelevisionOn;
     private boolean isMuteOn;
     private int volume;
     private int screenBrightness;
 
-    public TelevisionModel() {
-        super();
+    public TelevisionModel(String name, int port) {
+        super(name, port);
         isTelevisionOn = false;
         isMuteOn = false;
         volume = 0;
         screenBrightness = 0;
-
-        setServicePort(PORT);
-        setServiceName(NAME);
     }
 
     public void setVolume(int volume) {

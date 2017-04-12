@@ -9,11 +9,11 @@ import java.util.Random;
 /**
  * Created by Ian C on 07/04/2017.
  */
-public class Playlist {
+public class PlaylistModel {
 
     private List<Integer> tracks;
 
-    public Playlist() {
+    public PlaylistModel() {
         tracks = new ArrayList<>();
         populatePlaylist();
     }

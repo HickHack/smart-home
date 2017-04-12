@@ -14,9 +14,8 @@ public class TelevisionServiceImpl implements Service {
     String name;
     int port;
 
-    public TelevisionServiceImpl(String name, int port) {
+    public TelevisionServiceImpl(String name) {
         this.name = name;
-        this.port = port;
     }
 
     @Override
@@ -32,8 +31,13 @@ public class TelevisionServiceImpl implements Service {
     }
 
     @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
     public void run() {
-        tcpService = new TCPServiceImpl(name, port, ServiceType.TELEVISION);
+        tcpService = new TCPServiceImpl(name, ServiceType.TELEVISION);
         tcpService.setController(new TelevisionControllerImpl(tcpService));
         start();
     }

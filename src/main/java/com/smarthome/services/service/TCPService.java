@@ -9,5 +9,6 @@ public interface TCPService extends Service {
     void register();
     void addSubscriber(ServiceType subscriberType);
     void setController(ServiceController controller);
+    int getPort();
     String connectToService(ServiceOperation operation, ServiceType serviceType);
 }

@@ -8,17 +8,13 @@ import com.smarthome.services.service.model.BaseServiceModel;
  */
 public class JacuzziModel extends BaseServiceModel {
 
-    private static int PORT = 9090;
-    private static String NAME = "Jacuzzi_Service";
     private int waterDepth;
     private boolean isWaterRunning;
     private boolean isJetsRunning;
     private int jetPower;
 
-    public JacuzziModel() {
-        super();
-        setServiceName(NAME);
-        setServicePort(PORT);
+    public JacuzziModel(String name, int port) {
+        super(name, port);
     }
 
     public void setWaterDepth(int waterDepth) {

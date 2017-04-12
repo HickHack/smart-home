@@ -8,18 +8,13 @@ import com.smarthome.services.service.model.BaseServiceModel;
  */
 public class LightingModel extends BaseServiceModel {
 
-    public static int PORT = 9091;
-    private static String NAME = "Lighting_Service";
     private boolean isLightingOn;
     private int brightness;
 
-    public LightingModel() {
-        super();
+    public LightingModel(String name, int port) {
+        super(name, port);
         isLightingOn = false;
         brightness = 0;
-
-        setServicePort(PORT);
-        setServiceName(NAME);
     }
 
 

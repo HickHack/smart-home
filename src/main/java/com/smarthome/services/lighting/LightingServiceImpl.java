@@ -13,12 +13,9 @@ public class LightingServiceImpl implements Service {
 
     private TCPService tcpService;
     String name;
-    int port;
 
-
-    public LightingServiceImpl(String name, int port) {
+    public LightingServiceImpl(String name) {
         this.name = name;
-        this.port = port;
     }
 
     @Override
@@ -34,8 +31,13 @@ public class LightingServiceImpl implements Service {
     }
 
     @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
     public void run() {
-        tcpService = new TCPServiceImpl(name, port, ServiceType.LIGHTING);
+        tcpService = new TCPServiceImpl(name, ServiceType.LIGHTING);
         tcpService.setController(new LightingControllerImpl(tcpService));
         start();
     }

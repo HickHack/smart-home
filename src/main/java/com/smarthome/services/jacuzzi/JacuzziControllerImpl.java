@@ -15,7 +15,7 @@ public class JacuzziControllerImpl implements ServiceController {
 
     public JacuzziControllerImpl(TCPService service) {
         this.service = service;
-        model = new JacuzziModel();
+        model = new JacuzziModel(service.getName(), service.getPort());
     }
 
     @Override

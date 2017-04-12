@@ -7,9 +7,11 @@ public class BaseServiceModel {
 
     private int servicePort;
     private String serviceName;
+    private String status;
 
-    public BaseServiceModel() {
-
+    public BaseServiceModel(String serviceName, int servicePort) {
+        this.serviceName = serviceName;
+        this.servicePort = servicePort;
     }
 
     public int getServicePort() {
@@ -18,13 +20,5 @@ public class BaseServiceModel {
 
     public String getServiceName() {
         return serviceName;
-    }
-
-    public void setServicePort(int servicePort) {
-        this.servicePort = servicePort;
-    }
-
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
     }
 }

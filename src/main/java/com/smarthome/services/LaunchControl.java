@@ -11,6 +11,7 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+import javax.jmdns.ServiceInfo;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -30,10 +31,12 @@ public class LaunchControl {
     private Thread televisionProcess;
     private Thread lightingProcess;
     private Thread mediaPlayerProcess;
+    private DNSServiceDiscovery serviceDiscovery;
 
     String clientId = "Publisher";
 
     private LaunchControl() throws InterruptedException {
+        subscribeToServices();
         launchJacuzzi();
         launchLighting();
         launchTelevision();
@@ -45,22 +48,27 @@ public class LaunchControl {
         shutdown();
     }
 
+    private void subscribeToServices() {
+        serviceDiscovery = new DNSServiceDiscovery();
+        serviceDiscovery.addServiceListener(ServiceType.JACUZZI);
+    }
+
     private void launchJacuzzi() throws InterruptedException {
-        jacuzziProcess = new Thread(new JacuzziServiceImpl("Jacuzzi_Service1", 9090));
+        jacuzziProcess = new Thread(new JacuzziServiceImpl("Jacuzzi_Service1"));
         jacuzziProcess.start();
 
         Thread.sleep(9000);
     }
 
     private void launchLighting() throws InterruptedException {
-        lightingProcess = new Thread(new LightingServiceImpl("LightingService1", 9091));
+        lightingProcess = new Thread(new LightingServiceImpl("LightingService1"));
         lightingProcess.start();
 
         Thread.sleep(9000);
     }
 
     private void launchTelevision() throws InterruptedException {
-        televisionProcess = new Thread(new TelevisionServiceImpl("TelevisionService1", 9092));
+        televisionProcess = new Thread(new TelevisionServiceImpl("TelevisionService1"));
         televisionProcess.start();
 
         Thread.sleep(9000);
@@ -74,11 +82,14 @@ public class LaunchControl {
     }
 
     private void testJacuzziService() {
-
-        ServiceOperation operation = new ServiceOperation(0);
-        String response = sendRequest(operation, 9090);
-
-        System.out.println("Test Response: " + response);
+        if (serviceDiscovery.hasDiscoveredService(ServiceType.JACUZZI)) {
+            ServiceInfo info = serviceDiscovery.getServiceInfo(ServiceType.JACUZZI);
+            ServiceRequest request = new ServiceRequest(info, new ServiceOperation(0));
+            request.send();
+            System.out.println("Test Response: " + request.getResponse());
+        } else {
+            System.out.println("Unable to turn Jacuzzi On!");
+        }
     }
 
     private void testMediaPlayerService() {
@@ -121,26 +132,6 @@ public class LaunchControl {
         lightingProcess.interrupt();
         televisionProcess.interrupt();
         mediaPlayerProcess.interrupt();
-    }
-
-    public String sendRequest(ServiceOperation serviceOperation, int port){
-        Gson gson = new Gson();
-        String json = gson.toJson(serviceOperation);
-        String response = "";
-
-        try {
-            Socket clientSocket = new Socket("127.0.0.1", port);
-            DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-            outputStream.writeBytes(json + '\n');
-            response = bufferedReader.readLine();
-            clientSocket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return response;
     }
 
     public static void main(String[] args) throws InterruptedException {

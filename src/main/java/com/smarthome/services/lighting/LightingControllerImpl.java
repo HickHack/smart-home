@@ -15,7 +15,7 @@ public class LightingControllerImpl implements ServiceController {
 
     public LightingControllerImpl(TCPService service) {
         this.service = service;
-        model = new LightingModel();
+        model = new LightingModel(service.getName(), service.getPort());
     }
 
     @Override
