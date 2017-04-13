@@ -1,6 +1,7 @@
 package com.smarthome.services.television;
 
 import com.smarthome.services.service.*;
+import com.smarthome.services.service.model.BaseServiceModel;
 import com.smarthome.services.television.model.TelevisionModel;
 
 /**
@@ -18,7 +19,7 @@ public class TelevisionControllerImpl implements ServiceController {
     }
 
     @Override
-    public ServiceResponse performOperation(ServiceOperation request) {
+    public BaseServiceModel performOperation(ServiceOperation request) {
 
         switch (request.getOperationCode()) {
             case 0:
@@ -49,7 +50,7 @@ public class TelevisionControllerImpl implements ServiceController {
                 break;
 
         }
-        return new ServiceResponse(tvModel);
+        return tvModel;
     }
 
     private void turnTelevisionOn() {

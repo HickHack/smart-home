@@ -3,6 +3,7 @@ package com.smarthome.services.mediaplayer;
 import com.smarthome.services.mediaplayer.model.MediaplayerModel;
 import com.smarthome.services.mediaplayer.model.PlaylistModel;
 import com.smarthome.services.service.*;
+import com.smarthome.services.service.model.BaseServiceModel;
 
 /**
  * Created by Ian C on 06/04/2017.
@@ -17,7 +18,7 @@ public class MediaPlayerControllerImpl implements ServiceController {
     }
 
     @Override
-    public ServiceResponse performOperation(ServiceOperation request) {
+    public BaseServiceModel performOperation(ServiceOperation request) {
 
         switch (request.getOperationCode()) {
             case 0:
@@ -50,7 +51,7 @@ public class MediaPlayerControllerImpl implements ServiceController {
                 break;
 
         }
-        return new ServiceResponse(mpModel);
+        return mpModel;
     }
 
     private void turnMediaPlayerOn() {

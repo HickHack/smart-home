@@ -1,9 +1,11 @@
 package com.smarthome.services.service;
 
+import com.smarthome.services.service.model.BaseServiceModel;
+
 /**
  * @author Graham Murray
  * @descripion Interface for service controllers
  */
 public interface ServiceController {
-    ServiceResponse performOperation(ServiceOperation request);
+    BaseServiceModel performOperation(ServiceOperation request);
 }

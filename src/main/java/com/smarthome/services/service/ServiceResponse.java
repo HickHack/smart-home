@@ -2,18 +2,26 @@ package com.smarthome.services.service;
 
 import com.smarthome.services.service.model.BaseServiceModel;
 
+import java.util.Date;
+
 /**
  * Created by graham on 28/03/17.
  */
 public class ServiceResponse {
 
-    private BaseServiceModel status;
+    BaseServiceModel model;
+    private String timestamp;
 
-    public ServiceResponse(BaseServiceModel status) {
-        this.status = status;
+    public ServiceResponse(BaseServiceModel model) {
+        this.model = model;
+        timestamp = new Date().toString();
     }
 
-    public BaseServiceModel getStatus() {
-        return status;
+    public BaseServiceModel getModel() {
+        return model;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
     }
 }
