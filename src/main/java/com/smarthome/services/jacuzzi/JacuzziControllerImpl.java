@@ -4,6 +4,7 @@ import com.smarthome.services.jacuzzi.model.JacuzziModel;
 import com.smarthome.services.lighting.model.LightingModel;
 import com.smarthome.services.service.*;
 import com.smarthome.services.service.model.BaseServiceModel;
+import com.smarthome.services.television.model.TelevisionModel;
 
 /**
  * @author Graham Murray
@@ -45,7 +46,6 @@ public class JacuzziControllerImpl implements ServiceController {
                 break;
 
         }
-
         return model;
     }
 
@@ -59,10 +59,20 @@ public class JacuzziControllerImpl implements ServiceController {
     }
 
     private void turnLightsAndTvOn() {
-        LightingModel lightResponse = (LightingModel) service.connectToService(new ServiceOperation(0), ServiceType.LIGHTING);
+        BaseServiceModel lightingResponse = service.connectToService(new ServiceOperation(0), ServiceType.LIGHTING);
 
-        if (lightResponse.isLightingOn()) {
-            service.connectToService(new ServiceOperation(0), ServiceType.TELEVISION);
+        if (ServiceHelper.isValidResponse(lightingResponse, LightingModel.class)) {
+            LightingModel lightingModel = (LightingModel) lightingResponse;
+
+            if (lightingModel.isLightingOn()) {
+                BaseServiceModel tvResponse = service.connectToService(new ServiceOperation(0), ServiceType.TELEVISION);
+
+                if (ServiceHelper.isValidResponse(tvResponse, TelevisionModel.class)) {
+                    System.out.println("Successfully Turned TV and Lights On");
+                }
+            }
+        } else {
+            System.out.println("Failed to turn TV and Lights On");
         }
     }
 
@@ -79,10 +89,20 @@ public class JacuzziControllerImpl implements ServiceController {
     }
 
     private void turnLightsAndTvOff() {
-        LightingModel lightingResponse = (LightingModel) service.connectToService(new ServiceOperation(1), ServiceType.LIGHTING);
+        BaseServiceModel lightingResponse = service.connectToService(new ServiceOperation(1), ServiceType.LIGHTING);
 
-        if (!lightingResponse.isLightingOn()) {
-            service.connectToService(new ServiceOperation(1), ServiceType.TELEVISION);
+        if (ServiceHelper.isValidResponse(lightingResponse, LightingModel.class)) {
+            LightingModel lightingModel = (LightingModel) lightingResponse;
+
+            if (!lightingModel.isLightingOn()) {
+                BaseServiceModel tvResponse = service.connectToService(new ServiceOperation(1), ServiceType.TELEVISION);
+
+                if (ServiceHelper.isValidResponse(tvResponse, TelevisionModel.class)) {
+                    System.out.println("Successfully Turned TV and Lights Off");
+                }
+            }
+        } else {
+            System.out.println("Failed to turn TV and Lights Off");
         }
     }
 
