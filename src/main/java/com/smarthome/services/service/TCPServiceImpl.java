@@ -3,6 +3,7 @@ package com.smarthome.services.service;
 import com.google.gson.Gson;
 import com.smarthome.services.jacuzzi.model.JacuzziModel;
 import com.smarthome.services.lighting.model.LightingModel;
+import com.smarthome.services.service.model.BaseServiceModel;
 import com.smarthome.services.television.model.TelevisionModel;
 
 import javax.jmdns.ServiceInfo;
@@ -10,9 +11,11 @@ import java.io.IOException;
 import java.net.ServerSocket;
 
 import static com.smarthome.services.service.ServiceType.*;
+import static com.smarthome.services.service.config.Config.MAX_REQUEST_RETRY;
 
 /**
- * Created by graham on 30/03/17.
+ * @author Graham Murray
+ * @date 30/03/17
  */
 public class TCPServiceImpl implements TCPService, ServiceControllerListener {
 
@@ -24,6 +27,7 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
     private DNSServiceDiscovery dnsServiceDiscovery;
     private ServiceType serviceType;
     private Gson gson;
+    private int requestRetryCount;
 
     public TCPServiceImpl(String name,
                           ServiceType serviceType) {
@@ -70,20 +74,24 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
     }
 
     @Override
-    public Object connectToService(ServiceOperation operation, ServiceType serviceType) {
-        //TODO: Add error handling
+    public BaseServiceModel connectToService(ServiceOperation operation, ServiceType serviceType) {
 
-        if (dnsServiceDiscovery.hasDiscoveredService(serviceType)) {
-            ServiceInfo serviceInfo = dnsServiceDiscovery.getServiceInfo(serviceType);
+        while (requestRetryCount <= MAX_REQUEST_RETRY) {
+            if (dnsServiceDiscovery.hasDiscoveredService(serviceType)) {
+                ServiceInfo serviceInfo = dnsServiceDiscovery.getServiceInfo(serviceType);
 
-            if (serviceInfo != null) {
-                ServiceRequest request = new ServiceRequest(serviceInfo, operation);
-                request.send();
-                System.out.println(serviceType.toString() + " Response: " + request.getResponse());
+                if (serviceInfo != null) {
+                    ServiceRequest request = new ServiceRequest(serviceInfo, operation);
+                    request.send();
+                    System.out.println(serviceType.toString() + " Response: " + request.getResponse());
 
-                return deserializeResponse(request.getResponse(), serviceType);
+                    return deserializeResponse(request.getResponse(), serviceType);
+                }
             }
+
+            requestRetryCount++;
         }
+        requestRetryCount = 0;
 
         return null;
     }
@@ -117,7 +125,7 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
         return port;
     }
 
-    private Object deserializeResponse(String response, ServiceType serviceType) {
+    private BaseServiceModel deserializeResponse(String response, ServiceType serviceType) {
 
         switch (serviceType) {
             case JACUZZI:

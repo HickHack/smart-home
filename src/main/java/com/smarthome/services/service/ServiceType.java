@@ -2,7 +2,7 @@ package com.smarthome.services.service;
 
 /**
  * @author Graham Murray
- * @descripion Interface for service controllers
+ * @descripion Enum for storing service types
  */
 public enum ServiceType {
     JACUZZI("_jacuzzi._tcp.local."),

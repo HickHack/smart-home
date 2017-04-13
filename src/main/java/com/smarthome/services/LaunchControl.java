@@ -99,15 +99,15 @@ public class LaunchControl {
         String json = gson.toJson(operation);
 
         try {
-            MqttClient sampleClient = new MqttClient(broker, clientId, persistence);
+            MqttClient sampleClient = new MqttClient(BROKER, clientId, PERSISTENCE);
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setCleanSession(true);
-            System.out.println("Connecting to broker: " + broker);
+            System.out.println("Connecting to BROKER: " + BROKER);
             sampleClient.connect(connOpts);
             System.out.println("Connected");
             System.out.println("Publishing message: " + json);
             MqttMessage message = new MqttMessage(json.getBytes());
-            message.setQos(qos);
+            message.setQos(QOS);
             sampleClient.publish(ServiceType.MEDIAPLAYER.toString(), message);
             System.out.println("Message published");
             sampleClient.disconnect();
