@@ -1,10 +1,15 @@
 package com.smarthome.services.service;
 
 import com.google.gson.Gson;
+import com.smarthome.services.jacuzzi.model.JacuzziModel;
+import com.smarthome.services.lighting.model.LightingModel;
+import com.smarthome.services.television.model.TelevisionModel;
 
 import javax.jmdns.ServiceInfo;
 import java.io.IOException;
 import java.net.ServerSocket;
+
+import static com.smarthome.services.service.ServiceType.*;
 
 /**
  * Created by graham on 30/03/17.
@@ -65,7 +70,7 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
     }
 
     @Override
-    public String connectToService(ServiceOperation operation, ServiceType serviceType) {
+    public Object connectToService(ServiceOperation operation, ServiceType serviceType) {
         //TODO: Add error handling
 
         if (dnsServiceDiscovery.hasDiscoveredService(serviceType)) {
@@ -74,9 +79,9 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
             if (serviceInfo != null) {
                 ServiceRequest request = new ServiceRequest(serviceInfo, operation);
                 request.send();
-                System.out.println("Service Response: " + request.getResponse());
+                System.out.println(serviceType.toString() + " Response: " + request.getResponse());
 
-                return request.getResponse();
+                return deserializeResponse(request.getResponse(), serviceType);
             }
         }
 
@@ -110,5 +115,19 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
         server.close();
 
         return port;
+    }
+
+    private Object deserializeResponse(String response, ServiceType serviceType) {
+
+        switch (serviceType) {
+            case JACUZZI:
+                return gson.fromJson(response, JacuzziModel.class);
+            case LIGHTING:
+                return gson.fromJson(response, LightingModel.class);
+            case TELEVISION:
+                return gson.fromJson(response, TelevisionModel.class);
+        }
+
+        return null;
     }
 }

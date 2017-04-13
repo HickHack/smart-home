@@ -2,6 +2,7 @@ package com.smarthome.services.lighting;
 
 import com.smarthome.services.lighting.model.LightingModel;
 import com.smarthome.services.service.*;
+import com.smarthome.services.service.model.BaseServiceModel;
 
 /**
  * @author Graham Murray
@@ -19,7 +20,7 @@ public class LightingControllerImpl implements ServiceController {
     }
 
     @Override
-    public ServiceResponse performOperation(ServiceOperation request) {
+    public BaseServiceModel performOperation(ServiceOperation request) {
         switch (request.getOperationCode()) {
             case 0:
                 turnLightsOn();
@@ -35,7 +36,7 @@ public class LightingControllerImpl implements ServiceController {
 
         }
 
-        return new ServiceResponse(model);
+        return model;
     }
 
     private void turnLightsOn() {

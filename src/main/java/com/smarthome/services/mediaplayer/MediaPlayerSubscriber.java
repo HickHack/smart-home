@@ -5,6 +5,7 @@ import com.smarthome.services.service.Service;
 import com.smarthome.services.service.ServiceController;
 import com.smarthome.services.service.ServiceOperation;
 import com.smarthome.services.service.ServiceResponse;
+import com.smarthome.services.service.model.BaseServiceModel;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -29,7 +30,7 @@ public class MediaPlayerSubscriber implements MqttCallback {
 
     @Override
     public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
-        ServiceResponse serviceResponse = mediaPlayerService.getController().performOperation(gson.fromJson(mqttMessage.toString(), ServiceOperation.class));
+        BaseServiceModel serviceResponse = mediaPlayerService.getController().performOperation(gson.fromJson(mqttMessage.toString(), ServiceOperation.class));
 
         String serializedResponse = gson.toJson(serviceResponse);
         System.out.println("Media Player is sending: " + serializedResponse);

@@ -1,7 +1,9 @@
 package com.smarthome.services.jacuzzi;
 
 import com.smarthome.services.jacuzzi.model.JacuzziModel;
+import com.smarthome.services.lighting.model.LightingModel;
 import com.smarthome.services.service.*;
+import com.smarthome.services.service.model.BaseServiceModel;
 
 /**
  * @author Graham Murray
@@ -19,7 +21,7 @@ public class JacuzziControllerImpl implements ServiceController {
     }
 
     @Override
-    public ServiceResponse performOperation(ServiceOperation operation) {
+    public BaseServiceModel performOperation(ServiceOperation operation) {
         switch (operation.getOperationCode()) {
             case 0:
                 turnWaterOn();
@@ -44,7 +46,7 @@ public class JacuzziControllerImpl implements ServiceController {
 
         }
 
-        return new ServiceResponse(model);
+        return model;
     }
 
     private void turnWaterOn() {
@@ -52,19 +54,34 @@ public class JacuzziControllerImpl implements ServiceController {
             model.setWaterDepth(80);
             model.setWaterRunning(true);
             turnJetsOn();
-            String lightResponse = service.connectToService(new ServiceOperation(0), ServiceType.LIGHTING);
-            System.out.println("Jacuzzi Lights: " + lightResponse);
-            String televisionResponse = service.connectToService(new ServiceOperation(0), ServiceType.TELEVISION);
-            System.out.println("Jacuzzi TV: " + televisionResponse);
+            turnLightsAndTvOn();
         }
     }
 
+    private void turnLightsAndTvOn() {
+        LightingModel lightResponse = (LightingModel) service.connectToService(new ServiceOperation(0), ServiceType.LIGHTING);
+
+        if (lightResponse.isLightingOn()) {
+            service.connectToService(new ServiceOperation(0), ServiceType.TELEVISION);
+        }
+    }
+
+    /**
+     * Turn the water off along with the lights and television
+     */
     private void turnWaterOff() {
         if (model.isWaterRunning()) {
             model.setWaterDepth(0);
             model.setWaterRunning(false);
             turnJetsOff();
-            service.connectToService(new ServiceOperation(1), ServiceType.LIGHTING);
+            turnLightsAndTvOff();
+        }
+    }
+
+    private void turnLightsAndTvOff() {
+        LightingModel lightingResponse = (LightingModel) service.connectToService(new ServiceOperation(1), ServiceType.LIGHTING);
+
+        if (!lightingResponse.isLightingOn()) {
             service.connectToService(new ServiceOperation(1), ServiceType.TELEVISION);
         }
     }
