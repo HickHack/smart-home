@@ -4,6 +4,8 @@ import com.smarthome.services.service.*;
 import com.smarthome.services.service.model.BaseServiceModel;
 import com.smarthome.services.television.model.TelevisionModel;
 
+import java.util.Map;
+
 /**
  * Created by Ian C on 01/04/2017.
  */
@@ -51,6 +53,11 @@ public class TelevisionControllerImpl implements ServiceController {
 
         }
         return tvModel;
+    }
+
+    @Override
+    public Map getModelStatus() {
+        return null;
     }
 
     private void turnTelevisionOn() {

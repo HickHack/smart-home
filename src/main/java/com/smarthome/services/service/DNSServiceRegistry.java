@@ -23,13 +23,22 @@ public class DNSServiceRegistry {
         }
     }
 
-    public void register(String type, String name, int port) {
+    public void register(Service service) {
         try {
-            ServiceInfo serviceInfo = ServiceInfo.create(type, name, port, "");
+            ServiceInfo serviceInfo = ServiceInfo.create(service.getType().toString(),
+                                                         service.getName(),
+                                                         service.getPort(), "");
             jmdns.registerService(serviceInfo);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void unregister(Service service) {
+        ServiceInfo serviceInfo = ServiceInfo.create(service.getType().toString(),
+                                                     service.getName(),
+                                                     service.getPort(), "");
+        jmdns.unregisterService(serviceInfo);
     }
 }

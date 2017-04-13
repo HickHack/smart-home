@@ -1,11 +1,12 @@
 package com.smarthome.services.service;
 
 /**
- * Created by graham on 29/03/17.
+ * @author Graham Murray
  */
 public class ServiceOperation {
 
     private int operationCode;
+    private String requester;
 
     public ServiceOperation(int operationCode) {
         this.operationCode = operationCode;
@@ -13,5 +14,13 @@ public class ServiceOperation {
 
     public int getOperationCode() {
         return operationCode;
+    }
+
+    public void setRequester(String requester) {
+        this.requester = requester;
+    }
+
+    public String getRequester() {
+        return requester;
     }
 }

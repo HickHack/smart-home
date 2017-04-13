@@ -4,6 +4,8 @@ import com.smarthome.services.lighting.model.LightingModel;
 import com.smarthome.services.service.*;
 import com.smarthome.services.service.model.BaseServiceModel;
 
+import java.util.Map;
+
 /**
  * @author Graham Murray
  * @descripion Jacuzzi service controller. This class holds the logic for
@@ -37,6 +39,11 @@ public class LightingControllerImpl implements ServiceController {
         }
 
         return model;
+    }
+
+    @Override
+    public Map getModelStatus() {
+        return null;
     }
 
     private void turnLightsOn() {
