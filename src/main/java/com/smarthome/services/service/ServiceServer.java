@@ -3,6 +3,7 @@ package com.smarthome.services.service;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +35,6 @@ public class ServiceServer {
     }
 
     public void start() {
-        System.out.println("Starting server on port " + port);
         try {
             listen();
         } catch (IOException e) {
@@ -76,8 +76,8 @@ public class ServiceServer {
                     socket.close();
                 }
             }
-        } finally {
-            stop();
+        } catch (SocketException ex) {
+            System.out.println("Server stopped listening");
         }
     }
 

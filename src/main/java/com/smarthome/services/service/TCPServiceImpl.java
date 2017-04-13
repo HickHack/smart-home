@@ -5,12 +5,12 @@ import com.smarthome.services.jacuzzi.model.JacuzziModel;
 import com.smarthome.services.lighting.model.LightingModel;
 import com.smarthome.services.service.model.BaseServiceModel;
 import com.smarthome.services.television.model.TelevisionModel;
+import com.smarthome.ui.ServiceUI;
 
 import javax.jmdns.ServiceInfo;
 import java.io.IOException;
 import java.net.ServerSocket;
 
-import static com.smarthome.services.service.ServiceType.*;
 import static com.smarthome.services.service.config.Config.MAX_REQUEST_RETRY;
 
 /**
@@ -27,6 +27,7 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
     private DNSServiceDiscovery dnsServiceDiscovery;
     private ServiceType serviceType;
     private Gson gson;
+    private ServiceUI ui;
     private int requestRetryCount;
 
     public TCPServiceImpl(String name,
@@ -37,6 +38,7 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
             this.serviceType = serviceType;
             server = new ServiceServer(port);
             dnsServiceDiscovery = new DNSServiceDiscovery();
+            ui = new ServiceUI(this);
             gson = new Gson();
 
             registry = new DNSServiceRegistry();
@@ -47,20 +49,23 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
 
     @Override
     public void stop() {
+        registry.unregister(this);
         server.stop();
-        //TODO Unregister JMDNS
+        updateUI("Stopping service...");
     }
 
     @Override
     public void start() {
-        register();
+        ui.init();
+        registry.register(this);
         server.addListener(this);
+        updateUI(name + " is starting on port " + port);
         server.start();
     }
 
     @Override
-    public void register() {
-        registry.register(serviceType.toString(), name, port);
+    public void updateUI(String message) {
+        ui.updateOutput(message);
     }
 
     @Override
@@ -75,6 +80,7 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
 
     @Override
     public BaseServiceModel connectToService(ServiceOperation operation, ServiceType serviceType) {
+        operation.setRequester(name);
 
         while (requestRetryCount <= MAX_REQUEST_RETRY) {
             if (dnsServiceDiscovery.hasDiscoveredService(serviceType)) {
@@ -99,6 +105,7 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
     @Override
     public String processRequest() {
         ServiceOperation operation = gson.fromJson(server.getRequest(), ServiceOperation.class);
+        updateUI("Request received from " + operation.getRequester() + " - opcode: " + operation.getOperationCode());
         return gson.toJson(controller.performOperation(operation));
     }
 
@@ -110,6 +117,11 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public ServiceType getType() {
+        return serviceType;
     }
 
     @Override

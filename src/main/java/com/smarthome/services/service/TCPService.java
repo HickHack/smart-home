@@ -8,9 +8,7 @@ import com.smarthome.services.service.model.BaseServiceModel;
  * used to find other services.
  */
 public interface TCPService extends Service {
-    void register();
     void addSubscriber(ServiceType subscriberType);
     void setController(ServiceController controller);
-    int getPort();
     BaseServiceModel connectToService(ServiceOperation operation, ServiceType serviceType);
 }

@@ -5,6 +5,8 @@ import com.smarthome.services.mediaplayer.model.PlaylistModel;
 import com.smarthome.services.service.*;
 import com.smarthome.services.service.model.BaseServiceModel;
 
+import java.util.Map;
+
 /**
  * Created by Ian C on 06/04/2017.
  */
@@ -52,6 +54,11 @@ public class MediaPlayerControllerImpl implements ServiceController {
 
         }
         return mpModel;
+    }
+
+    @Override
+    public Map getModelStatus() {
+        return null;
     }
 
     private void turnMediaPlayerOn() {

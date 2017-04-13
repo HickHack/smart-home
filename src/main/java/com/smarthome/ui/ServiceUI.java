@@ -1,4 +1,4 @@
-package com.smarthome.ui.service;
+package com.smarthome.ui;
 
 import com.smarthome.services.service.Service;
 
@@ -8,6 +8,7 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Date;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -21,32 +22,24 @@ public class ServiceUI extends JFrame {
 
     private JPanel panel;
     private JTextArea outputArea;
-    private JScrollPane outputScroll;
+    private Service service;
 
     public ServiceUI(Service service) {
         super(service.getName() + " - " + service.getType());
-        this.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                service.stop();
-            }
-        });
+        this.service = service;
 
         setupPanel();
         setupOutputTextArea();
         setupScrollPane();
+        addWindowCloseListener();
     }
 
     public void init() {
         this.setVisible(true);
     }
 
-    public void clearArea() {
-        outputArea.setText("");
-    }
-
-    public void updateArea(String message) {
-        outputArea.append("\n" + message);
+    public void updateOutput(String message) {
+        outputArea.append("\n" + new Date().toString() + " - " + message);
     }
 
 
@@ -70,14 +63,29 @@ public class ServiceUI extends JFrame {
 
     private void setupOutputTextArea() {
         outputArea = new JTextArea();
+        outputArea.setLineWrap(true);
     }
 
     private void setupScrollPane() {
-        outputScroll = new JScrollPane(outputArea,
+        JScrollPane outputScroll = new JScrollPane(outputArea,
                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         outputScroll.setBounds(5, 5, UIWIDTH - 10, 268);
         outputScroll.setViewportView(outputArea);
         panel.add(outputScroll);
+    }
+
+    private void addWindowCloseListener() {
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                service.stop();
+            }
+        });
+    }
+
+    public static void main(String[] args) {
+        //ServiceUI ui = new ServiceUI();
+        //ui.init();
     }
 }
