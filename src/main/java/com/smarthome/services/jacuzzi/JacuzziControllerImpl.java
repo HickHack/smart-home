@@ -7,6 +7,10 @@ import com.smarthome.services.service.model.BaseServiceModel;
 import com.smarthome.services.television.model.TelevisionModel;
 
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import static com.smarthome.services.service.ServiceResponse.Status;
 
 /**
  * @author Graham Murray
@@ -17,38 +21,36 @@ public class JacuzziControllerImpl implements ServiceController {
 
     private JacuzziModel model;
     private TCPService service;
+    private Timer timer;
 
     public JacuzziControllerImpl(TCPService service) {
         this.service = service;
         model = new JacuzziModel(service.getName(), service.getPort());
+        timer = new Timer();
     }
 
     @Override
-    public BaseServiceModel performOperation(ServiceOperation operation) {
+    public ServiceResponse performOperation(ServiceOperation operation) {
+        Status status;
         switch (operation.getOperationCode()) {
             case 0:
-                turnWaterOn();
+                status = turnOn();
                 break;
             case 1:
-                turnWaterOff();
-                break;
-            case 2:
-                turnJetsOn();
+                status = turnOff();
                 break;
             case 3:
-                turnJetsOff();
+                status = increaseJetPower();
                 break;
             case 4:
-                increaseJetPower();
-                break;
-            case 5:
-                decreaseJetPower();
+                status = decreaseJetPower();
                 break;
             default:
+                status = Status.UNSUPPORTED_OPERATION;
                 break;
-
         }
-        return model;
+
+        return new ServiceResponse(status, model);
     }
 
     @Override
@@ -56,40 +58,47 @@ public class JacuzziControllerImpl implements ServiceController {
         return model.getValuesMap();
     }
 
-    private void turnWaterOn() {
+    private Status turnOn() {
         if (model.getWaterDepth() == 0 && !model.isWaterRunning()) {
-            model.setWaterDepth(80);
+            model.setWaterDepth(0);
             model.setWaterRunning(true);
-            service.updateUIOutput("Water is running, depth is 80%");
+            service.updateUIOutput("Water is running, depth is 1%");
             turnJetsOn();
             turnLightsOn();
             turnTVOn();
+            timer.schedule(new WaterTask(), 0, 2000);
+
+            return Status.OK;
+        } else {
+            return Status.FAILED;
         }
     }
 
     private void turnLightsOn() {
-        BaseServiceModel lightingResult = service.connectToService(new ServiceOperation(0), ServiceType.LIGHTING);
+        ServiceResponse response = service.connectToService(new ServiceOperation(0), ServiceType.LIGHTING);
 
-        if (ServiceHelper.isValidResponse(lightingResult, LightingModel.class)) {
-            LightingModel lightingModel = (LightingModel) lightingResult;
-
-            if (lightingModel.isLightingOn()) {
-                service.updateUIOutput("Successfully Turned Lights On");
-            }
+        if (ServiceHelper.isValidResponse(response)) {
+            service.updateUIOutput("Successfully Turned Lights On");
         } else {
             service.updateUIOutput("Failed to turn Lights On");
         }
     }
 
+    private void increaseLightBrightness() {
+        ServiceResponse response = service.connectToService(new ServiceOperation(2), ServiceType.LIGHTING);
+
+        if (ServiceHelper.isValidResponse(response)) {
+            service.updateUIOutput("Successfully to increased lights");
+        } else {
+            service.updateUIOutput("Failed to increase lights");
+        }
+    }
+
     private void turnTVOn() {
-        BaseServiceModel tvResult = service.connectToService(new ServiceOperation(0), ServiceType.TELEVISION);
+        ServiceResponse response = service.connectToService(new ServiceOperation(0), ServiceType.TELEVISION);
 
-        if (ServiceHelper.isValidResponse(tvResult, TelevisionModel.class)) {
-            TelevisionModel tvModel = (TelevisionModel) tvResult;
-
-            if (tvModel.isTelevisionOn()) {
-                service.updateUIOutput("Successfully Turned TV On");
-            }
+        if (ServiceHelper.isValidResponse(response)) {
+            service.updateUIOutput("Successfully Turned TV On");
         } else {
             service.updateUIOutput("Failed to turn TV On");
         }
@@ -98,49 +107,46 @@ public class JacuzziControllerImpl implements ServiceController {
     /**
      * Turn the water off along with the lights and television
      */
-    private void turnWaterOff() {
+    private Status turnOff() {
         if (model.isWaterRunning()) {
             model.setWaterDepth(0);
             model.setWaterRunning(false);
             turnJetsOff();
             turnLightsOff();
             turnTVOff();
+            timer.cancel();
+
+            return Status.OK;
         }
+
+        return Status.FAILED;
     }
 
     private void turnLightsOff() {
-        BaseServiceModel lightingResult = service.connectToService(new ServiceOperation(1), ServiceType.LIGHTING);
+        ServiceResponse response = service.connectToService(new ServiceOperation(1), ServiceType.LIGHTING);
 
-        if (ServiceHelper.isValidResponse(lightingResult, LightingModel.class)) {
-            LightingModel lightingModel = (LightingModel) lightingResult;
-
-            if (!lightingModel.isLightingOn()) {
-                service.updateUIOutput("Successfully Turned Lights Off");
-            }
+        if (ServiceHelper.isValidResponse(response)) {
+            service.updateUIOutput("Successfully Turned Lights Off");
         } else {
             service.updateUIOutput("Failed to turn Lights Off");
         }
     }
 
     private void turnTVOff() {
-        BaseServiceModel tvResult = service.connectToService(new ServiceOperation(1), ServiceType.TELEVISION);
+        ServiceResponse response = service.connectToService(new ServiceOperation(1), ServiceType.TELEVISION);
 
-        if (ServiceHelper.isValidResponse(tvResult, TelevisionModel.class)) {
-            TelevisionModel televisionModel = (TelevisionModel) tvResult;
-
-            if (!televisionModel.isTelevisionOn()) {
-                service.updateUIOutput("Successfully Turned TV Off");
-            }
+        if (ServiceHelper.isValidResponse(response)) {
+            service.updateUIOutput("Successfully Turned TV Off");
         } else {
             service.updateUIOutput("Failed to turn TV Off");
         }
     }
 
     private void turnJetsOn() {
-        if (!model.isJetsRunning() && model.getWaterDepth()> 0) {
-            model.setJetPower(40);
+        if (!model.isJetsRunning()) {
+            model.setJetPower(0);
             model.setJetsRunning(true);
-            service.updateUIOutput("Starting Jets, power is 40%");
+            service.updateUIOutput("Starting Jets, power is 0%");
         }
     }
 
@@ -152,17 +158,41 @@ public class JacuzziControllerImpl implements ServiceController {
         }
     }
 
-    private void increaseJetPower() {
-        if (model.getJetPower() < 100 && model.isJetsRunning() && model.getWaterDepth() > 0) {
-            model.setJetPower(model.getJetPower() + 20);
-            service.updateUIOutput("Starting Jets, power is 40%");
+    private Status increaseJetPower() {
+        if (model.getJetPower() < 100 && model.getWaterDepth() > 0) {
+            model.setJetPower(model.getJetPower() + 5);
+            service.updateUIOutput("Increasing jet power");
+            return Status.OK;
         }
+
+        return Status.FAILED;
     }
 
-    private void decreaseJetPower() {
+    private Status decreaseJetPower() {
         if (model.getJetPower() > 0) {
-            model.setJetPower(model.getJetPower() - 20);
+            model.setJetPower(model.getJetPower() - 5);
             service.updateUIOutput("Decreasing jet power");
+
+            return Status.OK;
+        }
+
+        return Status.FAILED;
+    }
+
+    class WaterTask extends TimerTask {
+
+        @Override
+        public void run() {
+            if (model.getWaterDepth() < 100) {
+                model.setWaterDepth(model.getWaterDepth() + 4);
+                increaseJetPower();
+                increaseLightBrightness();
+                service.updateUIStatus();
+            } else {
+                model.setWaterRunning(false);
+                timer.cancel();
+                service.updateUIOutput("Water full.");
+            }
         }
     }
 }

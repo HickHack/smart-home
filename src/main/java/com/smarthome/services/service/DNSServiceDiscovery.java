@@ -76,9 +76,7 @@ public class DNSServiceDiscovery {
         }
 
         @Override
-        public void serviceAdded(ServiceEvent event) {
-            System.out.println("Service added " + event.getInfo().getName());
-        }
+        public void serviceAdded(ServiceEvent event) {}
 
         @Override
         public void serviceRemoved(ServiceEvent event) {

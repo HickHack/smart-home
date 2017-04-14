@@ -1,155 +1,113 @@
 package com.smarthome.services.television;
 
 import com.smarthome.services.service.*;
-import com.smarthome.services.service.model.BaseServiceModel;
 import com.smarthome.services.television.model.TelevisionModel;
 
 import java.util.Map;
 
+import static com.smarthome.services.service.ServiceResponse.Status;
+
 /**
- * Created by Ian C on 01/04/2017.
+ * @author Ian Cunningham
  */
 public class TelevisionControllerImpl implements ServiceController {
 
-    private TelevisionModel tvModel;
+    private TelevisionModel model;
     private Service service;
-    private int previousVolumeLevel;
 
     public TelevisionControllerImpl(TCPService service) {
-        tvModel = new TelevisionModel(service.getName(), service.getPort());
+        model = new TelevisionModel(service.getName(), service.getPort());
         this.service = service;
     }
 
     @Override
-    public BaseServiceModel performOperation(ServiceOperation request) {
+    public ServiceResponse performOperation(ServiceOperation request) {
+        Status status;
 
         switch (request.getOperationCode()) {
             case 0:
-                turnTelevisionOn();
+                status = turnTelevisionOn();
                 break;
             case 1:
-                turnTelevisionOff();
-                break;
-            case 2:
-                turnMuteOn();
-                break;
-            case 3:
-                turnMuteOff();
+                status = turnTelevisionOff();
                 break;
             case 4:
-                decreaseVolume();
+                status = decreaseVolume();
                 break;
             case 5:
-                increaseVolumne();
-                break;
-            case 6:
-                decreaseScreenBrightness();
-                break;
-            case 7:
-                increaseScreenBrightness();
+                status = increaseVolume();
                 break;
             default:
+                status = Status.UNSUPPORTED_OPERATION;
                 break;
 
         }
-        return tvModel;
+
+        return new ServiceResponse(status, model);
     }
 
     @Override
     public Map getControllerStatus() {
-        return tvModel.getValuesMap();
+        return model.getValuesMap();
     }
 
-    private void turnTelevisionOn() {
-        if (!tvModel.isTelevisionOn()) {
-            tvModel.setTelevisionOn(true);
-            tvModel.setVolume(50);
-            tvModel.setScreenBrightness(60);
-            service.updateUIOutput("Turning TV On. Volume: " + tvModel.getVolume());
+    private Status turnTelevisionOn() {
+        if (!model.isTelevisionOn()) {
+            model.setTelevisionOn(true);
+            model.setVolume(50);
+            model.setScreenBrightness(60);
+            service.updateUIOutput("Turning TV On. Volume: " + model.getVolume());
+
+            return Status.OK;
         }
+
+        return Status.FAILED;
     }
 
-    private void turnTelevisionOff() {
-        if (tvModel.isTelevisionOn()) {
-            tvModel.setTelevisionOn(false);
-            tvModel.setVolume(0);
-            tvModel.setScreenBrightness(0);
-            service.updateUIOutput("Turning TV Off. Volume: " + tvModel.getVolume());
+    private Status turnTelevisionOff() {
+        if (model.isTelevisionOn()) {
+            model.setTelevisionOn(false);
+            model.setVolume(0);
+            model.setScreenBrightness(0);
+            service.updateUIOutput("Turning TV Off. Volume: " + model.getVolume());
+
+            return Status.OK;
         }
+
+        return Status.FAILED;
     }
 
-    private void turnMuteOn() {
-        if (tvModel.isTelevisionOn() && !tvModel.isMuteOn()) {
-            tvModel.setMuteOn(true);
-            previousVolumeLevel = tvModel.getVolume();
-            tvModel.setVolume(0);
-            service.updateUIOutput("Turning Mute On. Volume: " + tvModel.getVolume());
-        }
-    }
+    private Status decreaseVolume() {
+        if (model.isTelevisionOn() && model.getVolume() > 0) {
 
-    private void turnMuteOff() {
-        if (tvModel.isTelevisionOn() && tvModel.isMuteOn()) {
-            tvModel.setMuteOn(false);
-            tvModel.setVolume(previousVolumeLevel);
-            service.updateUIOutput("Turning Mute Off. Volume: " + tvModel.getVolume());
-        }
-    }
-
-    private void decreaseVolume() {
-        if (tvModel.isTelevisionOn() && tvModel.getVolume() > 0) {
-
-            if (tvModel.getVolume() - 1 == 0) {
-                tvModel.setVolume(0);
+            if (model.getVolume() - 1 == 0) {
+                model.setVolume(0);
             }
 
-            tvModel.setVolume(tvModel.getVolume() - 1);
-            service.updateUIOutput("Decreasing volume. Volume: " + tvModel.getVolume());
-        } else {
-            service.updateUIOutput("Cant decrease volume. Volume: " + tvModel.getVolume());
+            model.setVolume(model.getVolume() - 1);
+            service.updateUIOutput("Decreasing volume. Volume: " + model.getVolume());
+
+            return Status.OK;
         }
 
+        service.updateUIOutput("Cant decrease volume. Volume: " + model.getVolume());
+        return Status.FAILED;
     }
 
-    private void increaseVolumne() {
-        if (tvModel.isTelevisionOn() && tvModel.getVolume() < 100) {
+    private Status increaseVolume() {
+        if (model.isTelevisionOn() && model.getVolume() < 100) {
 
-            if (tvModel.getVolume() + 1 == 100) {
-                tvModel.setVolume(100);
+            if (model.getVolume() + 1 == 100) {
+                model.setVolume(100);
             }
 
-            tvModel.setVolume(tvModel.getVolume() + 1);
-            service.updateUIOutput("Increasing volume. Volume" + tvModel.getVolume());
-        } else {
-            service.updateUIOutput("Cant increase volume. Volume: " + tvModel.getVolume());
+            model.setVolume(model.getVolume() + 1);
+            service.updateUIOutput("Increasing volume. Volume" + model.getVolume());
+
+            return Status.OK;
         }
 
-    }
-
-    private void decreaseScreenBrightness() {
-        if (tvModel.isTelevisionOn() && tvModel.getScreenBrightness() > 0) {
-
-            if (tvModel.getScreenBrightness() - 20 == 0) {
-                tvModel.setScreenBrightness(0);
-            }
-
-            tvModel.setScreenBrightness(tvModel.getScreenBrightness() - 20);
-            service.updateUIOutput("Decreasing brightness. Brightness: " + tvModel.getVolume());
-        } else {
-            service.updateUIOutput("Cant decrease brightness: Brightness: " + tvModel.getScreenBrightness());
-        }
-    }
-
-    private void increaseScreenBrightness() {
-        if (tvModel.isTelevisionOn() && tvModel.getScreenBrightness() < 100) {
-
-            if (tvModel.getScreenBrightness() + 20 >= 100) {
-                tvModel.setScreenBrightness(100);
-            }
-
-            tvModel.setScreenBrightness(tvModel.getScreenBrightness() + 20);
-            service.updateUIOutput("Increasing brightness. Brightness: " + tvModel.getVolume());
-        } else {
-            service.updateUIOutput("Cant increase brightness. Brightness: " + tvModel.getVolume());
-        }
+        service.updateUIOutput("Cant increase volume. Volume: " + model.getVolume());
+        return Status.FAILED;
     }
 }

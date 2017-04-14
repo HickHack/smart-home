@@ -28,28 +28,18 @@ public class ServiceServer {
 
     public void stop() {
         try {
-            listener.close();
+            if (listener != null  && socket != null) {
+                listener.close();
+                socket.close();
+            }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.print("Failed to stop server.");
         }
     }
 
     public void start() {
         try {
             listen();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void respond(String response) {
-        try {
-            OutputStream outputStream = socket.getOutputStream();
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
-            BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
-
-            bufferedWriter.write(response);
-            bufferedWriter.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -99,6 +89,19 @@ public class ServiceServer {
     private void notifyListeners() {
         for (ServiceControllerListener listener : listeners) {
             respond(listener.processRequest());
+        }
+    }
+
+    private void respond(String response) {
+        try {
+            OutputStream outputStream = socket.getOutputStream();
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
+            BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
+
+            bufferedWriter.write(response);
+            bufferedWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

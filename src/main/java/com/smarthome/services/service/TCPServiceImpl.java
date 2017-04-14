@@ -60,13 +60,19 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
         registry.register(this);
         server.addListener(this);
         updateUIOutput(name + " is starting on port " + port);
-        ui.updateStatusAttributes(controller.getControllerStatus());
+        updateUIStatus();
         server.start();
     }
 
     @Override
     public void updateUIOutput(String message) {
+        updateUIStatus();
         ui.updateOutput(message);
+    }
+
+    @Override
+    public void updateUIStatus() {
+        ui.updateStatusAttributes(controller.getControllerStatus());
     }
 
     @Override
@@ -80,7 +86,7 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
     }
 
     @Override
-    public BaseServiceModel connectToService(ServiceOperation operation, ServiceType serviceType) {
+    public ServiceResponse connectToService(ServiceOperation operation, ServiceType serviceType) {
         operation.setRequester(name);
 
         while (requestRetryCount < MAX_REQUEST_RETRY) {
@@ -93,7 +99,7 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
                     request.send();
 
                     if (request.isSuccessful()) {
-                        return deserializeResponse(request.getResponse(), serviceType);
+                        return gson.fromJson(request.getResponse(), ServiceResponse.class);
                     } else {
                         ui.updateOutput("Failed to connect to " + serviceInfo.getName() + " on port " + serviceInfo.getPort());
                     }
@@ -116,9 +122,10 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
         ServiceOperation operation = gson.fromJson(server.getRequest(), ServiceOperation.class);
         updateUIOutput("Request received from " + operation.getRequester() + " - opcode: " + operation.getOperationCode());
 
-        BaseServiceModel updatedModel = controller.performOperation(operation);
-        ui.updateStatusAttributes(updatedModel.getValuesMap());
-        return gson.toJson(updatedModel);
+        ServiceResponse response = controller.performOperation(operation);
+        ui.updateStatusAttributes(controller.getControllerStatus());
+
+        return gson.toJson(response);
     }
 
     @Override

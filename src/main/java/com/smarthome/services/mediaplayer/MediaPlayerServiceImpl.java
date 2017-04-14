@@ -37,7 +37,7 @@ public class MediaPlayerServiceImpl implements Runnable {
             System.out.println("Publishing message: " + serializedServiceResponse);
             MqttMessage message = new MqttMessage(serializedServiceResponse.getBytes());
             message.setQos(QOS);
-            sampleClient.publish(ServiceType.MEDIAPLAYER.toString(), message);
+            sampleClient.publish(ServiceType.MEDIA_PLAYER.toString(), message);
             System.out.println("Message published");
             sampleClient.disconnect();
             System.out.println("Disconnected");

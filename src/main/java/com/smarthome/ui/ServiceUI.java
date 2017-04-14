@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
+import javax.swing.text.BadLocationException;
 
 import static com.smarthome.ui.UIConstants.*;
 
@@ -38,27 +39,44 @@ public class ServiceUI extends JFrame {
         this.setVisible(true);
     }
 
-    public void updateOutput(String message) {
-        outputArea.append("\n" + new Date().toString() + " - " + message);
+    public synchronized void updateOutput(String text) {
+        Runnable  runnable = new Runnable() {
+            public void run(){
+                if (!text.equals("")) {
+                    outputArea.append(new Date().toString() + " - " + text);
+                    outputArea.append("\n");
+                }
+
+                outputArea.update(outputArea.getGraphics());
+            }
+        };
+
+        SwingUtilities.invokeLater(runnable);
     }
 
-    public void updateStatusAttributes(Map<Object, Object> valuesMap) {
-        String text = "";
-        int count = 0;
+    public synchronized void updateStatusAttributes(Map<Object, Object> valuesMap) {
+        Runnable  runnable = new Runnable() {
+            public void run(){
+                String text = "";
+                int count = 0;
 
-        for (Map.Entry<Object, Object> e : valuesMap.entrySet()) {
-            String pair =  e.getKey() + ": " + e.getValue() + "\t";
+                for (Map.Entry<Object, Object> e : valuesMap.entrySet()) {
+                    String pair =  e.getKey() + ": " + e.getValue() + "\t";
 
-            if (count % 2 != 0 && count != 0) {
-                text = text + pair + "\n";
-            } else {
-                text = text + pair;
+                    if (count % 2 != 0 && count != 0) {
+                        text = text + pair + "\n";
+                    } else {
+                        text = text + pair;
+                    }
+
+                    count ++;
+                }
+
+                statusArea.setText(text);
             }
+        };
 
-            count ++;
-        }
-
-        statusArea.setText(text);
+        SwingUtilities.invokeLater(runnable);
     }
 
     public Point setPosition(Component component) {
