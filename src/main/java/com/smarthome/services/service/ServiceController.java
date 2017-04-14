@@ -2,6 +2,7 @@ package com.smarthome.services.service;
 
 import com.smarthome.services.service.model.BaseServiceModel;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -10,5 +11,5 @@ import java.util.Map;
  */
 public interface ServiceController {
     BaseServiceModel performOperation(ServiceOperation request);
-    Map getModelStatus();
+    Map getControllerStatus();
 }

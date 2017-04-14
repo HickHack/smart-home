@@ -7,7 +7,7 @@ package com.smarthome.services.service;
 public interface Service extends Runnable {
     void stop();
     void start();
-    void updateUI(String message);
+    void updateUIOutput(String message);
     String getName();
     ServiceType getType();
     int getPort();

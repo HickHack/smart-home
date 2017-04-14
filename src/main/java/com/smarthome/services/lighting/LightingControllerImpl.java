@@ -42,8 +42,8 @@ public class LightingControllerImpl implements ServiceController {
     }
 
     @Override
-    public Map getModelStatus() {
-        return null;
+    public Map getControllerStatus() {
+        return model.getValuesMap();
     }
 
     private void turnLightsOn() {
