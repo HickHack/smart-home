@@ -30,7 +30,7 @@ public class MediaPlayerSubscriber implements MqttCallback {
 
     @Override
     public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
-        BaseServiceModel serviceResponse = mediaPlayerService.getController().performOperation(gson.fromJson(mqttMessage.toString(), ServiceOperation.class));
+        ServiceResponse serviceResponse = mediaPlayerService.getController().performOperation(gson.fromJson(mqttMessage.toString(), ServiceOperation.class));
 
         String serializedResponse = gson.toJson(serviceResponse);
         System.out.println("Media Player is sending: " + serializedResponse);

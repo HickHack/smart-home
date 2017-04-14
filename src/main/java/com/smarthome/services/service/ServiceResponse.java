@@ -5,20 +5,32 @@ import com.smarthome.services.service.model.BaseServiceModel;
 import java.util.Date;
 
 /**
- * Created by graham on 28/03/17.
+ * @author Graham Murray
  */
 public class ServiceResponse {
 
-    BaseServiceModel model;
-    private String timestamp;
+    public enum Status {
+        OK,
+        FAILED,
+        UNSUPPORTED_OPERATION
+    }
 
-    public ServiceResponse(BaseServiceModel model) {
+    private Status status;
+    private String timestamp;
+    private BaseServiceModel model;
+
+    public ServiceResponse(Status status, BaseServiceModel model) {
+        this.status = status;
         this.model = model;
         timestamp = new Date().toString();
     }
 
-    public BaseServiceModel getModel() {
-        return model;
+    public void getModel() {
+        this.model = model;
+    }
+
+    public Status getStatus() {
+        return status;
     }
 
     public String getTimestamp() {

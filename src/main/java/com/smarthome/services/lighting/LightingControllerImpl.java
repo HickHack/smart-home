@@ -6,6 +6,8 @@ import com.smarthome.services.service.model.BaseServiceModel;
 
 import java.util.Map;
 
+import static com.smarthome.services.service.ServiceResponse.Status;
+
 /**
  * @author Graham Murray
  * @descripion Lighting Service controller. This class holds the logic for
@@ -22,23 +24,29 @@ public class LightingControllerImpl implements ServiceController {
     }
 
     @Override
-    public BaseServiceModel performOperation(ServiceOperation request) {
+    public ServiceResponse performOperation(ServiceOperation request) {
+        Status status;
+
         switch (request.getOperationCode()) {
             case 0:
-                turnLightsOn();
+                status = turnLightsOn();
                 break;
             case 1:
-                turnLightsOff();
+                status = turnLightsOff();
+                break;
             case 2:
-                increaseBrightness();
+                status = increaseBrightness();
+                break;
             case 3:
-                decreaseBrightness();
+                status = decreaseBrightness();
+                break;
             default:
+                status = Status.UNSUPPORTED_OPERATION;
                 break;
 
         }
 
-        return model;
+        return new ServiceResponse(status, model);
     }
 
     @Override
@@ -46,27 +54,35 @@ public class LightingControllerImpl implements ServiceController {
         return model.getValuesMap();
     }
 
-    private void turnLightsOn() {
+    private Status turnLightsOn() {
         if (!model.isLightingOn()) {
             model.setLightingOn(true);
             model.setBrightness(40);
             service.updateUIOutput("Turning lighting On. Brightness: " + model.getBrightness());
+
+            return Status.OK;
         } else {
             service.updateUIOutput("Lighting already On");
         }
+
+        return Status.FAILED;
     }
 
-    private void turnLightsOff() {
+    private Status turnLightsOff() {
         if (model.isLightingOn()) {
             model.setLightingOn(false);
             model.setBrightness(0);
             service.updateUIOutput("Turning lighting Off");
-        } {
+
+            return Status.OK;
+        } else {
             service.updateUIOutput("Lighting already Off");
         }
+
+        return Status.FAILED;
     }
 
-    private void decreaseBrightness() {
+    private Status decreaseBrightness() {
         if (model.isLightingOn() && model.getBrightness() > 0) {
 
 
@@ -76,16 +92,24 @@ public class LightingControllerImpl implements ServiceController {
 
             model.setBrightness(model.getBrightness() - 20);
             service.updateUIOutput("Decreasing Brightness. Level: " + model.getBrightness());
+
+            return Status.OK;
         }
+
+        return Status.FAILED;
     }
 
-    private void increaseBrightness() {
+    private Status increaseBrightness() {
         if (model.getBrightness() < 100) {
             model.setBrightness(model.getBrightness() + 20);
             turnLightsOn();
             service.updateUIOutput("Increasing Brightness. Level: " + model.getBrightness());
-        } {
+
+            return Status.OK;
+        } else {
             service.updateUIOutput("Brightness is max: Level: " + model.getBrightness());
         }
+
+        return Status.FAILED;
     }
 }

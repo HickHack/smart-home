@@ -22,7 +22,6 @@ public class ServiceUI extends JFrame {
     private JPanel panel;
     private JTextArea outputArea;
     private JTextArea statusArea;
-    private JScrollPane outputScroll;
     private Service service;
 
     public ServiceUI(Service service) {
@@ -53,7 +52,6 @@ public class ServiceUI extends JFrame {
         };
 
         SwingUtilities.invokeLater(runnable);
-
     }
 
     public synchronized void updateStatusAttributes(Map<Object, Object> valuesMap) {
@@ -79,7 +77,6 @@ public class ServiceUI extends JFrame {
         };
 
         SwingUtilities.invokeLater(runnable);
-
     }
 
     public Point setPosition(Component component) {
@@ -107,7 +104,7 @@ public class ServiceUI extends JFrame {
     }
 
     private void setupScrollPane() {
-        outputScroll = new JScrollPane(outputArea,
+        JScrollPane outputScroll = new JScrollPane(outputArea,
                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         outputScroll.setBounds(SCROLLPANE_X, SCROLLPANE_Y, SCROLLPANE_WIDTH, SCROLLPANE_HEIGHT);

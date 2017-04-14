@@ -10,5 +10,5 @@ import com.smarthome.services.service.model.BaseServiceModel;
 public interface TCPService extends Service {
     void addSubscriber(ServiceType subscriberType);
     void setController(ServiceController controller);
-    BaseServiceModel connectToService(ServiceOperation operation, ServiceType serviceType);
+    ServiceResponse connectToService(ServiceOperation operation, ServiceType serviceType);
 }

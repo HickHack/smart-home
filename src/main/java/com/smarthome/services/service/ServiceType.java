@@ -8,7 +8,7 @@ public enum ServiceType {
     JACUZZI("_jacuzzi._tcp.local."),
     LIGHTING("_lighting._tcp.local."),
     TELEVISION("_television._tcp.local."),
-    MEDIAPLAYER("/smart_home/mediaplayer");
+    MEDIA_PLAYER("/smart_home/mediaplayer");
 
     private final String text;
 

@@ -8,7 +8,7 @@ import com.smarthome.services.service.model.BaseServiceModel;
 import java.util.Map;
 
 /**
- * Created by Ian C on 06/04/2017.
+ * @author Ian Cunningham
  */
 public class MediaPlayerControllerImpl implements ServiceController {
 
@@ -20,7 +20,7 @@ public class MediaPlayerControllerImpl implements ServiceController {
     }
 
     @Override
-    public BaseServiceModel performOperation(ServiceOperation request) {
+    public ServiceResponse performOperation(ServiceOperation request) {
 
         switch (request.getOperationCode()) {
             case 0:
@@ -53,7 +53,8 @@ public class MediaPlayerControllerImpl implements ServiceController {
                 break;
 
         }
-        return mpModel;
+
+        return new ServiceResponse(ServiceResponse.Status.OK, mpModel);
     }
 
     @Override

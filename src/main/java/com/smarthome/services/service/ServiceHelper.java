@@ -8,8 +8,8 @@ package com.smarthome.services.service;
  */
 public class ServiceHelper {
 
-    public static boolean isValidResponse(Object object, Class clazz) {
-        if (object != null && clazz.isInstance(object)) {
+    public static boolean isValidResponse(ServiceResponse response) {
+        if (response != null && response.getStatus().equals(ServiceResponse.Status.OK)) {
             return true;
         }
 

@@ -108,7 +108,7 @@ public class LaunchControl {
             System.out.println("Publishing message: " + json);
             MqttMessage message = new MqttMessage(json.getBytes());
             message.setQos(QOS);
-            sampleClient.publish(ServiceType.MEDIAPLAYER.toString(), message);
+            sampleClient.publish(ServiceType.MEDIA_PLAYER.toString(), message);
             System.out.println("Message published");
             sampleClient.disconnect();
             System.out.println("Disconnected");

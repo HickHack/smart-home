@@ -10,6 +10,6 @@ import java.util.Map;
  * @descripion Interface for service controllers
  */
 public interface ServiceController {
-    BaseServiceModel performOperation(ServiceOperation request);
+    ServiceResponse performOperation(ServiceOperation request);
     Map getControllerStatus();
 }
