@@ -49,21 +49,21 @@ public class LaunchControl {
     }
 
     private void launchJacuzzi() throws InterruptedException {
-        jacuzziProcess = new Thread(new JacuzziServiceImpl("Jacuzzi_Service1"));
+        jacuzziProcess = new Thread(new JacuzziServiceImpl("jacuzziservice1"));
         jacuzziProcess.start();
 
         Thread.sleep(9000);
     }
 
     private void launchLighting() throws InterruptedException {
-        lightingProcess = new Thread(new LightingServiceImpl("LightingService1"));
+        lightingProcess = new Thread(new LightingServiceImpl("lightingservice1"));
         lightingProcess.start();
 
         Thread.sleep(9000);
     }
 
     private void launchTelevision() throws InterruptedException {
-        televisionProcess = new Thread(new TelevisionServiceImpl("TelevisionService1"));
+        televisionProcess = new Thread(new TelevisionServiceImpl("televisionservice1"));
         televisionProcess.start();
 
         Thread.sleep(9000);

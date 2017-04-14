@@ -60,13 +60,19 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
         registry.register(this);
         server.addListener(this);
         updateUIOutput(name + " is starting on port " + port);
-        ui.updateStatusAttributes(controller.getControllerStatus());
+        updateUIStatus();
         server.start();
     }
 
     @Override
     public void updateUIOutput(String message) {
+        updateUIStatus();
         ui.updateOutput(message);
+    }
+
+    @Override
+    public void updateUIStatus() {
+        ui.updateStatusAttributes(controller.getControllerStatus());
     }
 
     @Override

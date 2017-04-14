@@ -8,6 +8,7 @@ public interface Service extends Runnable {
     void stop();
     void start();
     void updateUIOutput(String message);
+    void updateUIStatus();
     String getName();
     ServiceType getType();
     int getPort();

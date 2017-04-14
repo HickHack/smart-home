@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
+import javax.swing.text.BadLocationException;
 
 import static com.smarthome.ui.UIConstants.*;
 
@@ -21,6 +22,7 @@ public class ServiceUI extends JFrame {
     private JPanel panel;
     private JTextArea outputArea;
     private JTextArea statusArea;
+    private JScrollPane outputScroll;
     private Service service;
 
     public ServiceUI(Service service) {
@@ -38,27 +40,46 @@ public class ServiceUI extends JFrame {
         this.setVisible(true);
     }
 
-    public void updateOutput(String message) {
-        outputArea.append("\n" + new Date().toString() + " - " + message);
+    public synchronized void updateOutput(String text) {
+        Runnable  runnable = new Runnable() {
+            public void run(){
+                if (!text.equals("")) {
+                    outputArea.append(new Date().toString() + " - " + text);
+                    outputArea.append("\n");
+                }
+
+                outputArea.update(outputArea.getGraphics());
+            }
+        };
+
+        SwingUtilities.invokeLater(runnable);
+
     }
 
-    public void updateStatusAttributes(Map<Object, Object> valuesMap) {
-        String text = "";
-        int count = 0;
+    public synchronized void updateStatusAttributes(Map<Object, Object> valuesMap) {
+        Runnable  runnable = new Runnable() {
+            public void run(){
+                String text = "";
+                int count = 0;
 
-        for (Map.Entry<Object, Object> e : valuesMap.entrySet()) {
-            String pair =  e.getKey() + ": " + e.getValue() + "\t";
+                for (Map.Entry<Object, Object> e : valuesMap.entrySet()) {
+                    String pair =  e.getKey() + ": " + e.getValue() + "\t";
 
-            if (count % 2 != 0 && count != 0) {
-                text = text + pair + "\n";
-            } else {
-                text = text + pair;
+                    if (count % 2 != 0 && count != 0) {
+                        text = text + pair + "\n";
+                    } else {
+                        text = text + pair;
+                    }
+
+                    count ++;
+                }
+
+                statusArea.setText(text);
             }
+        };
 
-            count ++;
-        }
+        SwingUtilities.invokeLater(runnable);
 
-        statusArea.setText(text);
     }
 
     public Point setPosition(Component component) {
@@ -86,7 +107,7 @@ public class ServiceUI extends JFrame {
     }
 
     private void setupScrollPane() {
-        JScrollPane outputScroll = new JScrollPane(outputArea,
+        outputScroll = new JScrollPane(outputArea,
                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         outputScroll.setBounds(SCROLLPANE_X, SCROLLPANE_Y, SCROLLPANE_WIDTH, SCROLLPANE_HEIGHT);
