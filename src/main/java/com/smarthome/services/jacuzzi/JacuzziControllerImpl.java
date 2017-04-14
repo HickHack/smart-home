@@ -6,6 +6,9 @@ import com.smarthome.services.service.*;
 import com.smarthome.services.service.model.BaseServiceModel;
 import com.smarthome.services.television.model.TelevisionModel;
 
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,8 +55,8 @@ public class JacuzziControllerImpl implements ServiceController {
     }
 
     @Override
-    public Map getModelStatus() {
-        return null;
+    public Map getControllerStatus() {
+        return model.getValuesMap();
     }
 
     private void turnWaterOn() {

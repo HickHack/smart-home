@@ -2,6 +2,9 @@ package com.smarthome.services.jacuzzi.model;
 
 import com.smarthome.services.service.model.BaseServiceModel;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Graham Murray
  * @descripion Jacuzzi service controller
@@ -15,6 +18,17 @@ public class JacuzziModel extends BaseServiceModel {
 
     public JacuzziModel(String name, int port) {
         super(name, port);
+    }
+
+    @Override
+    public Map getValuesMap() {
+        Map valuesMap = new HashMap();
+        valuesMap.put("Water Depth", waterDepth);
+        valuesMap.put("Water Running", isWaterRunning);
+        valuesMap.put("Jets Running", isJetsRunning);
+        valuesMap.put("Jet Power", jetPower);
+
+        return valuesMap;
     }
 
     public void setWaterDepth(int waterDepth) {
