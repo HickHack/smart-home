@@ -51,7 +51,7 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
     public void stop() {
         registry.unregister(this);
         server.stop();
-        updateUI("Stopping service...");
+        updateUIOutput("Stopping service...");
     }
 
     @Override
@@ -59,12 +59,13 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
         ui.init();
         registry.register(this);
         server.addListener(this);
-        updateUI(name + " is starting on port " + port);
+        updateUIOutput(name + " is starting on port " + port);
+        ui.updateStatusAttributes(controller.getControllerStatus());
         server.start();
     }
 
     @Override
-    public void updateUI(String message) {
+    public void updateUIOutput(String message) {
         ui.updateOutput(message);
     }
 
@@ -105,8 +106,11 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
     @Override
     public String processRequest() {
         ServiceOperation operation = gson.fromJson(server.getRequest(), ServiceOperation.class);
-        updateUI("Request received from " + operation.getRequester() + " - opcode: " + operation.getOperationCode());
-        return gson.toJson(controller.performOperation(operation));
+        updateUIOutput("Request received from " + operation.getRequester() + " - opcode: " + operation.getOperationCode());
+
+        BaseServiceModel updatedModel = controller.performOperation(operation);
+        ui.updateStatusAttributes(updatedModel.getValuesMap());
+        return gson.toJson(updatedModel);
     }
 
     @Override

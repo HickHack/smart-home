@@ -2,6 +2,9 @@ package com.smarthome.services.television.model;
 
 import com.smarthome.services.service.model.BaseServiceModel;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by Ian C on 01/04/2017.
  */
@@ -19,6 +22,18 @@ public class TelevisionModel extends BaseServiceModel {
         volume = 0;
         screenBrightness = 0;
     }
+
+    @Override
+    public Map getValuesMap() {
+        Map valuesMap = new HashMap();
+        valuesMap.put("Television On", isTelevisionOn);
+        valuesMap.put("Mute On", isMuteOn);
+        valuesMap.put("Volume", volume);
+        valuesMap.put("Screen Brightness", screenBrightness);
+
+        return valuesMap;
+    }
+
 
     public void setVolume(int volume) {
         this.volume = volume;

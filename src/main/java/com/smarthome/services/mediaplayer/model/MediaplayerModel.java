@@ -2,6 +2,8 @@ package com.smarthome.services.mediaplayer.model;
 
 import com.smarthome.services.service.model.BaseServiceModel;
 
+import java.util.Map;
+
 /**
  * Created by Ian C on 06/04/2017.
  */
@@ -49,5 +51,10 @@ public class MediaplayerModel extends BaseServiceModel {
 
     public void setVolume(int volume) {
         this.volume = volume;
+    }
+
+    @Override
+    public Map getValuesMap() {
+        return null;
     }
 }

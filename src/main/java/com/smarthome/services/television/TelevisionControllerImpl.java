@@ -57,7 +57,7 @@ public class TelevisionControllerImpl implements ServiceController {
 
     @Override
     public Map getControllerStatus() {
-        return null;
+        return tvModel.getValuesMap();
     }
 
     private void turnTelevisionOn() {

@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Date;
+import java.util.Map;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -41,6 +42,24 @@ public class ServiceUI extends JFrame {
         outputArea.append("\n" + new Date().toString() + " - " + message);
     }
 
+    public void updateStatusAttributes(Map<Object, Object> valuesMap) {
+        String text = "";
+        int count = 0;
+
+        for (Map.Entry<Object, Object> e : valuesMap.entrySet()) {
+            String pair =  e.getKey() + ": " + e.getValue() + "\t";
+
+            if (count % 2 != 0 && count != 0) {
+                text = text + pair + "\n";
+            } else {
+                text = text + pair;
+            }
+
+            count ++;
+        }
+
+        statusArea.setText(text);
+    }
 
     public Point setPosition(Component component) {
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
@@ -63,6 +82,7 @@ public class ServiceUI extends JFrame {
     private void setupOutputTextArea() {
         outputArea = new JTextArea();
         outputArea.setLineWrap(true);
+        outputArea.setEditable(false);
     }
 
     private void setupScrollPane() {
@@ -78,6 +98,7 @@ public class ServiceUI extends JFrame {
     private void setupStatusPanel() {
         statusArea  = new JTextArea();
         statusArea.setLineWrap(true);
+        statusArea.setEditable(false);
         statusArea.setBorder(getCompoundBorder());
         statusArea.setBounds(STANDARD_X, STANDARD_Y, STATUS_AREA_WIDTH, STATUS_AREA_HEIGHT);
         panel.add(statusArea);
@@ -111,7 +132,7 @@ public class ServiceUI extends JFrame {
             }
 
             @Override
-            public void updateUI(String message) {
+            public void updateUIOutput(String message) {
 
             }
 

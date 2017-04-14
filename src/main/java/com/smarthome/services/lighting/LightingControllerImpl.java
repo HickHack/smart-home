@@ -43,7 +43,7 @@ public class LightingControllerImpl implements ServiceController {
 
     @Override
     public Map getControllerStatus() {
-        return null;
+        return model.getValuesMap();
     }
 
     private void turnLightsOn() {

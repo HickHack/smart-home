@@ -6,9 +6,6 @@ import com.smarthome.services.service.*;
 import com.smarthome.services.service.model.BaseServiceModel;
 import com.smarthome.services.television.model.TelevisionModel;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,7 +60,7 @@ public class JacuzziControllerImpl implements ServiceController {
         if (model.getWaterDepth() == 0 && !model.isWaterRunning()) {
             model.setWaterDepth(80);
             model.setWaterRunning(true);
-            service.updateUI("Water is running, depth is 80%");
+            service.updateUIOutput("Water is running, depth is 80%");
             turnJetsOn();
             turnLightsAndTvOn();
         }
@@ -109,11 +106,11 @@ public class JacuzziControllerImpl implements ServiceController {
                 BaseServiceModel tvResponse = service.connectToService(new ServiceOperation(1), ServiceType.TELEVISION);
 
                 if (ServiceHelper.isValidResponse(tvResponse, TelevisionModel.class)) {
-                    service.updateUI("Successfully turned TV and lights off");
+                    service.updateUIOutput("Successfully turned TV and lights off");
                 }
             }
         } else {
-            service.updateUI("Failed to turn lights and TV off");
+            service.updateUIOutput("Failed to turn lights and TV off");
         }
     }
 
@@ -121,7 +118,7 @@ public class JacuzziControllerImpl implements ServiceController {
         if (!model.isJetsRunning() && model.getWaterDepth()> 0) {
             model.setJetPower(40);
             model.setJetsRunning(true);
-            service.updateUI("Starting Jets, power is 40%");
+            service.updateUIOutput("Starting Jets, power is 40%");
         }
     }
 
@@ -129,21 +126,21 @@ public class JacuzziControllerImpl implements ServiceController {
         if (model.isJetsRunning()) {
             model.setJetPower(0);
             model.setJetsRunning(false);
-            service.updateUI("Powering jets off");
+            service.updateUIOutput("Powering jets off");
         }
     }
 
     private void increaseJetPower() {
         if (model.getJetPower() < 100 && model.isJetsRunning() && model.getWaterDepth() > 0) {
             model.setJetPower(model.getJetPower() + 20);
-            service.updateUI("Starting Jets, power is 40%");
+            service.updateUIOutput("Starting Jets, power is 40%");
         }
     }
 
     private void decreaseJetPower() {
         if (model.getJetPower() > 0) {
             model.setJetPower(model.getJetPower() - 20);
-            service.updateUI("Decreasing jet power");
+            service.updateUIOutput("Decreasing jet power");
         }
     }
 }
