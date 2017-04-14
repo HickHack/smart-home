@@ -83,21 +83,29 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
     public BaseServiceModel connectToService(ServiceOperation operation, ServiceType serviceType) {
         operation.setRequester(name);
 
-        while (requestRetryCount <= MAX_REQUEST_RETRY) {
+        while (requestRetryCount < MAX_REQUEST_RETRY) {
             if (dnsServiceDiscovery.hasDiscoveredService(serviceType)) {
                 ServiceInfo serviceInfo = dnsServiceDiscovery.getServiceInfo(serviceType);
 
                 if (serviceInfo != null) {
                     ServiceRequest request = new ServiceRequest(serviceInfo, operation);
+                    updateUIOutput("Sending request to " + serviceInfo.getName() + " opcode: " + operation.getOperationCode());
                     request.send();
-                    System.out.println(serviceType.toString() + " Response: " + request.getResponse());
 
-                    return deserializeResponse(request.getResponse(), serviceType);
+                    if (request.isSuccessful()) {
+                        return deserializeResponse(request.getResponse(), serviceType);
+                    } else {
+                        ui.updateOutput("Failed to connect to " + serviceInfo.getName() + " on port " + serviceInfo.getPort());
+                    }
                 }
+            } else {
+                ui.updateOutput("Yet to discover " + serviceType);
             }
 
             requestRetryCount++;
+            ui.updateOutput("Request retry: " + requestRetryCount);
         }
+
         requestRetryCount = 0;
 
         return null;

@@ -62,25 +62,36 @@ public class JacuzziControllerImpl implements ServiceController {
             model.setWaterRunning(true);
             service.updateUIOutput("Water is running, depth is 80%");
             turnJetsOn();
-            turnLightsAndTvOn();
+            turnLightsOn();
+            turnTVOn();
         }
     }
 
-    private void turnLightsAndTvOn() {
-        BaseServiceModel lightingResponse = service.connectToService(new ServiceOperation(0), ServiceType.LIGHTING);
+    private void turnLightsOn() {
+        BaseServiceModel lightingResult = service.connectToService(new ServiceOperation(0), ServiceType.LIGHTING);
 
-        if (ServiceHelper.isValidResponse(lightingResponse, LightingModel.class)) {
-            LightingModel lightingModel = (LightingModel) lightingResponse;
+        if (ServiceHelper.isValidResponse(lightingResult, LightingModel.class)) {
+            LightingModel lightingModel = (LightingModel) lightingResult;
 
             if (lightingModel.isLightingOn()) {
-                BaseServiceModel tvResponse = service.connectToService(new ServiceOperation(0), ServiceType.TELEVISION);
-
-                if (ServiceHelper.isValidResponse(tvResponse, TelevisionModel.class)) {
-                    System.out.println("Successfully Turned TV and Lights On");
-                }
+                service.updateUIOutput("Successfully Turned Lights On");
             }
         } else {
-            System.out.println("Failed to turn TV and Lights On");
+            service.updateUIOutput("Failed to turn Lights On");
+        }
+    }
+
+    private void turnTVOn() {
+        BaseServiceModel tvResult = service.connectToService(new ServiceOperation(0), ServiceType.TELEVISION);
+
+        if (ServiceHelper.isValidResponse(tvResult, TelevisionModel.class)) {
+            TelevisionModel tvModel = (TelevisionModel) tvResult;
+
+            if (tvModel.isTelevisionOn()) {
+                service.updateUIOutput("Successfully Turned TV On");
+            }
+        } else {
+            service.updateUIOutput("Failed to turn TV On");
         }
     }
 
@@ -92,25 +103,36 @@ public class JacuzziControllerImpl implements ServiceController {
             model.setWaterDepth(0);
             model.setWaterRunning(false);
             turnJetsOff();
-            turnLightsAndTvOff();
+            turnLightsOff();
+            turnTVOff();
         }
     }
 
-    private void turnLightsAndTvOff() {
-        BaseServiceModel lightingResponse = service.connectToService(new ServiceOperation(1), ServiceType.LIGHTING);
+    private void turnLightsOff() {
+        BaseServiceModel lightingResult = service.connectToService(new ServiceOperation(1), ServiceType.LIGHTING);
 
-        if (ServiceHelper.isValidResponse(lightingResponse, LightingModel.class)) {
-            LightingModel lightingModel = (LightingModel) lightingResponse;
+        if (ServiceHelper.isValidResponse(lightingResult, LightingModel.class)) {
+            LightingModel lightingModel = (LightingModel) lightingResult;
 
             if (!lightingModel.isLightingOn()) {
-                BaseServiceModel tvResponse = service.connectToService(new ServiceOperation(1), ServiceType.TELEVISION);
-
-                if (ServiceHelper.isValidResponse(tvResponse, TelevisionModel.class)) {
-                    service.updateUIOutput("Successfully turned TV and lights off");
-                }
+                service.updateUIOutput("Successfully Turned Lights Off");
             }
         } else {
-            service.updateUIOutput("Failed to turn lights and TV off");
+            service.updateUIOutput("Failed to turn Lights Off");
+        }
+    }
+
+    private void turnTVOff() {
+        BaseServiceModel tvResult = service.connectToService(new ServiceOperation(1), ServiceType.TELEVISION);
+
+        if (ServiceHelper.isValidResponse(tvResult, TelevisionModel.class)) {
+            TelevisionModel televisionModel = (TelevisionModel) tvResult;
+
+            if (!televisionModel.isTelevisionOn()) {
+                service.updateUIOutput("Successfully Turned TV Off");
+            }
+        } else {
+            service.updateUIOutput("Failed to turn TV Off");
         }
     }
 

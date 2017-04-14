@@ -7,26 +7,26 @@ import java.util.Map;
 /**
  * Created by Ian C on 06/04/2017.
  */
-public class MediaplayerModel extends BaseServiceModel {
+public class MediaPlayerModel extends BaseServiceModel {
 
-    private boolean isMediaplayerOn;
+    private boolean isMediaPlayerOn;
     private boolean isMuteOn;
     private int volume;
     private int track;
     private PlaylistModel playlist;
 
-    public MediaplayerModel(String name) {
+    public MediaPlayerModel(String name) {
         super(name, 0);
 
        // playlist = new Playlist();
     }
 
-    public boolean isMediaplayerOn() {
-        return isMediaplayerOn;
+    public boolean isMediaPlayerOn() {
+        return isMediaPlayerOn;
     }
 
-    public void setMediaplayerOn(boolean mediaplayerOn) {
-        isMediaplayerOn = mediaplayerOn;
+    public void setMediaPlayerOn(boolean mediaPlayerOn) {
+        isMediaPlayerOn = mediaPlayerOn;
     }
 
     public int getTrack() {

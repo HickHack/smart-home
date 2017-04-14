@@ -118,45 +118,4 @@ public class ServiceUI extends JFrame {
             }
         });
     }
-
-    public static void main(String[] args) {
-        ServiceUI ui = new ServiceUI(new Service() {
-            @Override
-            public void stop() {
-
-            }
-
-            @Override
-            public void start() {
-
-            }
-
-            @Override
-            public void updateUIOutput(String message) {
-
-            }
-
-            @Override
-            public String getName() {
-                return "Graham's";
-            }
-
-            @Override
-            public ServiceType getType() {
-                return ServiceType.JACUZZI;
-            }
-
-            @Override
-            public int getPort() {
-                return 0;
-            }
-
-            @Override
-            public void run() {
-
-            }
-        });
-
-        ui.init();
-    }
 }

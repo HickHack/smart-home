@@ -41,7 +41,6 @@ public class ServiceRequest {
 
                 isSuccess = true;
             } catch (IOException e) {
-                e.printStackTrace();
                 isSuccess = false;
             }
     }
