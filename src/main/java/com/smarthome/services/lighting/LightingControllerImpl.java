@@ -8,8 +8,8 @@ import java.util.Map;
 
 /**
  * @author Graham Murray
- * @descripion Jacuzzi service controller. This class holds the logic for
- * handling an operation and manipulating the jacuzzi.
+ * @descripion Lighting Service controller. This class holds the logic for
+ * handling an operation and manipulating the lighting.
  */
 public class LightingControllerImpl implements ServiceController {
 
@@ -50,6 +50,9 @@ public class LightingControllerImpl implements ServiceController {
         if (!model.isLightingOn()) {
             model.setLightingOn(true);
             model.setBrightness(40);
+            service.updateUIOutput("Turning lighting On. Brightness: " + model.getBrightness());
+        } else {
+            service.updateUIOutput("Lighting already On");
         }
     }
 
@@ -57,6 +60,9 @@ public class LightingControllerImpl implements ServiceController {
         if (model.isLightingOn()) {
             model.setLightingOn(false);
             model.setBrightness(0);
+            service.updateUIOutput("Turning lighting Off");
+        } {
+            service.updateUIOutput("Lighting already Off");
         }
     }
 
@@ -69,6 +75,7 @@ public class LightingControllerImpl implements ServiceController {
             }
 
             model.setBrightness(model.getBrightness() - 20);
+            service.updateUIOutput("Decreasing Brightness. Level: " + model.getBrightness());
         }
     }
 
@@ -76,6 +83,9 @@ public class LightingControllerImpl implements ServiceController {
         if (model.getBrightness() < 100) {
             model.setBrightness(model.getBrightness() + 20);
             turnLightsOn();
+            service.updateUIOutput("Increasing Brightness. Level: " + model.getBrightness());
+        } {
+            service.updateUIOutput("Brightness is max: Level: " + model.getBrightness());
         }
     }
 }

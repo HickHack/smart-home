@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * @author Graham Murray
- * @descripion Jacuzzi service server
+ * @descripion Server service used for TCP services
  *
  */
 public class ServiceServer {

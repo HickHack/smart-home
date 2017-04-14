@@ -9,7 +9,7 @@ public class UIConstants {
     public static final int STANDARD_Y = 5;
 
     public static final int FRAME_WIDTH = 550;
-    public static final int FRAME_HEIGHT = 500;
+    public static final int FRAME_HEIGHT = 380;
 
     public static final int STATUS_AREA_WIDTH = FRAME_WIDTH - (STANDARD_X * 2);
     public static final int STATUS_AREA_HEIGHT = (FRAME_HEIGHT / 4) - (STANDARD_Y * 2);

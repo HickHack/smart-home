@@ -65,6 +65,7 @@ public class TelevisionControllerImpl implements ServiceController {
             tvModel.setTelevisionOn(true);
             tvModel.setVolume(50);
             tvModel.setScreenBrightness(60);
+            service.updateUIOutput("Turning TV On. Volume: " + tvModel.getVolume());
         }
     }
 
@@ -73,6 +74,7 @@ public class TelevisionControllerImpl implements ServiceController {
             tvModel.setTelevisionOn(false);
             tvModel.setVolume(0);
             tvModel.setScreenBrightness(0);
+            service.updateUIOutput("Turning TV Off. Volume: " + tvModel.getVolume());
         }
     }
 
@@ -81,6 +83,7 @@ public class TelevisionControllerImpl implements ServiceController {
             tvModel.setMuteOn(true);
             previousVolumeLevel = tvModel.getVolume();
             tvModel.setVolume(0);
+            service.updateUIOutput("Turning Mute On. Volume: " + tvModel.getVolume());
         }
     }
 
@@ -88,6 +91,7 @@ public class TelevisionControllerImpl implements ServiceController {
         if (tvModel.isTelevisionOn() && tvModel.isMuteOn()) {
             tvModel.setMuteOn(false);
             tvModel.setVolume(previousVolumeLevel);
+            service.updateUIOutput("Turning Mute Off. Volume: " + tvModel.getVolume());
         }
     }
 
@@ -99,6 +103,9 @@ public class TelevisionControllerImpl implements ServiceController {
             }
 
             tvModel.setVolume(tvModel.getVolume() - 1);
+            service.updateUIOutput("Decreasing volume. Volume: " + tvModel.getVolume());
+        } else {
+            service.updateUIOutput("Cant decrease volume. Volume: " + tvModel.getVolume());
         }
 
     }
@@ -111,6 +118,9 @@ public class TelevisionControllerImpl implements ServiceController {
             }
 
             tvModel.setVolume(tvModel.getVolume() + 1);
+            service.updateUIOutput("Increasing volume. Volume" + tvModel.getVolume());
+        } else {
+            service.updateUIOutput("Cant increase volume. Volume: " + tvModel.getVolume());
         }
 
     }
@@ -123,6 +133,9 @@ public class TelevisionControllerImpl implements ServiceController {
             }
 
             tvModel.setScreenBrightness(tvModel.getScreenBrightness() - 20);
+            service.updateUIOutput("Decreasing brightness. Brightness: " + tvModel.getVolume());
+        } else {
+            service.updateUIOutput("Cant decrease brightness: Brightness: " + tvModel.getScreenBrightness());
         }
     }
 
@@ -134,6 +147,9 @@ public class TelevisionControllerImpl implements ServiceController {
             }
 
             tvModel.setScreenBrightness(tvModel.getScreenBrightness() + 20);
+            service.updateUIOutput("Increasing brightness. Brightness: " + tvModel.getVolume());
+        } else {
+            service.updateUIOutput("Cant increase brightness. Brightness: " + tvModel.getVolume());
         }
     }
 }
