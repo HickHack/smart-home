@@ -1,7 +1,6 @@
 package com.smarthome.ui;
 
 import com.smarthome.services.service.Service;
-import com.smarthome.services.service.ServiceType;
 
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -12,9 +11,8 @@ import java.util.Map;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
-import javax.swing.text.BadLocationException;
 
-import static com.smarthome.ui.UIConstants.*;
+import static com.smarthome.ui.UIDimension.*;
 
 
 public class ServiceUI extends JFrame {
@@ -29,7 +27,7 @@ public class ServiceUI extends JFrame {
         this.service = service;
 
         setupPanel();
-        setupStatusPanel();
+        setupStatusTextArea();
         setupOutputTextArea();
         setupScrollPane();
         addWindowCloseListener();
@@ -40,7 +38,7 @@ public class ServiceUI extends JFrame {
     }
 
     public synchronized void updateOutput(String text) {
-        Runnable  runnable = new Runnable() {
+        Runnable runnable = new Runnable() {
             public void run(){
                 if (!text.equals("")) {
                     outputArea.append(new Date().toString() + " - " + text);
@@ -55,13 +53,13 @@ public class ServiceUI extends JFrame {
     }
 
     public synchronized void updateStatusAttributes(Map<Object, Object> valuesMap) {
-        Runnable  runnable = new Runnable() {
+        Runnable runnable = new Runnable() {
             public void run(){
                 String text = "";
                 int count = 0;
 
-                for (Map.Entry<Object, Object> e : valuesMap.entrySet()) {
-                    String pair =  e.getKey() + ": " + e.getValue() + "\t";
+                for (Map.Entry<Object, Object> entry : valuesMap.entrySet()) {
+                    String pair = entry.getKey() + ": " + entry.getValue() + "\t";
 
                     if (count % 2 != 0 && count != 0) {
                         text = text + pair + "\n";
@@ -113,7 +111,7 @@ public class ServiceUI extends JFrame {
         panel.add(outputScroll);
     }
 
-    private void setupStatusPanel() {
+    private void setupStatusTextArea() {
         statusArea  = new JTextArea();
         statusArea.setLineWrap(true);
         statusArea.setEditable(false);

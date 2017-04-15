@@ -57,7 +57,7 @@ public class LightingControllerImpl implements ServiceController {
     private Status turnLightsOn() {
         if (!model.isLightingOn()) {
             model.setLightingOn(true);
-            model.setBrightness(40);
+            model.setBrightness(4);
             service.updateUIOutput("Turning lighting On. Brightness: " + model.getBrightness());
 
             return Status.OK;
@@ -90,7 +90,7 @@ public class LightingControllerImpl implements ServiceController {
                 turnLightsOff();
             }
 
-            model.setBrightness(model.getBrightness() - 20);
+            model.setBrightness(model.getBrightness() - 4);
             service.updateUIOutput("Decreasing Brightness. Level: " + model.getBrightness());
 
             return Status.OK;
@@ -101,7 +101,7 @@ public class LightingControllerImpl implements ServiceController {
 
     private Status increaseBrightness() {
         if (model.getBrightness() < 100) {
-            model.setBrightness(model.getBrightness() + 20);
+            model.setBrightness(model.getBrightness() + 4);
             turnLightsOn();
             service.updateUIOutput("Increasing Brightness. Level: " + model.getBrightness());
 

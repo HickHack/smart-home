@@ -56,7 +56,7 @@ public class DNSServiceDiscovery {
         }
     }
 
-    private static class DNSListener implements ServiceListener {
+    private class DNSListener implements ServiceListener {
 
         private List<ServiceInfo> services;
 
@@ -80,7 +80,18 @@ public class DNSServiceDiscovery {
 
         @Override
         public void serviceRemoved(ServiceEvent event) {
-            removeService(ServiceType.valueOf(event.getInfo().getType()));
+            ServiceType serviceType = ServiceType.fromString(event.getInfo().getType());
+            int position = 0;
+
+            if (doesServiceExist(serviceType)) {
+                for(ServiceInfo discoveredService : services) {
+                    if (discoveredService.getType().equals(serviceType.toString())) {
+                        services.remove(position);
+                    }
+
+                    position++;
+                }
+            }
         }
 
         @Override
@@ -92,20 +103,6 @@ public class DNSServiceDiscovery {
 
             if (!doesServiceExist(ServiceType.fromString(serviceInfo.getType()))) {
                 services.add(serviceInfo);
-            }
-        }
-
-        private void removeService(ServiceType serviceType) {
-            int position = 0;
-
-            if (doesServiceExist(serviceType)) {
-                for(ServiceInfo discoveredService : services) {
-                    if (discoveredService.getType().equals(serviceType.toString())) {
-                        services.remove(position);
-                    }
-
-                    position++;
-                }
             }
         }
 
