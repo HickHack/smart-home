@@ -52,6 +52,7 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
         registry.unregister(this);
         server.stop();
         updateUIOutput("Stopping service...");
+        Thread.currentThread().interrupt();
     }
 
     @Override
@@ -106,6 +107,7 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
                 }
             } else {
                 ui.updateOutput("Yet to discover " + serviceType);
+                break;
             }
 
             requestRetryCount++;
