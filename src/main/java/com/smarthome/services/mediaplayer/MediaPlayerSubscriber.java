@@ -15,6 +15,5 @@ public class MediaPlayerSubscriber extends MqttSubscriber {
     public MediaPlayerSubscriber(MediaPlayerServiceImpl mediaPlayerService) {
         super(mediaPlayerService);
     }
-
-
+    
 }

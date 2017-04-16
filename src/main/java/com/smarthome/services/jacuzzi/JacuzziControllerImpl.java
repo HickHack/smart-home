@@ -194,7 +194,7 @@ public class JacuzziControllerImpl implements ServiceController {
                 model.setWaterDepth(model.getWaterDepth() + 4);
                 increaseJetPower();
                 increaseLightBrightness();
-                decreaseTvVolume();
+               // decreaseTvVolume();
                 service.updateUIStatus();
                 service.updateUIOutput("Filling water.");
             } else {
