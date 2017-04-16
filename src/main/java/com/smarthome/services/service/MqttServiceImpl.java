@@ -30,18 +30,18 @@ public class MqttServiceImpl implements Runnable{
 
     public void publishResponse(String serializedServiceResponse) {
         try {
-            MqttClient sampleClient = new MqttClient(BROKER, clientId, PERSISTENCE);
+            MqttClient responseClient = new MqttClient(BROKER, clientId, PERSISTENCE);
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setCleanSession(true);
             System.out.println("Connecting to BROKER: " + BROKER);
-            sampleClient.connect(connOpts);
+            responseClient.connect(connOpts);
             System.out.println("Connected");
             System.out.println("Publishing message: " + serializedServiceResponse);
             MqttMessage message = new MqttMessage(serializedServiceResponse.getBytes());
             message.setQos(QOS);
-            sampleClient.publish(ServiceType.MEDIA_PLAYER.toString(), message);
+            responseClient.publish(ServiceType.MEDIA_PLAYER.toString(), message);
             System.out.println("Message published");
-            sampleClient.disconnect();
+            responseClient.disconnect();
             System.out.println("Disconnected");
         } catch (MqttException me) {
             mqttEx(me);
