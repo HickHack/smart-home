@@ -19,4 +19,5 @@ public class Config {
      * TCP SERVICE CONSTANTS
      */
     public static int MAX_REQUEST_RETRY = 3;
+    public static int MAX_REQUEST_TIMEOUT = 1500;
 }

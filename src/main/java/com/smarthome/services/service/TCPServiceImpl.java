@@ -38,10 +38,9 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
             this.serviceType = serviceType;
             server = new ServiceServer(port);
             dnsServiceDiscovery = new DNSServiceDiscovery();
+            registry = new DNSServiceRegistry();
             ui = new ServiceUI(this);
             gson = new Gson();
-
-            registry = new DNSServiceRegistry();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -101,6 +100,8 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
 
                     if (request.isSuccessful()) {
                         return gson.fromJson(request.getResponse(), ServiceResponse.class);
+                    } else if (request.isTimeout()){
+                        ui.updateOutput("Connection timeout connecting to " + serviceInfo.getName());
                     } else {
                         ui.updateOutput("Failed to connect to " + serviceInfo.getName() + " on port " + serviceInfo.getPort());
                     }

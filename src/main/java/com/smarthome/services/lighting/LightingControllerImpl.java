@@ -2,7 +2,6 @@ package com.smarthome.services.lighting;
 
 import com.smarthome.services.lighting.model.LightingModel;
 import com.smarthome.services.service.*;
-import com.smarthome.services.service.model.BaseServiceModel;
 
 import java.util.Map;
 
@@ -102,7 +101,11 @@ public class LightingControllerImpl implements ServiceController {
     private Status increaseBrightness() {
         if (model.getBrightness() < 100) {
             model.setBrightness(model.getBrightness() + 4);
-            turnLightsOn();
+
+            if (!model.isLightingOn()) {
+                turnLightsOn();
+            }
+
             service.updateUIOutput("Increasing Brightness. Level: " + model.getBrightness());
 
             return Status.OK;
