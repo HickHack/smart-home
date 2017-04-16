@@ -37,7 +37,7 @@ public class PlaylistModel {
         for(int i = 0; i < 20; i++) {
             int track = i + 1;
             tracks.add(track);
-            System.out.println(tracks.get(i));
+            //System.out.println(tracks.get(i));
         }
     }
 

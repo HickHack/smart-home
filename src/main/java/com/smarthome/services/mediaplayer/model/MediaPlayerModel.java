@@ -18,7 +18,7 @@ public class MediaPlayerModel extends BaseServiceModel {
     public MediaPlayerModel(String name) {
         super(name, 0);
 
-       // playlist = new Playlist();
+        playlist = new PlaylistModel();
     }
 
     public boolean isMediaPlayerOn() {
@@ -51,6 +51,14 @@ public class MediaPlayerModel extends BaseServiceModel {
 
     public void setVolume(int volume) {
         this.volume = volume;
+    }
+
+    public PlaylistModel getPlaylist() {
+        return playlist;
+    }
+
+    public void setPlaylist(PlaylistModel playlist) {
+        this.playlist = playlist;
     }
 
     @Override

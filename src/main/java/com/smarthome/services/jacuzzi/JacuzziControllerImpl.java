@@ -1,10 +1,7 @@
 package com.smarthome.services.jacuzzi;
 
 import com.smarthome.services.jacuzzi.model.JacuzziModel;
-import com.smarthome.services.lighting.model.LightingModel;
 import com.smarthome.services.service.*;
-import com.smarthome.services.service.model.BaseServiceModel;
-import com.smarthome.services.television.model.TelevisionModel;
 
 import java.util.Map;
 import java.util.Timer;
@@ -91,6 +88,16 @@ public class JacuzziControllerImpl implements ServiceController {
             service.updateUIOutput("Successfully to increased lights");
         } else {
             service.updateUIOutput("Failed to increase lights");
+        }
+    }
+
+    private void decreaseTvVolume() {
+        ServiceResponse response = service.connectToService(new ServiceOperation(4), ServiceType.TELEVISION);
+
+        if (ServiceHelper.isValidResponse(response)) {
+            service.updateUIOutput("Successfully increased volume");
+        } else {
+            service.updateUIOutput("Failed to increase volume");
         }
     }
 
@@ -187,6 +194,7 @@ public class JacuzziControllerImpl implements ServiceController {
                 model.setWaterDepth(model.getWaterDepth() + 4);
                 increaseJetPower();
                 increaseLightBrightness();
+                decreaseTvVolume();
                 service.updateUIStatus();
                 service.updateUIOutput("Filling water.");
             } else {

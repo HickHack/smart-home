@@ -80,16 +80,19 @@ public class TelevisionControllerImpl implements ServiceController {
     private Status decreaseVolume() {
         if (model.isTelevisionOn() && model.getVolume() > 0) {
 
-            if (model.getVolume() - 1 == 0) {
+            /*if (model.getVolume() - 2 == 0) {
                 model.setVolume(0);
-            }
+                model.setMuteOn(true);
+            }*/
 
-            model.setVolume(model.getVolume() - 1);
+            model.setVolume(model.getVolume() - 4);
             service.updateUIOutput("Decreasing volume. Volume: " + model.getVolume());
 
             return Status.OK;
         }
 
+        model.setVolume(0);
+        model.setMuteOn(true);
         service.updateUIOutput("Cant decrease volume. Volume: " + model.getVolume());
         return Status.FAILED;
     }
@@ -97,16 +100,19 @@ public class TelevisionControllerImpl implements ServiceController {
     private Status increaseVolume() {
         if (model.isTelevisionOn() && model.getVolume() < 100) {
 
-            if (model.getVolume() + 1 == 100) {
-                model.setVolume(100);
-            }
+            model.setMuteOn(false);
 
-            model.setVolume(model.getVolume() + 1);
+            /*if (model.getVolume() + 2 == 100) {
+                model.setVolume(100);
+            }*/
+
+            model.setVolume(model.getVolume() + 4);
             service.updateUIOutput("Increasing volume. Volume" + model.getVolume());
 
             return Status.OK;
         }
 
+        model.setVolume(100);
         service.updateUIOutput("Cant increase volume. Volume: " + model.getVolume());
         return Status.FAILED;
     }
