@@ -11,12 +11,12 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public class MqttSubscriber implements MqttCallback {
 
-    private MqttServiceImpl service;
+    private MqttServiceImpl mqttServiceImpl;
     Gson gson;
 
-    public MqttSubscriber(MqttServiceImpl service) {
+    public MqttSubscriber(MqttServiceImpl mqttServiceImpl) {
         gson = new Gson();
-        this.service = service;
+        this.mqttServiceImpl = mqttServiceImpl;
     }
 
     @Override
@@ -26,11 +26,11 @@ public class MqttSubscriber implements MqttCallback {
 
     @Override
     public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
-        ServiceResponse serviceResponse = service.getController().performOperation(gson.fromJson(mqttMessage.toString(), ServiceOperation.class));
+        ServiceResponse serviceResponse = mqttServiceImpl.getController().performOperation(gson.fromJson(mqttMessage.toString(), ServiceOperation.class));
 
         String serializedResponse = gson.toJson(serviceResponse);
         System.out.println("Media Player is sending: " + serializedResponse);
-        service.publishResponse(serializedResponse);
+        mqttServiceImpl.publishResponse(serializedResponse);
     }
 
     @Override

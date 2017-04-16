@@ -12,8 +12,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public class MediaPlayerSubscriber extends MqttSubscriber {
 
-    public MediaPlayerSubscriber(MediaPlayerServiceImpl mediaPlayerService) {
-        super(mediaPlayerService);
+    public MediaPlayerSubscriber(MqttServiceImpl mqttServiceImpl) {
+        super(mqttServiceImpl);
     }
-    
 }

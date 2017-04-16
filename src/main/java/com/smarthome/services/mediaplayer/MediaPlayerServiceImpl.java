@@ -13,18 +13,12 @@ import static com.smarthome.services.service.config.Config.*;
  */
 public class MediaPlayerServiceImpl extends MqttServiceImpl {
 
-    private static String clientId = "MediaPlayer";
-   // private ServiceController serviceController;
-    private MqttSubscriber mediaPlayerSubscriber;
-
     public MediaPlayerServiceImpl() {
         super();
-       // serviceController = new MediaPlayerControllerImpl();
-        mediaPlayerSubscriber = new MediaPlayerSubscriber(this);
     }
 
     @Override
     public void run() {
-        subscribe(clientId, mediaPlayerSubscriber);
+        subscribe();
     }
 }

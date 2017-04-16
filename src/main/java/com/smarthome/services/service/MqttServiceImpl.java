@@ -13,15 +13,15 @@ import static com.smarthome.services.service.config.Config.QOS;
 /**
  * Created by Ian C on 16/04/2017.
  */
-public class MqttServiceImpl implements Runnable{
+public class MqttServiceImpl implements Runnable {
 
-    private String clientId = "Publisher_Id";
-    private MqttSubscriber mqttSubscriber;
+    private static String clientId = "MediaPlayer";
     private ServiceController serviceController;
+    private MqttSubscriber mediaPlayerSubscriber;
 
     public MqttServiceImpl() {
-        mqttSubscriber = new MqttSubscriber(this);
         serviceController = new MediaPlayerControllerImpl();
+        mediaPlayerSubscriber = new MqttSubscriber(this);
     }
 
     public ServiceController getController() {
@@ -44,33 +44,32 @@ public class MqttServiceImpl implements Runnable{
             sampleClient.disconnect();
             System.out.println("Disconnected");
         } catch (MqttException me) {
-            mqttEx(me);
+            System.out.println("reason " + me.getReasonCode() + "\nmsg " + me.getMessage() + "\nloc " + me.getLocalizedMessage() +
+                    "\ncause " + me.getCause() + "\nexcep " + me);
+            me.printStackTrace();
         }
     }
 
 
-    public void subscribe(String clientId, MqttSubscriber mqttSubscriber) {
+    public void subscribe() {
         try {
             MqttClient sampleClient = new MqttClient(BROKER, clientId, PERSISTENCE);
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setCleanSession(true);
-            sampleClient.setCallback(mqttSubscriber);
+            sampleClient.setCallback(mediaPlayerSubscriber);
             System.out.println("Connecting to BROKER: " + BROKER);
             sampleClient.connect(connOpts);
             System.out.println("Connected");
             sampleClient.subscribe("/smart_home/#");
         } catch (MqttException me) {
-            mqttEx(me);
+            System.out.println("reason " + me.getReasonCode() + "\nmsg " + me.getMessage() + "\nloc " + me.getLocalizedMessage() +
+                    "\ncause " + me.getCause() + "\nexcep " + me);
+            me.printStackTrace();
         }
-    }
-
-    public void mqttEx(MqttException me) {
-        System.out.println("reason " + me.getReasonCode() + "\nmsg " + me.getMessage() + "\nloc " + me.getLocalizedMessage() + "\ncause " + me.getCause() + "\nexcep " + me);
-        me.printStackTrace();
     }
 
     @Override
     public void run() {
-        subscribe(clientId, mqttSubscriber);
+        subscribe();
     }
 }
