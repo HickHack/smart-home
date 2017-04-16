@@ -1,6 +1,7 @@
 package com.smarthome.services.service;
 
 import com.google.gson.Gson;
+import com.smarthome.services.mediaplayer.MediaPlayerServiceImpl;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -10,12 +11,12 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  */
 public class MqttSubscriber implements MqttCallback {
 
-    private MqttServiceImpl mqttService;
+    private MqttServiceImpl service;
     Gson gson;
 
     public MqttSubscriber(MqttServiceImpl service) {
         gson = new Gson();
-        this.mqttService = service;
+        this.service = service;
     }
 
     @Override
@@ -25,11 +26,11 @@ public class MqttSubscriber implements MqttCallback {
 
     @Override
     public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
-        ServiceResponse serviceResponse = mqttService.getController().performOperation(gson.fromJson(mqttMessage.toString(), ServiceOperation.class));
+        ServiceResponse serviceResponse = service.getController().performOperation(gson.fromJson(mqttMessage.toString(), ServiceOperation.class));
 
         String serializedResponse = gson.toJson(serviceResponse);
         System.out.println("Media Player is sending: " + serializedResponse);
-        mqttService.publishResponse(serializedResponse);
+        service.publishResponse(serializedResponse);
     }
 
     @Override
