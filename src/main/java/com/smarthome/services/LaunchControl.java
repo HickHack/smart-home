@@ -38,7 +38,7 @@ public class LaunchControl {
         launchMediaPlayer();
         Thread.sleep(4000);
         testJacuzziService();
-        testMediaPlayerService();
+        //testMediaPlayerService();
 
         shutdown();
     }

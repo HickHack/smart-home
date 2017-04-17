@@ -1,11 +1,21 @@
 package com.smarthome.services.television;
 
+import com.google.gson.Gson;
+import com.smarthome.services.jacuzzi.JacuzziControllerImpl;
+import com.smarthome.services.mediaplayer.model.MediaPlayerModel;
 import com.smarthome.services.service.*;
 import com.smarthome.services.television.model.TelevisionModel;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-import java.util.Map;
+import java.util.*;
 
 import static com.smarthome.services.service.ServiceResponse.Status;
+import static com.smarthome.services.service.config.Config.BROKER;
+import static com.smarthome.services.service.config.Config.PERSISTENCE;
+import static com.smarthome.services.service.config.Config.QOS;
 
 /**
  * @author Ian Cunningham
@@ -13,11 +23,15 @@ import static com.smarthome.services.service.ServiceResponse.Status;
 public class TelevisionControllerImpl implements ServiceController {
 
     private TelevisionModel model;
+    private MediaPlayerModel mpModel;
     private Service service;
+    private Timer timer;
 
     public TelevisionControllerImpl(TCPService service) {
         model = new TelevisionModel(service.getName(), service.getPort());
+        mpModel = new MediaPlayerModel(service.getName());
         this.service = service;
+        timer = new Timer();
     }
 
     @Override
@@ -57,11 +71,48 @@ public class TelevisionControllerImpl implements ServiceController {
             model.setVolume(50);
             model.setScreenBrightness(60);
             service.updateUIOutput("Turning TV On. Volume: " + model.getVolume());
+            turnMediaPlayerOn();
+
+            timer.schedule(new TelevisionControllerImpl.MediaPlayerTask(), 0, 4000);
 
             return Status.OK;
         }
 
         return Status.FAILED;
+    }
+
+    private void turnMediaPlayerOn() {
+        ServiceOperation operation = new ServiceOperation(0);
+        sendServiceOperation(operation);
+    }
+
+    private void sendServiceOperation(ServiceOperation operation) {
+
+        Gson gson = new Gson();
+        String json = gson.toJson(operation);
+
+        try {
+            MqttClient sampleClient = new MqttClient(BROKER, "Television Publisher", PERSISTENCE);
+            MqttConnectOptions connOpts = new MqttConnectOptions();
+            connOpts.setCleanSession(true);
+            System.out.println("Connecting to BROKER: " + BROKER);
+            sampleClient.connect(connOpts);
+            System.out.println("Connected");
+            System.out.println("Publishing message: " + json);
+            MqttMessage message = new MqttMessage(json.getBytes());
+            message.setQos(QOS);
+            sampleClient.publish(ServiceType.MEDIA_PLAYER.toString(), message);
+            System.out.println("Message published");
+            sampleClient.disconnect();
+            System.out.println("Disconnected");
+        } catch (MqttException me) {
+            System.out.println("reason " + me.getReasonCode());
+            System.out.println("msg " + me.getMessage());
+            System.out.println("loc " + me.getLocalizedMessage());
+            System.out.println("cause " + me.getCause());
+            System.out.println("excep " + me);
+            me.printStackTrace();
+        }
     }
 
     private Status turnTelevisionOff() {
@@ -115,5 +166,24 @@ public class TelevisionControllerImpl implements ServiceController {
         model.setVolume(100);
         service.updateUIOutput("Cant increase volume. Volume: " + model.getVolume());
         return Status.FAILED;
+    }
+
+    class MediaPlayerTask extends TimerTask {
+
+        int i;
+
+        @Override
+        public void run() {
+            i = mpModel.getTrack() + 1;
+
+            if (model.isTelevisionOn() && i <= 20) {
+                mpModel.setTrack(i);
+                //service.updateUIStatus();
+                service.updateUIOutput("Media Player track: "+ i);
+            } else {
+                timer.cancel();
+                service.updateUIOutput("Media Player played all tracks.");
+            }
+        }
     }
 }
