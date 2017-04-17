@@ -1,9 +1,6 @@
 package com.smarthome.services.television;
 
-import com.smarthome.services.service.Service;
-import com.smarthome.services.service.ServiceType;
-import com.smarthome.services.service.TCPService;
-import com.smarthome.services.service.TCPServiceImpl;
+import com.smarthome.services.service.*;
 
 /**
  * Created by Ian C on 01/04/2017.

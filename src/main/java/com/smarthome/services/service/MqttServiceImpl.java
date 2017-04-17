@@ -19,8 +19,8 @@ public class MqttServiceImpl implements Runnable {
     private ServiceController serviceController;
     private MqttSubscriber mediaPlayerSubscriber;
 
-    public MqttServiceImpl() {
-        serviceController = new MediaPlayerControllerImpl();
+    public MqttServiceImpl(ServiceController serviceController) {
+        this.serviceController = serviceController;
         mediaPlayerSubscriber = new MqttSubscriber(this);
     }
 

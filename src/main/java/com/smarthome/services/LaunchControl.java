@@ -3,6 +3,7 @@ package com.smarthome.services;
 import com.google.gson.Gson;
 import com.smarthome.services.jacuzzi.JacuzziServiceImpl;
 import com.smarthome.services.lighting.LightingServiceImpl;
+import com.smarthome.services.mediaplayer.MediaPlayerControllerImpl;
 import com.smarthome.services.mediaplayer.MediaPlayerServiceImpl;
 import com.smarthome.services.service.*;
 import com.smarthome.services.television.TelevisionServiceImpl;
@@ -25,7 +26,7 @@ public class LaunchControl {
     private Thread jacuzziProcess;
     private Thread televisionProcess;
     private Thread lightingProcess;
-    private Thread mediaPlayerProcess;
+    public Thread mediaPlayerProcess;
     private DNSServiceDiscovery serviceDiscovery;
 
     String clientId = "Publisher";
@@ -70,7 +71,8 @@ public class LaunchControl {
     }
 
     private void launchMediaPlayer() throws InterruptedException {
-        mediaPlayerProcess = new Thread(new MediaPlayerServiceImpl());
+        MediaPlayerControllerImpl sc = new MediaPlayerControllerImpl();
+        mediaPlayerProcess = new Thread(new MediaPlayerServiceImpl(sc));
         mediaPlayerProcess.start();
 
         Thread.sleep(4000);

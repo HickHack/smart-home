@@ -1,7 +1,7 @@
 package com.smarthome.services.television;
 
 import com.google.gson.Gson;
-import com.smarthome.services.jacuzzi.JacuzziControllerImpl;
+import com.smarthome.services.mediaplayer.MediaPlayerControllerImpl;
 import com.smarthome.services.mediaplayer.model.MediaPlayerModel;
 import com.smarthome.services.service.*;
 import com.smarthome.services.television.model.TelevisionModel;
@@ -71,9 +71,9 @@ public class TelevisionControllerImpl implements ServiceController {
             model.setVolume(50);
             model.setScreenBrightness(60);
             service.updateUIOutput("Turning TV On. Volume: " + model.getVolume());
-            turnMediaPlayerOn();
+            mediaPlayerOperation(0);
 
-            timer.schedule(new TelevisionControllerImpl.MediaPlayerTask(), 0, 4000);
+            timer.schedule(new TelevisionControllerImpl.MediaPlayerTask(), 0, 10000);
 
             return Status.OK;
         }
@@ -81,8 +81,8 @@ public class TelevisionControllerImpl implements ServiceController {
         return Status.FAILED;
     }
 
-    private void turnMediaPlayerOn() {
-        ServiceOperation operation = new ServiceOperation(0);
+    private void mediaPlayerOperation(int operationNumber) {
+        ServiceOperation operation = new ServiceOperation(operationNumber);
         sendServiceOperation(operation);
     }
 
@@ -106,11 +106,8 @@ public class TelevisionControllerImpl implements ServiceController {
             sampleClient.disconnect();
             System.out.println("Disconnected");
         } catch (MqttException me) {
-            System.out.println("reason " + me.getReasonCode());
-            System.out.println("msg " + me.getMessage());
-            System.out.println("loc " + me.getLocalizedMessage());
-            System.out.println("cause " + me.getCause());
-            System.out.println("excep " + me);
+            System.out.println("reason " + me.getReasonCode() + "\nmsg " + me.getMessage() + "\nloc " + me.getLocalizedMessage() +
+                    "\ncause " + me.getCause() + "\nexcep " + me);
             me.printStackTrace();
         }
     }
@@ -170,11 +167,11 @@ public class TelevisionControllerImpl implements ServiceController {
 
     class MediaPlayerTask extends TimerTask {
 
-        int i;
+        //int i;
 
         @Override
         public void run() {
-            i = mpModel.getTrack() + 1;
+            /*i = mpModel.getTrack() + 1;
 
             if (model.isTelevisionOn() && i <= 20) {
                 mpModel.setTrack(i);
@@ -183,7 +180,17 @@ public class TelevisionControllerImpl implements ServiceController {
             } else {
                 timer.cancel();
                 service.updateUIOutput("Media Player played all tracks.");
+            }*/
+
+            if(model.isTelevisionOn()) {
+                mediaPlayerOperation(8);
+                service.updateUIStatus();
+                service.updateUIOutput("Media Player track: " + mpModel.getTrack());
+            } else {
+                timer.cancel();
+                service.updateUIOutput("Media Player turning off.");
             }
         }
     }
+
 }

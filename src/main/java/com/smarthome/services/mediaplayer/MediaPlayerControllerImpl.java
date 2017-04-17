@@ -58,7 +58,7 @@ public class MediaPlayerControllerImpl implements ServiceController {
 
     @Override
     public Map getControllerStatus() {
-        return null;
+        return mpModel.getValuesMap();
     }
 
     private void turnMediaPlayerOn() {

@@ -3,6 +3,7 @@ package com.smarthome.services.service;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.smarthome.services.service.model.deserialize.ServiceResponseDeserializer;
+
 import com.smarthome.ui.ServiceUI;
 
 import javax.jmdns.ServiceInfo;

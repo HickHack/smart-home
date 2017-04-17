@@ -2,6 +2,7 @@ package com.smarthome.services.mediaplayer.model;
 
 import com.smarthome.services.service.model.BaseServiceModel;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -63,6 +64,12 @@ public class MediaPlayerModel extends BaseServiceModel {
 
     @Override
     public Map getValuesMap() {
-        return null;
+        Map valuesMap = new HashMap();
+        valuesMap.put("Television On", isMediaPlayerOn);
+        valuesMap.put("Mute On", isMuteOn);
+        valuesMap.put("Volume", volume);
+        valuesMap.put("Current track", track);
+
+        return valuesMap;
     }
 }
