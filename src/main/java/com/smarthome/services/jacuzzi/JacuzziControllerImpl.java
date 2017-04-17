@@ -50,7 +50,7 @@ public class JacuzziControllerImpl implements ServiceController {
                 break;
         }
 
-        return new ServiceResponse(status, model);
+        return new ServiceResponse(status, model, service.getType());
     }
 
     @Override

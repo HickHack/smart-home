@@ -45,7 +45,7 @@ public class LightingControllerImpl implements ServiceController {
 
         }
 
-        return new ServiceResponse(status, model);
+        return new ServiceResponse(status, model, service.getType());
     }
 
     @Override
@@ -56,6 +56,7 @@ public class LightingControllerImpl implements ServiceController {
     private Status turnLightsOn() {
         if (!model.isLightingOn()) {
             model.setLightingOn(true);
+            model.setBrightnessMax(false);
             model.setBrightness(4);
             service.updateUIOutput("Turning lighting On. Brightness: " + model.getBrightness());
 
@@ -70,6 +71,7 @@ public class LightingControllerImpl implements ServiceController {
     private Status turnLightsOff() {
         if (model.isLightingOn()) {
             model.setLightingOn(false);
+            model.setBrightnessMax(false);
             model.setBrightness(0);
             service.updateUIOutput("Turning lighting Off");
 
@@ -110,6 +112,7 @@ public class LightingControllerImpl implements ServiceController {
 
             return Status.OK;
         } else {
+            model.setBrightnessMax(false);
             service.updateUIOutput("Brightness is max: Level: " + model.getBrightness());
         }
 

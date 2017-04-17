@@ -1,10 +1,8 @@
 package com.smarthome.services.service;
 
 import com.google.gson.Gson;
-import com.smarthome.services.jacuzzi.model.JacuzziModel;
-import com.smarthome.services.lighting.model.LightingModel;
-import com.smarthome.services.service.model.BaseServiceModel;
-import com.smarthome.services.television.model.TelevisionModel;
+import com.google.gson.GsonBuilder;
+import com.smarthome.services.service.model.deserialize.ServiceResponseDeserializer;
 import com.smarthome.ui.ServiceUI;
 
 import javax.jmdns.ServiceInfo;
@@ -40,7 +38,9 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
             dnsServiceDiscovery = new DNSServiceDiscovery();
             registry = new DNSServiceRegistry();
             ui = new ServiceUI(this);
-            gson = new Gson();
+            gson = new GsonBuilder()
+                    .registerTypeAdapter(ServiceResponse.class, new ServiceResponseDeserializer())
+                    .create();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -100,7 +100,7 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
 
                     if (request.isSuccessful()) {
                         return gson.fromJson(request.getResponse(), ServiceResponse.class);
-                    } else if (request.isTimeout()){
+                    } else if (request.isTimeout()) {
                         ui.updateOutput("Connection timeout connecting to " + serviceInfo.getName());
                     } else {
                         ui.updateOutput("Failed to connect to " + serviceInfo.getName() + " on port " + serviceInfo.getPort());
@@ -157,19 +157,5 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
         server.close();
 
         return port;
-    }
-
-    private BaseServiceModel deserializeResponse(String response, ServiceType serviceType) {
-
-        switch (serviceType) {
-            case JACUZZI:
-                return gson.fromJson(response, JacuzziModel.class);
-            case LIGHTING:
-                return gson.fromJson(response, LightingModel.class);
-            case TELEVISION:
-                return gson.fromJson(response, TelevisionModel.class);
-        }
-
-        return null;
     }
 }
