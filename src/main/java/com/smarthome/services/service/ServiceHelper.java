@@ -15,4 +15,15 @@ public class ServiceHelper {
 
         return false;
     }
+
+    public static boolean isValidResponse(ServiceResponse response, Class expected) {
+        if (response != null &&
+                expected.isInstance(response.getModel()) &&
+                response.getStatus().equals(ServiceResponse.Status.OK)) {
+
+            return true;
+        }
+
+        return false;
+    }
 }

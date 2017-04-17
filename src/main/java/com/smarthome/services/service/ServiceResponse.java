@@ -17,17 +17,24 @@ public class ServiceResponse {
 
     private Status status;
     private String timestamp;
+    private ServiceType type;
     private BaseServiceModel model;
 
-    public ServiceResponse(Status status, BaseServiceModel model) {
+    public ServiceResponse(Status status, BaseServiceModel model, ServiceType type) {
         this.status = status;
         this.model = model;
+        this.type = type;
         timestamp = new Date().toString();
     }
 
-    public void getModel() {
+    public void setModel(BaseServiceModel model) {
         this.model = model;
     }
+
+    public BaseServiceModel getModel() {
+        return this.model;
+    }
+
 
     public Status getStatus() {
         return status;
@@ -35,5 +42,9 @@ public class ServiceResponse {
 
     public String getTimestamp() {
         return timestamp;
+    }
+
+    public ServiceType getType() {
+        return type;
     }
 }

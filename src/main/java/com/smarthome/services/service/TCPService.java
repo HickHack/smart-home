@@ -1,7 +1,5 @@
 package com.smarthome.services.service;
 
-import com.smarthome.services.service.model.BaseServiceModel;
-
 /**
  * @author Graham Murray
  * @descripion Jacuzzi service discovery implementation

@@ -3,7 +3,6 @@ package com.smarthome.services.mediaplayer;
 import com.smarthome.services.mediaplayer.model.MediaPlayerModel;
 import com.smarthome.services.mediaplayer.model.PlaylistModel;
 import com.smarthome.services.service.*;
-import com.smarthome.services.service.model.BaseServiceModel;
 
 import java.util.Map;
 
@@ -54,7 +53,7 @@ public class MediaPlayerControllerImpl implements ServiceController {
 
         }
 
-        return new ServiceResponse(ServiceResponse.Status.OK, mpModel);
+        return new ServiceResponse(ServiceResponse.Status.OK, mpModel, ServiceType.MEDIA_PLAYER);
     }
 
     @Override

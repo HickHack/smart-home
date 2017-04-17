@@ -12,6 +12,7 @@ import java.util.Map;
 public class LightingModel extends BaseServiceModel {
 
     private boolean isLightingOn;
+    private boolean isBrightnessMax;
     private int brightness;
 
     public LightingModel(String name, int port) {
@@ -44,5 +45,13 @@ public class LightingModel extends BaseServiceModel {
 
     public int getBrightness() {
         return brightness;
+    }
+
+    public void setBrightnessMax(boolean brightnessMax) {
+        isBrightnessMax = brightnessMax;
+    }
+
+    public boolean isBrightnessMax() {
+        return isBrightnessMax;
     }
 }

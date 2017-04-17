@@ -43,7 +43,7 @@ public class TelevisionControllerImpl implements ServiceController {
 
         }
 
-        return new ServiceResponse(status, model);
+        return new ServiceResponse(status, model, service.getType());
     }
 
     @Override

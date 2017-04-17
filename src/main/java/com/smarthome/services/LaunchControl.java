@@ -36,7 +36,7 @@ public class LaunchControl {
         launchLighting();
         launchTelevision();
         launchMediaPlayer();
-
+        Thread.sleep(4000);
         testJacuzziService();
         testMediaPlayerService();
 
@@ -52,28 +52,28 @@ public class LaunchControl {
         jacuzziProcess = new Thread(new JacuzziServiceImpl("jacuzziservice1"));
         jacuzziProcess.start();
 
-        Thread.sleep(9000);
+        Thread.sleep(4000);
     }
 
     private void launchLighting() throws InterruptedException {
         lightingProcess = new Thread(new LightingServiceImpl("lightingservice1"));
         lightingProcess.start();
 
-        Thread.sleep(9000);
+        Thread.sleep(4000);
     }
 
     private void launchTelevision() throws InterruptedException {
         televisionProcess = new Thread(new TelevisionServiceImpl("televisionservice1"));
         televisionProcess.start();
 
-        Thread.sleep(9000);
+        Thread.sleep(4000);
     }
 
     private void launchMediaPlayer() throws InterruptedException {
         mediaPlayerProcess = new Thread(new MediaPlayerServiceImpl());
         mediaPlayerProcess.start();
 
-        Thread.sleep(9000);
+        Thread.sleep(4000);
     }
 
     private void testJacuzziService() {
