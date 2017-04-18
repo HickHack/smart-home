@@ -3,11 +3,10 @@ package com.smarthome.services;
 import com.google.gson.Gson;
 import com.smarthome.services.jacuzzi.JacuzziServiceImpl;
 import com.smarthome.services.lighting.LightingServiceImpl;
-import com.smarthome.services.mediaplayer.MediaPlayerControllerImpl;
 import com.smarthome.services.mediaplayer.MediaPlayerServiceImpl;
 import com.smarthome.services.service.*;
 import com.smarthome.services.service.tcp.discovery.DNSServiceDiscovery;
-import com.smarthome.services.television.TelevisionServiceImpl;
+import com.smarthome.services.television.TelevisionHybridServiceImpl;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -65,7 +64,7 @@ public class LaunchControl {
     }
 
     private void launchTelevision() throws InterruptedException {
-        televisionProcess = new Thread(new TelevisionServiceImpl("televisionservice1"));
+        televisionProcess = new Thread(new TelevisionHybridServiceImpl("televisionservice1"));
         televisionProcess.start();
 
         Thread.sleep(4000);

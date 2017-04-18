@@ -1,6 +1,7 @@
 package com.smarthome.services.service.mqtt;
 
 import com.google.gson.Gson;
+import com.smarthome.services.service.Service;
 import com.smarthome.services.service.ServiceController;
 import com.smarthome.services.service.ServiceResponse;
 import com.smarthome.services.service.ServiceType;
@@ -10,7 +11,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 /**
  * @author Ian Cunningham
  */
-public class MQTTServiceImpl implements MQTTService {
+public class MQTTServiceImpl implements MQTTService, Service {
 
     private ServiceController controller;
     private MQTTOperations operations;

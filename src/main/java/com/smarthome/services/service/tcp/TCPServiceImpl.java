@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.smarthome.services.service.*;
 import com.smarthome.services.service.model.deserialize.ServiceResponseDeserializer;
 
+import com.smarthome.services.service.mqtt.MQTTOperations;
+import com.smarthome.services.service.mqtt.MQTTService;
 import com.smarthome.services.service.tcp.discovery.DNSServiceDiscovery;
 import com.smarthome.services.service.tcp.discovery.DNSServiceRegistry;
 import com.smarthome.ui.ServiceUI;
@@ -148,6 +150,11 @@ public class TCPServiceImpl implements TCPService, TCPServiceControllerListener 
     @Override
     public ServiceType getType() {
         return serviceType;
+    }
+
+    @Override
+    public ServiceController getController() {
+        return controller;
     }
 
     @Override
