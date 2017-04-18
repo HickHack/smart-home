@@ -29,9 +29,7 @@ public class MQTTSubscriber implements MqttCallback {
     @Override
     public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
         ServiceResponse serviceResponse = service.getController().performOperation(gson.fromJson(mqttMessage.toString(), ServiceOperation.class));
-
-        String serializedResponse = gson.toJson(serviceResponse);
-        service.publish(serializedResponse);
+        service.publish(serviceResponse);
     }
 
     @Override
