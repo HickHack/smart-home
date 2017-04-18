@@ -9,7 +9,7 @@ import com.smarthome.ui.ServiceUI;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 /**
- * @author Ian Cunningham
+ * @author Ian Cunningham, Graham Murray
  */
 public class MQTTServiceImpl implements MQTTService, Service {
 
@@ -36,10 +36,9 @@ public class MQTTServiceImpl implements MQTTService, Service {
     @Override
     public void publish(ServiceResponse response) {
         try {
-            String json = gson.toJson(response);
-            operations.publish(json, this.getType());
+            operations.publish(response, this.getType());
         } catch (MqttException me) {
-            updateUIOutput("Publishing response.");
+            updateUIOutput("Publishing response to " + this.getType().toString());
         }
     }
 
@@ -64,6 +63,9 @@ public class MQTTServiceImpl implements MQTTService, Service {
 
     @Override
     public void start() {
+        ui.init();
+        updateUIOutput("Starting " + name);
+        updateUIStatus();
         subscribe();
     }
 

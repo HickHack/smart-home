@@ -9,11 +9,11 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 /**
  * @author Ian Cunningham
  */
-public class TelevisionHybridServiceImpl extends TCPServiceImpl implements MQTTService {
+public class TelevisionHybridService extends TCPServiceImpl implements MQTTService {
 
     private MQTTOperations mqttOperations;
 
-    public TelevisionHybridServiceImpl(String name) {
+    public TelevisionHybridService(String name) {
         super(name, ServiceType.TELEVISION);
         mqttOperations = new MQTTOperations(this);
     }
@@ -21,6 +21,7 @@ public class TelevisionHybridServiceImpl extends TCPServiceImpl implements MQTTS
     @Override
     public void run() {
         setController(new TelevisionControllerImpl(this));
+        subscribe();
         start();
     }
 

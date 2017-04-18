@@ -6,7 +6,7 @@ import com.smarthome.services.lighting.LightingServiceImpl;
 import com.smarthome.services.mediaplayer.MediaPlayerServiceImpl;
 import com.smarthome.services.service.*;
 import com.smarthome.services.service.tcp.discovery.DNSServiceDiscovery;
-import com.smarthome.services.television.TelevisionHybridServiceImpl;
+import com.smarthome.services.television.TelevisionHybridService;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -64,7 +64,7 @@ public class LaunchControl {
     }
 
     private void launchTelevision() throws InterruptedException {
-        televisionProcess = new Thread(new TelevisionHybridServiceImpl("televisionservice1"));
+        televisionProcess = new Thread(new TelevisionHybridService("televisionservice1"));
         televisionProcess.start();
 
         Thread.sleep(4000);
@@ -85,41 +85,6 @@ public class LaunchControl {
             System.out.println("Test Response: " + request.getResponse());
         } else {
             System.out.println("Unable to turn Jacuzzi On!");
-        }
-    }
-
-    private void testMediaPlayerService() {
-
-        ServiceOperation operation = new ServiceOperation(0);
-        sendServiceOperation(operation);
-    }
-
-    private void sendServiceOperation(ServiceOperation operation) {
-
-        Gson gson = new Gson();
-        String json = gson.toJson(operation);
-
-        try {
-            MqttClient sampleClient = new MqttClient(BROKER, clientId, PERSISTENCE);
-            MqttConnectOptions connOpts = new MqttConnectOptions();
-            connOpts.setCleanSession(true);
-            System.out.println("Connecting to BROKER: " + BROKER);
-            sampleClient.connect(connOpts);
-            System.out.println("Connected");
-            System.out.println("Publishing message: " + json);
-            MqttMessage message = new MqttMessage(json.getBytes());
-            message.setQos(QOS);
-            sampleClient.publish(ServiceType.MEDIA_PLAYER.toString(), message);
-            System.out.println("Message published");
-            sampleClient.disconnect();
-            System.out.println("Disconnected");
-        } catch (MqttException me) {
-            System.out.println("reason " + me.getReasonCode());
-            System.out.println("msg " + me.getMessage());
-            System.out.println("loc " + me.getLocalizedMessage());
-            System.out.println("cause " + me.getCause());
-            System.out.println("excep " + me);
-            me.printStackTrace();
         }
     }
 

@@ -3,7 +3,6 @@ package com.smarthome.services.television;
 import com.google.gson.Gson;
 import com.smarthome.services.mediaplayer.model.MediaPlayerModel;
 import com.smarthome.services.service.*;
-import com.smarthome.services.service.tcp.TCPService;
 import com.smarthome.services.television.model.TelevisionModel;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -24,10 +23,10 @@ public class TelevisionControllerImpl implements ServiceController {
 
     private TelevisionModel model;
     private MediaPlayerModel mpModel;
-    private Service service;
+    private TelevisionHybridService service;
     private Timer timer;
 
-    public TelevisionControllerImpl(TCPService service) {
+    public TelevisionControllerImpl(TelevisionHybridService service) {
         model = new TelevisionModel(service.getName(), service.getPort());
         mpModel = new MediaPlayerModel(service.getName());
         this.service = service;

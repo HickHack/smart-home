@@ -4,6 +4,7 @@ import com.smarthome.services.mediaplayer.model.MediaPlayerModel;
 import com.smarthome.services.mediaplayer.model.PlaylistModel;
 import com.smarthome.services.service.*;
 import com.smarthome.services.service.mqtt.MQTTOperations;
+import com.smarthome.services.service.mqtt.MQTTService;
 
 import java.util.Map;
 
@@ -14,11 +15,11 @@ import static com.smarthome.services.service.ServiceResponse.Status;
  */
 public class MediaPlayerControllerImpl implements ServiceController {
 
-    private MQTTOperations service;
+    private MQTTService service;
     private MediaPlayerModel model;
     private int volumeLevel;
 
-    public MediaPlayerControllerImpl(MQTTOperations service) {
+    public MediaPlayerControllerImpl(MQTTService service) {
         this.service = service;
         model = new MediaPlayerModel(service.getName());
     }

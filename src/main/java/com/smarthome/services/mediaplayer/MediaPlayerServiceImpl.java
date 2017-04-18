@@ -10,6 +10,6 @@ public class MediaPlayerServiceImpl extends MQTTServiceImpl {
 
     public MediaPlayerServiceImpl(String name) {
         super(name, ServiceType.MEDIA_PLAYER);
-        super.setController(new MediaPlayerControllerImpl(this));
+        setController(new MediaPlayerControllerImpl(this));
     }
 }
