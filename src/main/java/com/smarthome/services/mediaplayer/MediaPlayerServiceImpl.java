@@ -8,7 +8,8 @@ import com.smarthome.services.service.mqtt.MQTTServiceImpl;
  */
 public class MediaPlayerServiceImpl extends MQTTServiceImpl {
 
-    public MediaPlayerServiceImpl(ServiceController controller) {
-        super(controller);
+    public MediaPlayerServiceImpl(String name) {
+        super(name, ServiceType.MEDIA_PLAYER);
+        super.setController(new MediaPlayerControllerImpl(this));
     }
 }

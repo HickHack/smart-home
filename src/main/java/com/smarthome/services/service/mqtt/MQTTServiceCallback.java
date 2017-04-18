@@ -11,12 +11,12 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 /**
  * @author Ian Cunningham
  */
-public class MQTTSubscriber implements MqttCallback {
+public class MQTTServiceCallback implements MqttCallback {
 
     private MQTTService service;
     private Gson gson;
 
-    public MQTTSubscriber(MQTTService service) {
+    public MQTTServiceCallback(MQTTService service) {
         this.gson = new Gson();
         this.service = service;
     }
@@ -28,7 +28,8 @@ public class MQTTSubscriber implements MqttCallback {
 
     @Override
     public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
-        ServiceResponse serviceResponse = service.getController().performOperation(gson.fromJson(mqttMessage.toString(), ServiceOperation.class));
+        ServiceOperation operation = gson.fromJson(mqttMessage.toString(), ServiceOperation.class);
+        ServiceResponse serviceResponse = service.getController().performOperation(operation);
         service.publish(serviceResponse);
     }
 

@@ -92,16 +92,6 @@ public class JacuzziControllerImpl implements ServiceController {
         }
     }
 
-    private void decreaseTvVolume() {
-        ServiceResponse response = service.connectToService(new ServiceOperation(4), ServiceType.TELEVISION);
-
-        if (ServiceHelper.isValidResponse(response)) {
-            service.updateUIOutput("Successfully increased volume");
-        } else {
-            service.updateUIOutput("Failed to increase volume");
-        }
-    }
-
     private void turnTVOn() {
         ServiceResponse response = service.connectToService(new ServiceOperation(0), ServiceType.TELEVISION);
 

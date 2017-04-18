@@ -9,6 +9,7 @@ public interface Service extends Runnable {
     void start();
     void updateUIOutput(String message);
     void updateUIStatus();
+    void setController(ServiceController controller);
     String getName();
     ServiceType getType();
 }

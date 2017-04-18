@@ -72,8 +72,7 @@ public class LaunchControl {
     }
 
     private void launchMediaPlayer() throws InterruptedException {
-        MediaPlayerControllerImpl sc = new MediaPlayerControllerImpl();
-        mediaPlayerProcess = new Thread(new MediaPlayerServiceImpl(sc));
+        mediaPlayerProcess = new Thread(new MediaPlayerServiceImpl("mediaplayer"));
         mediaPlayerProcess.start();
 
         Thread.sleep(4000);
