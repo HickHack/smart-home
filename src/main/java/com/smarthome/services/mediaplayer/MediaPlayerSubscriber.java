@@ -1,18 +1,14 @@
 package com.smarthome.services.mediaplayer;
 
-import com.google.gson.Gson;
-import com.smarthome.services.service.*;
-import com.smarthome.services.service.model.BaseServiceModel;
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallback;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+import com.smarthome.services.service.mqtt.MQTTServiceImpl;
+import com.smarthome.services.service.mqtt.MQTTSubscriber;
 
 /**
  * Created by Ian C on 07/04/2017.
  */
-public class MediaPlayerSubscriber extends MqttSubscriber {
+public class MediaPlayerSubscriber extends MQTTSubscriber {
 
-    public MediaPlayerSubscriber(MqttServiceImpl mqttServiceImpl) {
+    public MediaPlayerSubscriber(MQTTServiceImpl mqttServiceImpl) {
         super(mqttServiceImpl);
     }
 }

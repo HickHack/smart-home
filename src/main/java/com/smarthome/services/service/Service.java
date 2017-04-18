@@ -11,5 +11,4 @@ public interface Service extends Runnable {
     void updateUIStatus();
     String getName();
     ServiceType getType();
-    int getPort();
 }

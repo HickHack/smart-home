@@ -6,6 +6,7 @@ import com.smarthome.services.lighting.LightingServiceImpl;
 import com.smarthome.services.mediaplayer.MediaPlayerControllerImpl;
 import com.smarthome.services.mediaplayer.MediaPlayerServiceImpl;
 import com.smarthome.services.service.*;
+import com.smarthome.services.service.tcp.discovery.DNSServiceDiscovery;
 import com.smarthome.services.television.TelevisionServiceImpl;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;

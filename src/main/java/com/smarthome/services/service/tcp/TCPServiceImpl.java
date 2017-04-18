@@ -1,9 +1,12 @@
-package com.smarthome.services.service;
+package com.smarthome.services.service.tcp;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.smarthome.services.service.*;
 import com.smarthome.services.service.model.deserialize.ServiceResponseDeserializer;
 
+import com.smarthome.services.service.tcp.discovery.DNSServiceDiscovery;
+import com.smarthome.services.service.tcp.discovery.DNSServiceRegistry;
 import com.smarthome.ui.ServiceUI;
 
 import javax.jmdns.ServiceInfo;
@@ -16,11 +19,11 @@ import static com.smarthome.services.service.config.Config.MAX_REQUEST_RETRY;
  * @author Graham Murray
  * @date 30/03/17
  */
-public class TCPServiceImpl implements TCPService, ServiceControllerListener {
+public class TCPServiceImpl implements TCPService, TCPServiceControllerListener {
 
     private String name;
     private int port;
-    private ServiceServer server;
+    private TCPServiceServer server;
     private ServiceController controller;
     private DNSServiceRegistry registry;
     private DNSServiceDiscovery dnsServiceDiscovery;
@@ -35,7 +38,7 @@ public class TCPServiceImpl implements TCPService, ServiceControllerListener {
             this.port = findAvailablePort();
             this.name = name;
             this.serviceType = serviceType;
-            server = new ServiceServer(port);
+            server = new TCPServiceServer(port);
             dnsServiceDiscovery = new DNSServiceDiscovery();
             registry = new DNSServiceRegistry();
             ui = new ServiceUI(this);

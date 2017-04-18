@@ -1,18 +1,14 @@
 package com.smarthome.services.mediaplayer;
 
 import com.smarthome.services.service.*;
+import com.smarthome.services.service.mqtt.MQTTServiceImpl;
 
 /**
- * Created by Ian C on 06/04/2017.
+ * @author Ian Cunningham
  */
-public class MediaPlayerServiceImpl extends MqttServiceImpl {
+public class MediaPlayerServiceImpl extends MQTTServiceImpl {
 
     public MediaPlayerServiceImpl(ServiceController controller) {
         super(controller);
-    }
-
-    @Override
-    public void run() {
-        super.run();
     }
 }

@@ -2,6 +2,7 @@ package com.smarthome.services.lighting;
 
 import com.smarthome.services.lighting.model.LightingModel;
 import com.smarthome.services.service.*;
+import com.smarthome.services.service.tcp.TCPService;
 
 import java.util.Map;
 

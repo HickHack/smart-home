@@ -1,9 +1,9 @@
 package com.smarthome.services.television;
 
 import com.google.gson.Gson;
-import com.smarthome.services.mediaplayer.MediaPlayerControllerImpl;
 import com.smarthome.services.mediaplayer.model.MediaPlayerModel;
 import com.smarthome.services.service.*;
+import com.smarthome.services.service.tcp.TCPService;
 import com.smarthome.services.television.model.TelevisionModel;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;

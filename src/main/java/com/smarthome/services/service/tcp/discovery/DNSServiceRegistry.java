@@ -1,4 +1,6 @@
-package com.smarthome.services.service;
+package com.smarthome.services.service.tcp.discovery;
+
+import com.smarthome.services.service.Service;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceInfo;
