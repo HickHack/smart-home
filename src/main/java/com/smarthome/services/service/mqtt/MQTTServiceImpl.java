@@ -52,7 +52,7 @@ public class MQTTServiceImpl implements MQTTService, Service {
         try {
             operations.subscribe(this.getType());
         } catch (MqttException ex) {
-            updateUIOutput("Subscribing to topic  " + this.getType());
+            updateUIOutput("Failed to subscribe to " + this.getType());
         }
     }
 
@@ -63,6 +63,7 @@ public class MQTTServiceImpl implements MQTTService, Service {
 
     @Override
     public void stop() {
+        operations.disconnect();
         Thread.currentThread().interrupt();
     }
 

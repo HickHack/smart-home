@@ -19,7 +19,6 @@ public class MQTTOperations {
     private Gson gson;
     private MqttClient client;
     private MqttCallback callback;
-    private boolean isConnected;
 
     public MQTTOperations(MQTTService service, MqttCallback callback) throws MqttException {
         this.service = service;
@@ -29,14 +28,24 @@ public class MQTTOperations {
         configureClient();
     }
 
+    public void disconnect() {
+        try {
+            client.disconnect();
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void publish(Object message, ServiceType topic) throws MqttException {
         String json = gson.toJson(message);
         MqttMessage mqttMessage = new MqttMessage(json.getBytes());
         mqttMessage.setQos(QOS);
+        service.updateUIOutput("Publishing message to " + topic);
         client.publish(topic.toString(), mqttMessage);
     }
 
     public void subscribe(ServiceType topic) throws MqttException {
+        service.updateUIOutput("Subscribing to " + topic);
         client.subscribe(topic.toString());
     }
 
