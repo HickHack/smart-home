@@ -1,8 +1,8 @@
 package com.smarthome.services.television;
 
-import com.smarthome.services.service.*;
 import com.smarthome.services.service.mqtt.MQTTOperations;
 import com.smarthome.services.service.mqtt.MQTTService;
+import com.smarthome.services.service.tcp.ServiceType;
 import com.smarthome.services.service.tcp.TCPServiceImpl;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
@@ -14,8 +14,13 @@ public class TelevisionHybridService extends TCPServiceImpl implements MQTTServi
     private MQTTOperations mqttOperations;
 
     public TelevisionHybridService(String name) {
-        super(name, ServiceType.TELEVISION);
-        mqttOperations = new MQTTOperations(this);
+        super(name, ServiceType.TCP_TELEVISION);
+
+        try {
+            mqttOperations = new MQTTOperations(this, new TelevisionMQTTCallback(this));
+        } catch (MqttException ex) {
+            updateUIOutput("Failed to connect to MQTT");
+        }
     }
 
     @Override
@@ -26,20 +31,20 @@ public class TelevisionHybridService extends TCPServiceImpl implements MQTTServi
     }
 
     @Override
-    public void publish(ServiceResponse response) {
+    public void publish(Object message) {
         try {
-            mqttOperations.publish(response, ServiceType.MEDIA_PLAYER);
+            mqttOperations.publish(message, ServiceType.MQTT_MEDIA_PLAYER);
         } catch (MqttException e) {
-            updateUIOutput("Publishing Message to MQTT");
+            updateUIOutput("Failed to publish message");
         }
     }
 
     @Override
     public void subscribe() {
         try {
-            mqttOperations.subscribe(ServiceType.MEDIA_PLAYER);
+            mqttOperations.subscribe(ServiceType.MQTT_TELEVISION);
         } catch (MqttException e) {
-            updateUIOutput("Failed to send MQTT message");
+            updateUIOutput("Failed to subscribe to" + ServiceType.MQTT_TELEVISION);
         }
     }
 }

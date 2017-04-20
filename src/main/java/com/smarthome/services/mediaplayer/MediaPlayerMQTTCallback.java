@@ -1,9 +1,9 @@
-package com.smarthome.services.service.mqtt;
+package com.smarthome.services.mediaplayer;
 
 import com.google.gson.Gson;
-import com.smarthome.services.service.Service;
 import com.smarthome.services.service.ServiceOperation;
 import com.smarthome.services.service.ServiceResponse;
+import com.smarthome.services.service.mqtt.MQTTService;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -11,14 +11,13 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 /**
  * @author Ian Cunningham
  */
-public class MQTTServiceCallback implements MqttCallback {
+public class MediaPlayerMQTTCallback implements MqttCallback {
 
     private MQTTService service;
     private Gson gson;
 
-    public MQTTServiceCallback(MQTTService service) {
+    public MediaPlayerMQTTCallback() {
         this.gson = new Gson();
-        this.service = service;
     }
 
     @Override
@@ -36,5 +35,9 @@ public class MQTTServiceCallback implements MqttCallback {
     @Override
     public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
 
+    }
+
+    public void setService(MQTTService service) {
+        this.service = service;
     }
 }

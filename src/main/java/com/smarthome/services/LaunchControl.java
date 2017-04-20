@@ -1,20 +1,14 @@
 package com.smarthome.services;
 
-import com.google.gson.Gson;
 import com.smarthome.services.jacuzzi.JacuzziServiceImpl;
 import com.smarthome.services.lighting.LightingServiceImpl;
 import com.smarthome.services.mediaplayer.MediaPlayerServiceImpl;
 import com.smarthome.services.service.*;
+import com.smarthome.services.service.tcp.ServiceType;
 import com.smarthome.services.service.tcp.discovery.DNSServiceDiscovery;
 import com.smarthome.services.television.TelevisionHybridService;
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import javax.jmdns.ServiceInfo;
-
-import static com.smarthome.services.service.config.Config.*;
 
 /**
  * @author Graham Murray
@@ -46,7 +40,7 @@ public class LaunchControl {
 
     private void subscribeToServices() {
         serviceDiscovery = new DNSServiceDiscovery();
-        serviceDiscovery.addServiceListener(ServiceType.JACUZZI);
+        serviceDiscovery.addServiceListener(ServiceType.TCP_JACUZZI);
     }
 
     private void launchJacuzzi() throws InterruptedException {
@@ -78,8 +72,8 @@ public class LaunchControl {
     }
 
     private void testJacuzziService() {
-        if (serviceDiscovery.hasDiscoveredService(ServiceType.JACUZZI)) {
-            ServiceInfo info = serviceDiscovery.getServiceInfo(ServiceType.JACUZZI);
+        if (serviceDiscovery.hasDiscoveredService(ServiceType.TCP_JACUZZI)) {
+            ServiceInfo info = serviceDiscovery.getServiceInfo(ServiceType.TCP_JACUZZI);
             ServiceRequest request = new ServiceRequest(info, new ServiceOperation(0));
             request.send();
             System.out.println("Test Response: " + request.getResponse());

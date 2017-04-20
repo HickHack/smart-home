@@ -1,6 +1,6 @@
 package com.smarthome.services.service.tcp.discovery;
 
-import com.smarthome.services.service.ServiceType;
+import com.smarthome.services.service.tcp.ServiceType;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceEvent;

@@ -2,6 +2,7 @@ package com.smarthome.services.jacuzzi;
 
 import com.smarthome.services.jacuzzi.model.JacuzziModel;
 import com.smarthome.services.service.*;
+import com.smarthome.services.service.tcp.ServiceType;
 import com.smarthome.services.service.tcp.TCPService;
 
 import java.util.Map;
@@ -73,7 +74,7 @@ public class JacuzziControllerImpl implements ServiceController {
     }
 
     private void turnLightsOn() {
-        ServiceResponse response = service.connectToService(new ServiceOperation(0), ServiceType.LIGHTING);
+        ServiceResponse response = service.connectToService(new ServiceOperation(0), ServiceType.TCP_LIGHTING);
 
         if (ServiceHelper.isValidResponse(response)) {
             service.updateUIOutput("Successfully Turned Lights On");
@@ -83,7 +84,7 @@ public class JacuzziControllerImpl implements ServiceController {
     }
 
     private void increaseLightBrightness() {
-        ServiceResponse response = service.connectToService(new ServiceOperation(2), ServiceType.LIGHTING);
+        ServiceResponse response = service.connectToService(new ServiceOperation(2), ServiceType.TCP_LIGHTING);
 
         if (ServiceHelper.isValidResponse(response)) {
             service.updateUIOutput("Successfully to increased lights");
@@ -93,7 +94,7 @@ public class JacuzziControllerImpl implements ServiceController {
     }
 
     private void turnTVOn() {
-        ServiceResponse response = service.connectToService(new ServiceOperation(0), ServiceType.TELEVISION);
+        ServiceResponse response = service.connectToService(new ServiceOperation(0), ServiceType.TCP_TELEVISION);
 
         if (ServiceHelper.isValidResponse(response)) {
             service.updateUIOutput("Successfully Turned TV On");
@@ -121,7 +122,7 @@ public class JacuzziControllerImpl implements ServiceController {
     }
 
     private void turnLightsOff() {
-        ServiceResponse response = service.connectToService(new ServiceOperation(1), ServiceType.LIGHTING);
+        ServiceResponse response = service.connectToService(new ServiceOperation(1), ServiceType.TCP_LIGHTING);
 
         if (ServiceHelper.isValidResponse(response)) {
             service.updateUIOutput("Successfully Turned Lights Off");
@@ -131,7 +132,7 @@ public class JacuzziControllerImpl implements ServiceController {
     }
 
     private void turnTVOff() {
-        ServiceResponse response = service.connectToService(new ServiceOperation(1), ServiceType.TELEVISION);
+        ServiceResponse response = service.connectToService(new ServiceOperation(1), ServiceType.TCP_TELEVISION);
 
         if (ServiceHelper.isValidResponse(response)) {
             service.updateUIOutput("Successfully Turned TV Off");

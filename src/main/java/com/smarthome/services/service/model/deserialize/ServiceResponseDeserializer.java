@@ -34,16 +34,16 @@ public class ServiceResponseDeserializer implements JsonDeserializer<ServiceResp
                 BaseServiceModel model;
 
                 switch (response.getType()) {
-                    case JACUZZI:
+                    case TCP_JACUZZI:
                         model = gson.fromJson(modelString, JacuzziModel.class);
                         break;
-                    case LIGHTING:
+                    case TCP_LIGHTING:
                         model =  gson.fromJson(modelString, LightingModel.class);
                         break;
-                    case TELEVISION:
+                    case TCP_TELEVISION:
                         model = gson.fromJson(modelString, TelevisionModel.class);
                         break;
-                    case MEDIA_PLAYER:
+                    case MQTT_MEDIA_PLAYER:
                         model = gson.fromJson(modelString, MediaPlayerModel.class);
                         break;
                     default:

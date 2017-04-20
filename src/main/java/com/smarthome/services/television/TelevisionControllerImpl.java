@@ -70,7 +70,8 @@ public class TelevisionControllerImpl implements ServiceController {
             model.setVolume(50);
             model.setScreenBrightness(60);
             service.updateUIOutput("Turning TV On. Volume: " + model.getVolume());
-            mediaPlayerOperation(0);
+            service.updateUIOutput("Activating Media Player");
+            service.publish(new ServiceOperation(0));
 
             timer.schedule(new TelevisionControllerImpl.MediaPlayerTask(), 0, 10000);
 
@@ -78,37 +79,6 @@ public class TelevisionControllerImpl implements ServiceController {
         }
 
         return Status.FAILED;
-    }
-
-    private void mediaPlayerOperation(int operationNumber) {
-        ServiceOperation operation = new ServiceOperation(operationNumber);
-        sendServiceOperation(operation);
-    }
-
-    private void sendServiceOperation(ServiceOperation operation) {
-
-        Gson gson = new Gson();
-        String json = gson.toJson(operation);
-
-        try {
-            MqttClient sampleClient = new MqttClient(BROKER, "Television Publisher", PERSISTENCE);
-            MqttConnectOptions connOpts = new MqttConnectOptions();
-            connOpts.setCleanSession(true);
-            System.out.println("Connecting to BROKER: " + BROKER);
-            sampleClient.connect(connOpts);
-            System.out.println("Connected");
-            System.out.println("Publishing message: " + json);
-            MqttMessage message = new MqttMessage(json.getBytes());
-            message.setQos(QOS);
-            sampleClient.publish(ServiceType.MEDIA_PLAYER.toString(), message);
-            System.out.println("Message published");
-            sampleClient.disconnect();
-            System.out.println("Disconnected");
-        } catch (MqttException me) {
-            System.out.println("reason " + me.getReasonCode() + "\nmsg " + me.getMessage() + "\nloc " + me.getLocalizedMessage() +
-                    "\ncause " + me.getCause() + "\nexcep " + me);
-            me.printStackTrace();
-        }
     }
 
     private Status turnTelevisionOff() {
@@ -166,21 +136,9 @@ public class TelevisionControllerImpl implements ServiceController {
 
     class MediaPlayerTask extends TimerTask {
 
-        //int i;
-
         @Override
         public void run() {
-            /*i = mpModel.getTrack() + 1;
-
-            if (model.isTelevisionOn() && i <= 20) {
-                mpModel.setTrack(i);
-                //service.updateUIStatus();
-                service.updateUIOutput("Media Player track: "+ i);
-            } else {
-                timer.cancel();
-                service.updateUIOutput("Media Player played all tracks.");
-            }*/
-
+            /*
             if(model.isTelevisionOn()) {
                 mediaPlayerOperation(8);
                 service.updateUIStatus();
@@ -188,7 +146,7 @@ public class TelevisionControllerImpl implements ServiceController {
             } else {
                 timer.cancel();
                 service.updateUIOutput("Media Player turning off.");
-            }
+            } */
         }
     }
 

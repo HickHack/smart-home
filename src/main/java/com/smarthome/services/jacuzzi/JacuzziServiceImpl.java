@@ -1,6 +1,6 @@
 package com.smarthome.services.jacuzzi;
 
-import com.smarthome.services.service.ServiceType;
+import com.smarthome.services.service.tcp.ServiceType;
 import com.smarthome.services.service.tcp.TCPServiceImpl;
 
 /**
@@ -10,13 +10,13 @@ import com.smarthome.services.service.tcp.TCPServiceImpl;
 public class JacuzziServiceImpl extends TCPServiceImpl {
 
     public JacuzziServiceImpl(String name) {
-        super(name, ServiceType.JACUZZI);
+        super(name, ServiceType.TCP_JACUZZI);
     }
 
     @Override
     public void run() {
-        addSubscriber(ServiceType.LIGHTING);
-        addSubscriber(ServiceType.TELEVISION);
+        addSubscriber(ServiceType.TCP_LIGHTING);
+        addSubscriber(ServiceType.TCP_TELEVISION);
         setController(new JacuzziControllerImpl(this));
         start();
     }

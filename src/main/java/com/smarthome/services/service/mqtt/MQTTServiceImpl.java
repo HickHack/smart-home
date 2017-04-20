@@ -1,11 +1,12 @@
 package com.smarthome.services.service.mqtt;
 
 import com.google.gson.Gson;
+import com.smarthome.services.mediaplayer.MediaPlayerMQTTCallback;
 import com.smarthome.services.service.Service;
 import com.smarthome.services.service.ServiceController;
-import com.smarthome.services.service.ServiceResponse;
-import com.smarthome.services.service.ServiceType;
+import com.smarthome.services.service.tcp.ServiceType;
 import com.smarthome.ui.ServiceUI;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 /**
@@ -16,16 +17,20 @@ public class MQTTServiceImpl implements MQTTService, Service {
     private ServiceController controller;
     private MQTTOperations operations;
     private ServiceUI ui;
-    private Gson gson;
     private String name;
     private ServiceType serviceType;
 
-    public MQTTServiceImpl(String name, ServiceType serviceType) {
+    public MQTTServiceImpl(String name, ServiceType serviceType, MediaPlayerMQTTCallback callback) {
         this.name = name;
         this.serviceType = serviceType;
-        gson = new Gson();
         ui = new ServiceUI(this);
-        operations = new MQTTOperations(this);
+
+        try {
+            callback.setService(this);
+            operations = new MQTTOperations(this, callback);
+        } catch (MqttException ex) {
+            updateUIOutput("Failed to connect to MQTT");
+        }
     }
 
     @Override
@@ -34,9 +39,9 @@ public class MQTTServiceImpl implements MQTTService, Service {
     }
 
     @Override
-    public void publish(ServiceResponse response) {
+    public void publish(Object message) {
         try {
-            operations.publish(response, this.getType());
+            operations.publish(message, ServiceType.MQTT_TELEVISION);
         } catch (MqttException me) {
             updateUIOutput("Publishing response to " + this.getType().toString());
         }
@@ -45,9 +50,9 @@ public class MQTTServiceImpl implements MQTTService, Service {
     @Override
     public void subscribe() {
         try {
-            operations.subscribe(ServiceType.MEDIA_PLAYER);
+            operations.subscribe(this.getType());
         } catch (MqttException ex) {
-            updateUIOutput("Subscribing to topic  " + ServiceType.MEDIA_PLAYER);
+            updateUIOutput("Subscribing to topic  " + this.getType());
         }
     }
 

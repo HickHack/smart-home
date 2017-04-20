@@ -1,6 +1,7 @@
 package com.smarthome.services.service;
 
 import com.smarthome.services.service.model.BaseServiceModel;
+import com.smarthome.services.service.tcp.ServiceType;
 
 import java.util.Date;
 

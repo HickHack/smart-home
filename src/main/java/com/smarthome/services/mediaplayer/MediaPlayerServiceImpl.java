@@ -1,7 +1,7 @@
 package com.smarthome.services.mediaplayer;
 
-import com.smarthome.services.service.*;
 import com.smarthome.services.service.mqtt.MQTTServiceImpl;
+import com.smarthome.services.service.tcp.ServiceType;
 
 /**
  * @author Ian Cunningham
@@ -9,7 +9,7 @@ import com.smarthome.services.service.mqtt.MQTTServiceImpl;
 public class MediaPlayerServiceImpl extends MQTTServiceImpl {
 
     public MediaPlayerServiceImpl(String name) {
-        super(name, ServiceType.MEDIA_PLAYER);
+        super(name, ServiceType.MQTT_MEDIA_PLAYER, new MediaPlayerMQTTCallback());
         setController(new MediaPlayerControllerImpl(this));
     }
 }
