@@ -19,6 +19,8 @@ public class ClientUI extends JFrame {
     private JButton launchButton;
     private JButton jacuzziButton;
     private JButton lightingButton;
+    private JButton televisionButton;
+    private JButton mediaPlayerButton;
 
     public ClientUI(LaunchControl launchControl, String title) {
         super("Launch Control - " + title);
@@ -28,6 +30,8 @@ public class ClientUI extends JFrame {
         setupLaunchButton();
         setupJacuzziButton();
         setupLightingButton();
+        setupTelevisionButton();
+        setupMediaPlayerButton();
         addWindowCloseListener();
     }
 
@@ -94,12 +98,25 @@ public class ClientUI extends JFrame {
         });
     }
 
-    private void setupLightingButton() {
-        lightingButton = new JButton("Lighting");
-        lightingButton.setBounds(BUTTON_CENTER_X, LIGHTING_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT);
-        panel.add(lightingButton);
+    private void setupTelevisionButton() {
+        televisionButton = new JButton("Television");
+        televisionButton.setBounds(BUTTON_CENTER_X, TELEVISION_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT);
+        panel.add(televisionButton);
 
-        lightingButton.addActionListener(new ActionListener() {
+        televisionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+            }
+        });
+    }
+
+    private void setupMediaPlayerButton() {
+        mediaPlayerButton = new JButton("Media Player");
+        mediaPlayerButton.setBounds(BUTTON_CENTER_X, MEDIA_PLAYER_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT);
+        panel.add(mediaPlayerButton);
+
+        mediaPlayerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
