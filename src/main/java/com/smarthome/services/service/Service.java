@@ -1,7 +1,5 @@
 package com.smarthome.services.service;
 
-import com.smarthome.services.service.tcp.ServiceType;
-
 /**
  * @author Graham Murray
  * @date 30/03/17

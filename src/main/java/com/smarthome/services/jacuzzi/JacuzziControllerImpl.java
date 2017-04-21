@@ -2,7 +2,7 @@ package com.smarthome.services.jacuzzi;
 
 import com.smarthome.services.jacuzzi.model.JacuzziModel;
 import com.smarthome.services.service.*;
-import com.smarthome.services.service.tcp.ServiceType;
+import com.smarthome.services.service.ServiceType;
 import com.smarthome.services.service.tcp.TCPService;
 
 import java.util.Map;

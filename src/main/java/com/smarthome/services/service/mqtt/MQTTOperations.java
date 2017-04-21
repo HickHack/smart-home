@@ -2,8 +2,7 @@ package com.smarthome.services.service.mqtt;
 
 import com.google.gson.Gson;
 import com.smarthome.services.service.Service;
-import com.smarthome.services.service.tcp.ServiceType;
-import com.smarthome.services.television.TelevisionMQTTCallback;
+import com.smarthome.services.service.ServiceType;
 import org.eclipse.paho.client.mqttv3.*;
 
 import static com.smarthome.services.service.config.Config.BROKER;

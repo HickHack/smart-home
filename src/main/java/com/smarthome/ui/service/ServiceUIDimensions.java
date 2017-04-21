@@ -1,9 +1,9 @@
-package com.smarthome.ui;
+package com.smarthome.ui.service;
 
 /**
  * @author Graham Murray
  */
-public class UIDimension {
+public class ServiceUIDimensions {
 
     public static final int STANDARD_X = 5;
     public static final int STANDARD_Y = 5;

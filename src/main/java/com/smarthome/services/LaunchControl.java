@@ -4,15 +4,17 @@ import com.smarthome.services.jacuzzi.JacuzziServiceImpl;
 import com.smarthome.services.lighting.LightingServiceImpl;
 import com.smarthome.services.mediaplayer.MediaPlayerServiceImpl;
 import com.smarthome.services.service.*;
-import com.smarthome.services.service.tcp.ServiceType;
+import com.smarthome.services.service.ServiceType;
 import com.smarthome.services.service.tcp.discovery.DNSServiceDiscovery;
 import com.smarthome.services.television.TelevisionHybridService;
+import com.smarthome.ui.client.ClientUI;
 
 import javax.jmdns.ServiceInfo;
 
 /**
  * @author Graham Murray
- * @descripion Utility class for testing running services.
+ * @descripion Controller used by the client UI to launch and control
+ * services
  *
  */
 public class LaunchControl {
@@ -20,27 +22,42 @@ public class LaunchControl {
     private Thread jacuzziProcess;
     private Thread televisionProcess;
     private Thread lightingProcess;
-    public Thread mediaPlayerProcess;
+    private Thread mediaPlayerProcess;
     private DNSServiceDiscovery serviceDiscovery;
-
-    String clientId = "Publisher";
 
     private LaunchControl() throws InterruptedException {
         subscribeToServices();
-        launchJacuzzi();
-        launchLighting();
-        launchTelevision();
-        launchMediaPlayer();
-        Thread.sleep(4000);
-        testJacuzziService();
-        //testMediaPlayerService();
+    }
 
-        shutdown();
+    public void launchServices() {
+        try {
+            launchJacuzzi();
+            launchLighting();
+            launchTelevision();
+            launchMediaPlayer();
+
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void shutdown() {
+
+        if (jacuzziProcess != null && lightingProcess != null
+                && televisionProcess != null && mediaPlayerProcess != null) {
+            jacuzziProcess.interrupt();
+            lightingProcess.interrupt();
+            televisionProcess.interrupt();
+            mediaPlayerProcess.interrupt();
+        }
     }
 
     private void subscribeToServices() {
         serviceDiscovery = new DNSServiceDiscovery();
         serviceDiscovery.addServiceListener(ServiceType.TCP_JACUZZI);
+        serviceDiscovery.addServiceListener(ServiceType.TCP_LIGHTING);
+        serviceDiscovery.addServiceListener(ServiceType.TCP_TELEVISION);
     }
 
     private void launchJacuzzi() throws InterruptedException {
@@ -82,14 +99,8 @@ public class LaunchControl {
         }
     }
 
-    public void shutdown() {
-        jacuzziProcess.interrupt();
-        lightingProcess.interrupt();
-        televisionProcess.interrupt();
-        mediaPlayerProcess.interrupt();
-    }
-
     public static void main(String[] args) throws InterruptedException {
-        new LaunchControl();
+        ClientUI clientUI = new ClientUI(new LaunchControl(), "Smart Home");
+        clientUI.init();
     }
 }
