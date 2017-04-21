@@ -1,4 +1,4 @@
-package com.smarthome.services.service;
+package com.smarthome.services.service.tcp;
 
 /**
  * @author Graham Murray
@@ -6,6 +6,6 @@ package com.smarthome.services.service;
  * that a message has been received so it can process it so the server can process
  * a response
  */
-public interface ServiceControllerListener {
+public interface TCPServiceControllerListener {
     String processRequest();
 }

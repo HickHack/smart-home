@@ -1,14 +1,16 @@
-package com.smarthome.services.service;
+package com.smarthome.services.service.tcp;
 
 /**
  * @author Graham Murray
  * @descripion Enum for storing service types
  */
 public enum ServiceType {
-    JACUZZI("_jacuzzi._tcp.local."),
-    LIGHTING("_lighting._tcp.local."),
-    TELEVISION("_television._tcp.local."),
-    MEDIA_PLAYER("/smart_home/mediaplayer");
+    TCP_JACUZZI("_jacuzzi._tcp.local."),
+    TCP_LIGHTING("_lighting._tcp.local."),
+    TCP_TELEVISION("_television._tcp.local."),
+
+    MQTT_MEDIA_PLAYER("/smart_home/mediaplayer"),
+    MQTT_TELEVISION("/smart_home/television");
 
     private final String text;
 

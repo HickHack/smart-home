@@ -3,143 +3,181 @@ package com.smarthome.services.mediaplayer;
 import com.smarthome.services.mediaplayer.model.MediaPlayerModel;
 import com.smarthome.services.mediaplayer.model.PlaylistModel;
 import com.smarthome.services.service.*;
+import com.smarthome.services.service.mqtt.MQTTService;
+import com.smarthome.services.service.tcp.ServiceType;
 
 import java.util.Map;
 
+
+import static com.smarthome.services.service.ServiceResponse.Status;
 /**
  * @author Ian Cunningham
  */
 public class MediaPlayerControllerImpl implements ServiceController {
 
-    private MediaPlayerModel mpModel;
+    private MQTTService service;
+    private MediaPlayerModel model;
     private int volumeLevel;
 
-    public MediaPlayerControllerImpl() {
-        mpModel = new MediaPlayerModel("");
+    public MediaPlayerControllerImpl(MQTTService service) {
+        this.service = service;
+        model = new MediaPlayerModel(service.getName());
     }
 
     @Override
     public ServiceResponse performOperation(ServiceOperation request) {
+        Status status;
 
         switch (request.getOperationCode()) {
             case 0:
-                turnMediaPlayerOn();
+                status = turnMediaPlayerOn();
                 break;
             case 1:
-                turnMediaPlayerOff();
+                status = turnMediaPlayerOff();
                 break;
             case 2:
-                turnMuteOn();
+                status = turnMuteOn();
                 break;
             case 3:
-                turnMuteOff();
+                status = turnMuteOff();
                 break;
             case 4:
-                decreaseVolume();
+                status = decreaseVolume();
                 break;
             case 5:
-                increaseVolume();
+                status = increaseVolume();
                 break;
             case 6:
-                previousTrack();
+                status = previousTrack();
                 break;
             case 7:
-                nextTrack();
+                status = nextTrack();
                 break;
             case 8:
-                randomTrack();
+                status = randomTrack();
+                break;
             default:
+                status = Status.UNSUPPORTED_OPERATION;
                 break;
 
         }
 
-        return new ServiceResponse(ServiceResponse.Status.OK, mpModel, ServiceType.MEDIA_PLAYER);
+        return new ServiceResponse(status, model, ServiceType.MQTT_MEDIA_PLAYER);
     }
 
     @Override
     public Map getControllerStatus() {
-        return null;
+        return model.getValuesMap();
     }
 
-    private void turnMediaPlayerOn() {
-        if (!mpModel.isMediaPlayerOn()) {
-            mpModel.setMediaPlayerOn(true);
-            mpModel.setMuteOn(false);
-            mpModel.setVolume(50);
+    private Status turnMediaPlayerOn() {
+        if (!model.isMediaPlayerOn()) {
+            model.setMediaPlayerOn(true);
+            model.setMuteOn(false);
+            model.setVolume(50);
+
+            return Status.OK;
         }
+
+        return Status.FAILED;
     }
 
-    private void turnMediaPlayerOff() {
-        if (mpModel.isMediaPlayerOn()) {
-            mpModel.setMediaPlayerOn(false);
-            mpModel.setVolume(0);
+    private Status turnMediaPlayerOff() {
+        if (model.isMediaPlayerOn()) {
+            model.setMediaPlayerOn(false);
+            model.setVolume(0);
+
+            return Status.OK;
         }
+
+        return Status.FAILED;
     }
 
-    private void turnMuteOn() {
-        if (mpModel.isMediaPlayerOn() && !mpModel.isMuteOn()) {
-            mpModel.setMuteOn(true);
-            volumeLevel = mpModel.getVolume();
-            mpModel.setVolume(0);
+    private Status turnMuteOn() {
+        if (model.isMediaPlayerOn() && !model.isMuteOn()) {
+            model.setMuteOn(true);
+            volumeLevel = model.getVolume();
+            model.setVolume(0);
+
+            return Status.OK;
         }
+
+        return Status.FAILED;
     }
 
-    private void turnMuteOff() {
-        if (mpModel.isMediaPlayerOn() && mpModel.isMuteOn()) {
-            mpModel.setMuteOn(false);
-            mpModel.setVolume(volumeLevel);
+    private Status turnMuteOff() {
+        if (model.isMediaPlayerOn() && model.isMuteOn()) {
+            model.setMuteOn(false);
+            model.setVolume(volumeLevel);
+
+            return Status.OK;
         }
+
+        return Status.FAILED;
     }
 
-    private void decreaseVolume() {
-        if (mpModel.isMediaPlayerOn() && mpModel.getVolume() > 0) {
+    private Status decreaseVolume() {
+        if (model.isMediaPlayerOn() && model.getVolume() > 0) {
 
-            if (mpModel.getVolume() - 1 == 0) {
-                mpModel.setVolume(0);
+            if (model.getVolume() - 1 == 0) {
+                model.setVolume(0);
             }
 
-            mpModel.setVolume(mpModel.getVolume() - 1);
+            model.setVolume(model.getVolume() - 1);
+
+            return Status.OK;
         }
 
+        return Status.FAILED;
     }
 
-    private void increaseVolume() {
-        if (mpModel.isMediaPlayerOn() && mpModel.getVolume() < 100) {
+    private Status increaseVolume() {
+        if (model.isMediaPlayerOn() && model.getVolume() < 100) {
 
-            if (mpModel.getVolume() + 1 == 100) {
-                mpModel.setVolume(100);
+            if (model.getVolume() + 1 == 100) {
+                model.setVolume(100);
             }
 
-            mpModel.setVolume(mpModel.getVolume() + 1);
-        }
-    }
+            model.setVolume(model.getVolume() + 1);
 
-    private void previousTrack() {
-        if (mpModel.isMediaPlayerOn() && mpModel.getTrack() > 0) {
-            if (mpModel.getTrack() - 1 == 0) {
-                mpModel.setTrack(20);
-                mpModel.setVolume(50);
-            }
+            return Status.OK;
         }
 
-        mpModel.setTrack(mpModel.getTrack() - 1);
+        return Status.FAILED;
     }
 
-    private void nextTrack() {
-        if (mpModel.isMediaPlayerOn() && mpModel.getTrack() <= 20) {
-            if (mpModel.getTrack() + 1 > 20) {
-                mpModel.setTrack(1);
-                mpModel.setVolume(50);
+    private Status previousTrack() {
+        if (model.isMediaPlayerOn() && model.getTrack() > 0) {
+            if (model.getTrack() - 1 == 0) {
+                model.setTrack(20);
+                model.setVolume(50);
             }
         }
 
-        mpModel.setTrack(mpModel.getTrack() + 1);
+        model.setTrack(model.getTrack() - 1);
+
+        return Status.OK;
     }
 
-    private void randomTrack() {
-        if (mpModel.isMediaPlayerOn()) {
+    private Status nextTrack() {
+        if (model.isMediaPlayerOn() && model.getTrack() <= 20) {
+            if (model.getTrack() + 1 > 20) {
+                model.setTrack(1);
+                model.setVolume(50);
+            }
+        }
+
+        model.setTrack(model.getTrack() + 1);
+
+        return Status.OK;
+    }
+
+    private Status randomTrack() {
+        if (model.isMediaPlayerOn()) {
             PlaylistModel playlist = new PlaylistModel();
-            mpModel.setTrack(playlist.selectRandomTrack());
+            model.setTrack(playlist.selectRandomTrack());
         }
+
+        return Status.OK;
     }
 }

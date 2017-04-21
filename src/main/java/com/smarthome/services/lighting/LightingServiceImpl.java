@@ -1,7 +1,7 @@
 package com.smarthome.services.lighting;
 
-import com.smarthome.services.service.ServiceType;
-import com.smarthome.services.service.TCPServiceImpl;
+import com.smarthome.services.service.tcp.ServiceType;
+import com.smarthome.services.service.tcp.TCPServiceImpl;
 
 /**
  * @author Graham Murray
@@ -10,7 +10,7 @@ import com.smarthome.services.service.TCPServiceImpl;
 public class LightingServiceImpl extends TCPServiceImpl{
 
     public LightingServiceImpl(String name) {
-        super(name, ServiceType.LIGHTING);
+        super(name, ServiceType.TCP_LIGHTING);
     }
 
     @Override

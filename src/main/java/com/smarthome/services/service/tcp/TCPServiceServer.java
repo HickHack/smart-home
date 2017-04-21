@@ -1,4 +1,4 @@
-package com.smarthome.services.service;
+package com.smarthome.services.service.tcp;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -12,15 +12,15 @@ import java.util.List;
  * @descripion Server service used for TCP services
  *
  */
-public class ServiceServer {
+public class TCPServiceServer {
 
     private ServerSocket listener;
     private Socket socket;
-    private List<ServiceControllerListener> listeners;
+    private List<TCPServiceControllerListener> listeners;
     private String request;
     private int port;
 
-    public ServiceServer(int port) {
+    public TCPServiceServer(int port) {
         this.port = port;
         listeners = new ArrayList<>();
         request = "";
@@ -49,7 +49,7 @@ public class ServiceServer {
         return request;
     }
 
-    public void addListener(ServiceControllerListener listener) {
+    public void addListener(TCPServiceControllerListener listener) {
         listeners.add(listener);
     }
 
@@ -87,7 +87,7 @@ public class ServiceServer {
     }
 
     private void notifyListeners() {
-        for (ServiceControllerListener listener : listeners) {
+        for (TCPServiceControllerListener listener : listeners) {
             respond(listener.processRequest());
         }
     }
