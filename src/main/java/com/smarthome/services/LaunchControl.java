@@ -27,7 +27,8 @@ public class LaunchControl extends Thread{
     private DNSServiceDiscovery serviceDiscovery;
     private boolean isServicesRunning;
     private boolean isJacuzziOn;
-
+    private boolean isLightingOn;
+    private boolean isTelevisionOn;
 
     private LaunchControl() throws InterruptedException {
         subscribeToServices();
@@ -51,8 +52,12 @@ public class LaunchControl extends Thread{
         }
     }
 
-    public boolean isServiceAvailable(ServiceType serviceType) {
+    public boolean isTCPServiceAvailable(ServiceType serviceType) {
         return serviceDiscovery.hasDiscoveredService(serviceType);
+    }
+
+    public boolean isMediaPlayerAvailable() {
+        return isServicesRunning;
     }
 
     public void triggerJacuzziService() {
@@ -62,9 +67,35 @@ public class LaunchControl extends Thread{
             ServiceInfo info = serviceDiscovery.getServiceInfo(ServiceType.TCP_JACUZZI);
             ServiceRequest request = new ServiceRequest(info, operation);
             request.send();
-            System.out.println("Test Response: " + request.getResponse());
+            System.out.println("Jacuzzi Response: " + request.getResponse());
         } else {
             JOptionPane.showMessageDialog(null, "Failed to trigger Jacuzzi");
+        }
+    }
+
+    public void triggerLightingService() {
+        if (serviceDiscovery.hasDiscoveredService(ServiceType.TCP_LIGHTING)) {
+            ServiceOperation operation = new ServiceOperation(isLightingOn ? 1 : 0);
+            isLightingOn = !isLightingOn;
+            ServiceInfo info = serviceDiscovery.getServiceInfo(ServiceType.TCP_LIGHTING);
+            ServiceRequest request = new ServiceRequest(info, operation);
+            request.send();
+            System.out.println("Lighting Response: " + request.getResponse());
+        } else {
+            JOptionPane.showMessageDialog(null, "Failed to trigger Lighting");
+        }
+    }
+
+    public void triggerTelevisionService() {
+        if (serviceDiscovery.hasDiscoveredService(ServiceType.TCP_TELEVISION)) {
+            ServiceOperation operation = new ServiceOperation(isTelevisionOn ? 1 : 0);
+            isTelevisionOn = !isTelevisionOn;
+            ServiceInfo info = serviceDiscovery.getServiceInfo(ServiceType.TCP_TELEVISION);
+            ServiceRequest request = new ServiceRequest(info, operation);
+            request.send();
+            System.out.println("Lighting Response: " + request.getResponse());
+        } else {
+            JOptionPane.showMessageDialog(null, "Failed to trigger Television");
         }
     }
 

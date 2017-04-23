@@ -82,6 +82,7 @@ public class ClientUI extends JFrame {
     private void setupJacuzziButton() {
         jacuzziButton = new JButton("Jacuzzi");
         jacuzziButton.setBounds(BUTTON_CENTER_X, JACUZZI_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT);
+        jacuzziButton.setEnabled(false);
         panel.add(jacuzziButton);
 
         jacuzziButton.addActionListener(new ActionListener() {
@@ -95,12 +96,13 @@ public class ClientUI extends JFrame {
     private void setupLightingButton() {
         lightingButton = new JButton("Lighting");
         lightingButton.setBounds(BUTTON_CENTER_X, LIGHTING_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT);
+        lightingButton.setEnabled(false);
         panel.add(lightingButton);
 
         lightingButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
+                launchControl.triggerLightingService();
             }
         });
     }
@@ -108,12 +110,13 @@ public class ClientUI extends JFrame {
     private void setupTelevisionButton() {
         televisionButton = new JButton("Television");
         televisionButton.setBounds(BUTTON_CENTER_X, TELEVISION_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT);
+        televisionButton.setEnabled(false);
         panel.add(televisionButton);
 
         televisionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
+                launchControl.triggerTelevisionService();
             }
         });
     }
@@ -121,6 +124,7 @@ public class ClientUI extends JFrame {
     private void setupMediaPlayerButton() {
         mediaPlayerButton = new JButton("Media Player");
         mediaPlayerButton.setBounds(BUTTON_CENTER_X, MEDIA_PLAYER_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT);
+        mediaPlayerButton.setEnabled(false);
         panel.add(mediaPlayerButton);
 
         mediaPlayerButton.addActionListener(new ActionListener() {
@@ -151,9 +155,10 @@ public class ClientUI extends JFrame {
         timer = new Timer(3000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                jacuzziButton.setEnabled(launchControl.isServiceAvailable(ServiceType.TCP_JACUZZI));
-                lightingButton.setEnabled(launchControl.isServiceAvailable(ServiceType.TCP_LIGHTING));
-                televisionButton.setEnabled(launchControl.isServiceAvailable(ServiceType.TCP_TELEVISION));
+                jacuzziButton.setEnabled(launchControl.isTCPServiceAvailable(ServiceType.TCP_JACUZZI));
+                lightingButton.setEnabled(launchControl.isTCPServiceAvailable(ServiceType.TCP_LIGHTING));
+                televisionButton.setEnabled(launchControl.isTCPServiceAvailable(ServiceType.TCP_TELEVISION));
+                mediaPlayerButton.setEnabled(launchControl.isMediaPlayerAvailable());
             }
         });
 

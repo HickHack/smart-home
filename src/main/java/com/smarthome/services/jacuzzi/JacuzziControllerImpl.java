@@ -109,18 +109,14 @@ public class JacuzziControllerImpl implements ServiceController {
      * Turn the water off along with the lights and television
      */
     private Status turnOff() {
-        if (model.isWaterRunning()) {
-            model.setWaterDepth(0);
-            model.setWaterRunning(false);
-            turnJetsOff();
-            turnLightsOff();
-            turnTVOff();
-            timer.cancel();
+        model.setWaterDepth(0);
+        model.setWaterRunning(false);
+        turnJetsOff();
+        turnLightsOff();
+        turnTVOff();
+        timer.cancel();
 
-            return Status.OK;
-        }
-
-        return Status.FAILED;
+        return Status.OK;
     }
 
     private void turnLightsOff() {
