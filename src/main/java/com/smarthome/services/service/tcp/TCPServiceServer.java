@@ -66,7 +66,7 @@ public class TCPServiceServer {
         listener = new ServerSocket(port);
 
         try {
-            while (socket.isConnected()) {
+            while (!listener.isClosed()) {
                 socket = listener.accept();
 
                 try {
