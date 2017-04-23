@@ -5,7 +5,7 @@ import com.smarthome.services.service.tcp.TCPServiceImpl;
 
 /**
  * @author Graham Murray
- * @descripion Jacuzzi service main entry point used for starting the service
+ * @descripion Jacuzzi service implementation
  */
 public class JacuzziServiceImpl extends TCPServiceImpl {
 

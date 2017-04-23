@@ -18,6 +18,8 @@ import static com.smarthome.services.service.config.Config.MAX_REQUEST_RETRY;
 /**
  * @author Graham Murray
  * @date 30/03/17
+ * @descripion TCP Service implementation, see
+ * TCPService and TCPServiceControllerListener for comments
  */
 public class TCPServiceImpl implements TCPService, TCPServiceControllerListener {
 
@@ -38,6 +40,7 @@ public class TCPServiceImpl implements TCPService, TCPServiceControllerListener 
             this.port = findAvailablePort();
             this.name = name;
             this.serviceType = serviceType;
+
             server = new TCPServiceServer(port);
             dnsServiceDiscovery = new DNSServiceDiscovery();
             registry = new DNSServiceRegistry();
@@ -160,6 +163,13 @@ public class TCPServiceImpl implements TCPService, TCPServiceControllerListener 
         start();
     }
 
+    /**
+     * Find an unused port number to which
+     * a service can bind to.
+     *
+     * @return port number
+     * @throws IOException
+     */
     private int findAvailablePort() throws IOException {
         ServerSocket server = new ServerSocket(0);
         int port = server.getLocalPort();

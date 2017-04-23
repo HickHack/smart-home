@@ -3,27 +3,19 @@ package com.smarthome.services.service;
 /**
  * @author Graham Murray.
  * @description Helper class primarily for helping
- * controllers decide if the type of response they receive
- * corresponds to the expected result.
+ * controllers.
  */
 public class ServiceHelper {
 
+    /**
+     * Check a service response and check if the operation
+     * performed was successful
+     *
+     * @param response
+     * @return true if valid false if not.
+     */
     public static boolean isValidResponse(ServiceResponse response) {
-        if (response != null && response.getStatus().equals(ServiceResponse.Status.OK)) {
-            return true;
-        }
+        return response != null && response.getStatus().equals(ServiceResponse.Status.OK);
 
-        return false;
-    }
-
-    public static boolean isValidResponse(ServiceResponse response, Class expected) {
-        if (response != null &&
-                expected.isInstance(response.getModel()) &&
-                response.getStatus().equals(ServiceResponse.Status.OK)) {
-
-            return true;
-        }
-
-        return false;
     }
 }

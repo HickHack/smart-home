@@ -10,7 +10,6 @@ import java.util.List;
 /**
  * @author Graham Murray
  * @descripion Server service used for TCP services
- *
  */
 public class TCPServiceServer {
 
@@ -26,6 +25,11 @@ public class TCPServiceServer {
         request = "";
     }
 
+    /**
+     * Close the SocketListener and Socket
+     * which unbind from the port and stops
+     * the server looping listening for messages.
+     */
     public void stop() {
         try {
             if (listener != null  && socket != null) {
@@ -53,11 +57,16 @@ public class TCPServiceServer {
         listeners.add(listener);
     }
 
+    /**
+     * Continually loop listening for incoming messages.
+     * When a message is received process it.
+     * @throws IOException
+     */
     private void listen() throws IOException {
         listener = new ServerSocket(port);
 
         try {
-            while (true) {
+            while (socket.isConnected()) {
                 socket = listener.accept();
 
                 try {
@@ -71,6 +80,10 @@ public class TCPServiceServer {
         }
     }
 
+    /**
+     * Store the incoming message a notify all
+     * listeners
+     */
     private void processRequest() {
         InputStream inputStream;
 
@@ -86,12 +99,21 @@ public class TCPServiceServer {
         }
     }
 
+    /**
+     * Inform each listener that a message has been
+     * received so they can decide how they want to
+     * process the message.
+     */
     private void notifyListeners() {
         for (TCPServiceControllerListener listener : listeners) {
             respond(listener.processRequest());
         }
     }
 
+    /**
+     * Write a response back to the requester
+     * @param response
+     */
     private void respond(String response) {
         try {
             OutputStream outputStream = socket.getOutputStream();

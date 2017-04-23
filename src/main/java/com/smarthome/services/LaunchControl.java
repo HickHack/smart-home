@@ -10,20 +10,15 @@ import com.smarthome.services.television.TelevisionHybridService;
 import com.smarthome.ui.client.ClientUI;
 
 import javax.jmdns.ServiceInfo;
-import javax.swing.*;
+import javax.swing.JOptionPane;
 
 /**
  * @author Graham Murray
  * @descripion Controller used by the client UI to launch and control
  * services
- *
  */
-public class LaunchControl extends Thread{
+public class LaunchControl {
 
-    private Thread jacuzziProcess;
-    private Thread televisionProcess;
-    private Thread lightingProcess;
-    private Thread mediaPlayerProcess;
     private DNSServiceDiscovery serviceDiscovery;
     private boolean isServicesRunning;
     private boolean isJacuzziOn;
@@ -63,6 +58,7 @@ public class LaunchControl extends Thread{
     public void triggerJacuzziService() {
         if (serviceDiscovery.hasDiscoveredService(ServiceType.TCP_JACUZZI)) {
             ServiceOperation operation = new ServiceOperation(isJacuzziOn ? 1 : 0);
+            operation.setRequester("Client UI");
             isJacuzziOn = !isJacuzziOn;
             ServiceInfo info = serviceDiscovery.getServiceInfo(ServiceType.TCP_JACUZZI);
             ServiceRequest request = new ServiceRequest(info, operation);
@@ -76,6 +72,7 @@ public class LaunchControl extends Thread{
     public void triggerLightingService() {
         if (serviceDiscovery.hasDiscoveredService(ServiceType.TCP_LIGHTING)) {
             ServiceOperation operation = new ServiceOperation(isLightingOn ? 1 : 0);
+            operation.setRequester("Client UI");
             isLightingOn = !isLightingOn;
             ServiceInfo info = serviceDiscovery.getServiceInfo(ServiceType.TCP_LIGHTING);
             ServiceRequest request = new ServiceRequest(info, operation);
@@ -89,6 +86,7 @@ public class LaunchControl extends Thread{
     public void triggerTelevisionService() {
         if (serviceDiscovery.hasDiscoveredService(ServiceType.TCP_TELEVISION)) {
             ServiceOperation operation = new ServiceOperation(isTelevisionOn ? 1 : 0);
+            operation.setRequester("Client UI");
             isTelevisionOn = !isTelevisionOn;
             ServiceInfo info = serviceDiscovery.getServiceInfo(ServiceType.TCP_TELEVISION);
             ServiceRequest request = new ServiceRequest(info, operation);
@@ -107,28 +105,28 @@ public class LaunchControl extends Thread{
     }
 
     private void launchJacuzzi() throws InterruptedException {
-        jacuzziProcess = new Thread(new JacuzziServiceImpl("jacuzziservice1"));
+        Thread jacuzziProcess = new Thread(new JacuzziServiceImpl("jacuzziservice"));
         jacuzziProcess.start();
 
         Thread.sleep(4000);
     }
 
     private void launchLighting() throws InterruptedException {
-        lightingProcess = new Thread(new LightingServiceImpl("lightingservice1"));
+        Thread lightingProcess = new Thread(new LightingServiceImpl("lightingservice"));
         lightingProcess.start();
 
         Thread.sleep(4000);
     }
 
     private void launchTelevision() throws InterruptedException {
-        televisionProcess = new Thread(new TelevisionHybridService("televisionservice1"));
+        Thread televisionProcess = new Thread(new TelevisionHybridService("televisionservice"));
         televisionProcess.start();
 
         Thread.sleep(4000);
     }
 
     private void launchMediaPlayer() throws InterruptedException {
-        mediaPlayerProcess = new Thread(new MediaPlayerServiceImpl("mediaplayer"));
+        Thread mediaPlayerProcess = new Thread(new MediaPlayerServiceImpl("mediaplayer"));
         mediaPlayerProcess.start();
 
         Thread.sleep(4000);

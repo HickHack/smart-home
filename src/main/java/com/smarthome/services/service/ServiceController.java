@@ -1,8 +1,5 @@
 package com.smarthome.services.service;
 
-import com.smarthome.services.service.model.BaseServiceModel;
-
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -10,6 +7,19 @@ import java.util.Map;
  * @descripion Interface for service controllers
  */
 public interface ServiceController {
+
+    /**
+     * Perform an action on a service based on
+     * the request values set by the invoking service
+     *
+     * @param request
+     * @return response
+     */
     ServiceResponse performOperation(ServiceOperation request);
+
+    /**
+     *
+     * @return Map containing model values
+     */
     Map getControllerStatus();
 }

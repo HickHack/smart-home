@@ -2,6 +2,8 @@ package com.smarthome.services.service;
 
 /**
  * @author Graham Murray
+ * @description Service operation model used to hold operation
+ * codes that are used when invoking services
  */
 public class ServiceOperation {
 
