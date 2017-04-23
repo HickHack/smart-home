@@ -1,6 +1,7 @@
 package com.smarthome.ui.client;
 
 import com.smarthome.services.LaunchControl;
+import com.smarthome.services.service.ServiceType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,10 +12,13 @@ import java.awt.event.WindowEvent;
 
 import static com.smarthome.ui.client.ClientUIDimensions.*;
 
-
+/**
+ * @author Graham Murray
+ */
 public class ClientUI extends JFrame {
 
     private LaunchControl launchControl;
+    private Timer timer;
     private JPanel panel;
     private JButton launchButton;
     private JButton jacuzziButton;
@@ -23,20 +27,23 @@ public class ClientUI extends JFrame {
     private JButton mediaPlayerButton;
 
     public ClientUI(LaunchControl launchControl, String title) {
-        super("Launch Control - " + title);
+        super(title);
         this.launchControl = launchControl;
 
+        init();
+    }
+
+    public void init() {
         setupPanel();
         setupLaunchButton();
         setupJacuzziButton();
         setupLightingButton();
         setupTelevisionButton();
         setupMediaPlayerButton();
+        setupTimer();
         addWindowCloseListener();
-    }
 
-    public void init() {
-        this.setVisible(true);
+        setVisible(true);
     }
 
     public Point setPosition(Component component) {
@@ -80,7 +87,7 @@ public class ClientUI extends JFrame {
         jacuzziButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
+                launchControl.triggerJacuzziService();
             }
         });
     }
@@ -135,9 +142,22 @@ public class ClientUI extends JFrame {
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                launchControl.shutdown();
                 System.exit(0);
             }
         });
+    }
+
+    private void setupTimer() {
+        timer = new Timer(3000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                jacuzziButton.setEnabled(launchControl.isServiceAvailable(ServiceType.TCP_JACUZZI));
+                lightingButton.setEnabled(launchControl.isServiceAvailable(ServiceType.TCP_LIGHTING));
+                televisionButton.setEnabled(launchControl.isServiceAvailable(ServiceType.TCP_TELEVISION));
+            }
+        });
+
+        timer.setRepeats(true);
+        timer.start();
     }
 }

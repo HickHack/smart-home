@@ -44,6 +44,7 @@ public class MQTTOperations {
     }
 
     public void subscribe(ServiceType topic) throws MqttException {
+        service.updateUIOutput("Connected to broker: " + BROKER);
         service.updateUIOutput("Subscribing to " + topic);
         client.subscribe(topic.toString());
     }

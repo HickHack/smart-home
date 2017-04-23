@@ -65,6 +65,8 @@ public class JacuzziControllerImpl implements ServiceController {
             turnJetsOn();
             turnLightsOn();
             turnTVOn();
+
+            timer = new Timer();
             timer.schedule(new WaterTask(), 0, 2000);
 
             return Status.OK;
@@ -186,7 +188,6 @@ public class JacuzziControllerImpl implements ServiceController {
                 model.setWaterDepth(model.getWaterDepth() + 4);
                 increaseJetPower();
                 increaseLightBrightness();
-               // decreaseTvVolume();
                 service.updateUIStatus();
                 service.updateUIOutput("Filling water.");
             } else {
