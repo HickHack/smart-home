@@ -1,7 +1,7 @@
 package com.smarthome.services.mediaplayer;
 
 import com.smarthome.services.service.mqtt.MQTTServiceImpl;
-import com.smarthome.services.service.tcp.ServiceType;
+import com.smarthome.services.service.ServiceType;
 
 /**
  * @author Ian Cunningham

@@ -1,4 +1,4 @@
-package com.smarthome.ui;
+package com.smarthome.ui.service;
 
 import com.smarthome.services.service.Service;
 
@@ -12,7 +12,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 
-import static com.smarthome.ui.UIDimension.*;
+import static com.smarthome.ui.service.ServiceUIDimensions.*;
 
 
 public class ServiceUI extends JFrame {

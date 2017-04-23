@@ -1,6 +1,6 @@
 package com.smarthome.services.jacuzzi;
 
-import com.smarthome.services.service.tcp.ServiceType;
+import com.smarthome.services.service.ServiceType;
 import com.smarthome.services.service.tcp.TCPServiceImpl;
 
 /**

@@ -4,43 +4,106 @@ import com.smarthome.services.jacuzzi.JacuzziServiceImpl;
 import com.smarthome.services.lighting.LightingServiceImpl;
 import com.smarthome.services.mediaplayer.MediaPlayerServiceImpl;
 import com.smarthome.services.service.*;
-import com.smarthome.services.service.tcp.ServiceType;
+import com.smarthome.services.service.ServiceType;
 import com.smarthome.services.service.tcp.discovery.DNSServiceDiscovery;
 import com.smarthome.services.television.TelevisionHybridService;
+import com.smarthome.ui.client.ClientUI;
 
 import javax.jmdns.ServiceInfo;
+import javax.swing.*;
 
 /**
  * @author Graham Murray
- * @descripion Utility class for testing running services.
+ * @descripion Controller used by the client UI to launch and control
+ * services
  *
  */
-public class LaunchControl {
+public class LaunchControl extends Thread{
 
     private Thread jacuzziProcess;
     private Thread televisionProcess;
     private Thread lightingProcess;
-    public Thread mediaPlayerProcess;
+    private Thread mediaPlayerProcess;
     private DNSServiceDiscovery serviceDiscovery;
-
-    String clientId = "Publisher";
+    private boolean isServicesRunning;
+    private boolean isJacuzziOn;
+    private boolean isLightingOn;
+    private boolean isTelevisionOn;
 
     private LaunchControl() throws InterruptedException {
         subscribeToServices();
-        launchJacuzzi();
-        launchLighting();
-        launchTelevision();
-        launchMediaPlayer();
-        Thread.sleep(4000);
-        testJacuzziService();
-        //testMediaPlayerService();
+    }
 
-        shutdown();
+    public void launchServices() {
+
+        if (!isServicesRunning) {
+            try {
+                launchJacuzzi();
+                launchLighting();
+                launchTelevision();
+                launchMediaPlayer();
+
+                Thread.sleep(4000);
+
+                isServicesRunning = true;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public boolean isTCPServiceAvailable(ServiceType serviceType) {
+        return serviceDiscovery.hasDiscoveredService(serviceType);
+    }
+
+    public boolean isMediaPlayerAvailable() {
+        return isServicesRunning;
+    }
+
+    public void triggerJacuzziService() {
+        if (serviceDiscovery.hasDiscoveredService(ServiceType.TCP_JACUZZI)) {
+            ServiceOperation operation = new ServiceOperation(isJacuzziOn ? 1 : 0);
+            isJacuzziOn = !isJacuzziOn;
+            ServiceInfo info = serviceDiscovery.getServiceInfo(ServiceType.TCP_JACUZZI);
+            ServiceRequest request = new ServiceRequest(info, operation);
+            request.send();
+            System.out.println("Jacuzzi Response: " + request.getResponse());
+        } else {
+            JOptionPane.showMessageDialog(null, "Failed to trigger Jacuzzi");
+        }
+    }
+
+    public void triggerLightingService() {
+        if (serviceDiscovery.hasDiscoveredService(ServiceType.TCP_LIGHTING)) {
+            ServiceOperation operation = new ServiceOperation(isLightingOn ? 1 : 0);
+            isLightingOn = !isLightingOn;
+            ServiceInfo info = serviceDiscovery.getServiceInfo(ServiceType.TCP_LIGHTING);
+            ServiceRequest request = new ServiceRequest(info, operation);
+            request.send();
+            System.out.println("Lighting Response: " + request.getResponse());
+        } else {
+            JOptionPane.showMessageDialog(null, "Failed to trigger Lighting");
+        }
+    }
+
+    public void triggerTelevisionService() {
+        if (serviceDiscovery.hasDiscoveredService(ServiceType.TCP_TELEVISION)) {
+            ServiceOperation operation = new ServiceOperation(isTelevisionOn ? 1 : 0);
+            isTelevisionOn = !isTelevisionOn;
+            ServiceInfo info = serviceDiscovery.getServiceInfo(ServiceType.TCP_TELEVISION);
+            ServiceRequest request = new ServiceRequest(info, operation);
+            request.send();
+            System.out.println("Lighting Response: " + request.getResponse());
+        } else {
+            JOptionPane.showMessageDialog(null, "Failed to trigger Television");
+        }
     }
 
     private void subscribeToServices() {
         serviceDiscovery = new DNSServiceDiscovery();
         serviceDiscovery.addServiceListener(ServiceType.TCP_JACUZZI);
+        serviceDiscovery.addServiceListener(ServiceType.TCP_LIGHTING);
+        serviceDiscovery.addServiceListener(ServiceType.TCP_TELEVISION);
     }
 
     private void launchJacuzzi() throws InterruptedException {
@@ -71,25 +134,8 @@ public class LaunchControl {
         Thread.sleep(4000);
     }
 
-    private void testJacuzziService() {
-        if (serviceDiscovery.hasDiscoveredService(ServiceType.TCP_JACUZZI)) {
-            ServiceInfo info = serviceDiscovery.getServiceInfo(ServiceType.TCP_JACUZZI);
-            ServiceRequest request = new ServiceRequest(info, new ServiceOperation(0));
-            request.send();
-            System.out.println("Test Response: " + request.getResponse());
-        } else {
-            System.out.println("Unable to turn Jacuzzi On!");
-        }
-    }
-
-    public void shutdown() {
-        jacuzziProcess.interrupt();
-        lightingProcess.interrupt();
-        televisionProcess.interrupt();
-        mediaPlayerProcess.interrupt();
-    }
-
     public static void main(String[] args) throws InterruptedException {
-        new LaunchControl();
+        new ClientUI(new LaunchControl(), "Smart Home");
     }
+
 }

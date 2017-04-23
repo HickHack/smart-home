@@ -4,7 +4,7 @@ import com.smarthome.services.mediaplayer.model.MediaPlayerModel;
 import com.smarthome.services.mediaplayer.model.PlaylistModel;
 import com.smarthome.services.service.*;
 import com.smarthome.services.service.mqtt.MQTTService;
-import com.smarthome.services.service.tcp.ServiceType;
+import com.smarthome.services.service.ServiceType;
 
 import java.util.Map;
 
@@ -180,4 +180,6 @@ public class MediaPlayerControllerImpl implements ServiceController {
 
         return Status.OK;
     }
+
+
 }

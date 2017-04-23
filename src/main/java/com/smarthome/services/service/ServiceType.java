@@ -1,4 +1,4 @@
-package com.smarthome.services.service.tcp;
+package com.smarthome.services.service;
 
 /**
  * @author Graham Murray

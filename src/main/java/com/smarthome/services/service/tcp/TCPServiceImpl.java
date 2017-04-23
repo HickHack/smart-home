@@ -7,7 +7,7 @@ import com.smarthome.services.service.model.deserialize.ServiceResponseDeseriali
 
 import com.smarthome.services.service.tcp.discovery.DNSServiceDiscovery;
 import com.smarthome.services.service.tcp.discovery.DNSServiceRegistry;
-import com.smarthome.ui.ServiceUI;
+import com.smarthome.ui.service.ServiceUI;
 
 import javax.jmdns.ServiceInfo;
 import java.io.IOException;
