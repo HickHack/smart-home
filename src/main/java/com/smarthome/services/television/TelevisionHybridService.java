@@ -30,11 +30,6 @@ public class TelevisionHybridService extends TCPServiceImpl implements MQTTServi
         start();
     }
 
-    /**
-     *
-     * @param message
-     *
-     */
     @Override
     public void publish(Object message) {
         try {
@@ -49,7 +44,7 @@ public class TelevisionHybridService extends TCPServiceImpl implements MQTTServi
         try {
             mqttOperations.subscribe(ServiceType.MQTT_TELEVISION);
         } catch (MqttException e) {
-            e.printStackTrace();
+            updateUIOutput("Failed to subscribe to" + ServiceType.MQTT_TELEVISION);
         }
     }
 }
