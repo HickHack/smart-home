@@ -6,15 +6,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Ian C on 06/04/2017.
+ * @author Ian Cunningham
  */
 public class MediaPlayerModel extends BaseServiceModel {
 
     private boolean isMediaPlayerOn;
-    private boolean isMuteOn;
     private int volume;
-    private int track;
+    private int currentTrack;
     private PlaylistModel playlist;
+
 
     public MediaPlayerModel(String name) {
         super(name, 0);
@@ -30,22 +30,6 @@ public class MediaPlayerModel extends BaseServiceModel {
         isMediaPlayerOn = mediaPlayerOn;
     }
 
-    public int getTrack() {
-        return track;
-    }
-
-    public void setTrack(int track) {
-        this.track = track;
-    }
-
-    public boolean isMuteOn() {
-        return isMuteOn;
-    }
-
-    public void setMuteOn(boolean muteOn) {
-        isMuteOn = muteOn;
-    }
-
     public int getVolume() {
         return volume;
     }
@@ -58,17 +42,20 @@ public class MediaPlayerModel extends BaseServiceModel {
         return playlist;
     }
 
-    public void setPlaylist(PlaylistModel playlist) {
-        this.playlist = playlist;
+    public int getCurrentTrack() {
+        return currentTrack;
+    }
+
+    public void selectTrack(int code) {
+        currentTrack = code;
     }
 
     @Override
     public Map getValuesMap() {
         Map valuesMap = new HashMap();
         valuesMap.put("Television On", isMediaPlayerOn);
-        valuesMap.put("Mute On", isMuteOn);
         valuesMap.put("Volume", volume);
-        valuesMap.put("Current track", track);
+        valuesMap.put("Current track", currentTrack);
 
         return valuesMap;
     }
