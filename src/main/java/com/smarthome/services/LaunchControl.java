@@ -1,16 +1,26 @@
 package com.smarthome.services;
 
+import com.google.gson.Gson;
 import com.smarthome.services.jacuzzi.JacuzziServiceImpl;
 import com.smarthome.services.lighting.LightingServiceImpl;
 import com.smarthome.services.mediaplayer.MediaPlayerServiceImpl;
 import com.smarthome.services.service.*;
 import com.smarthome.services.service.ServiceType;
+import com.smarthome.services.service.mqtt.MQTTOperations;
 import com.smarthome.services.service.tcp.discovery.DNSServiceDiscovery;
 import com.smarthome.services.television.TelevisionHybridService;
 import com.smarthome.ui.client.ClientUI;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import javax.jmdns.ServiceInfo;
 import javax.swing.JOptionPane;
+
+import static com.smarthome.services.service.config.Config.BROKER;
+import static com.smarthome.services.service.config.Config.PERSISTENCE;
+import static com.smarthome.services.service.config.Config.QOS;
 
 /**
  * @author Graham Murray
@@ -24,6 +34,7 @@ public class LaunchControl {
     private boolean isJacuzziOn;
     private boolean isLightingOn;
     private boolean isTelevisionOn;
+    private boolean isMediaPlayerOn;
 
     private LaunchControl() throws InterruptedException {
         subscribeToServices();
@@ -97,6 +108,13 @@ public class LaunchControl {
         }
     }
 
+    public void triggerMediaPlayerService() {
+        ServiceOperation operation = new ServiceOperation(isTelevisionOn ? 1 : 0);
+        operation.setRequester("Client UI");
+        isMediaPlayerOn = !isMediaPlayerOn;
+        sendMQTTMessage(operation);
+    }
+
     private void subscribeToServices() {
         serviceDiscovery = new DNSServiceDiscovery();
         serviceDiscovery.addServiceListener(ServiceType.TCP_JACUZZI);
@@ -130,6 +148,25 @@ public class LaunchControl {
         mediaPlayerProcess.start();
 
         Thread.sleep(4000);
+    }
+
+    private void sendMQTTMessage(ServiceOperation operation) {
+
+        Gson gson = new Gson();
+        String json = gson.toJson(operation);
+
+        try {
+            MqttClient client = new MqttClient(BROKER, "UI Client", PERSISTENCE);
+            MqttConnectOptions connOpts = new MqttConnectOptions();
+            connOpts.setCleanSession(true);
+            client.connect(connOpts);
+            MqttMessage message = new MqttMessage(json.getBytes());
+            message.setQos(QOS);
+            client.publish(ServiceType.MQTT_MEDIA_PLAYER.toString(), message);
+            client.disconnect();
+        } catch (MqttException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public static void main(String[] args) throws InterruptedException {
