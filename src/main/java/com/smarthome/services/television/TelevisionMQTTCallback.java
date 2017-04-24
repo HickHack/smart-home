@@ -3,7 +3,6 @@ package com.smarthome.services.television;
 import com.google.gson.Gson;
 
 import com.google.gson.GsonBuilder;
-import com.smarthome.services.mediaplayer.model.MediaPlayerModel;
 import com.smarthome.services.service.Service;
 import com.smarthome.services.service.ServiceResponse;
 import com.smarthome.services.service.model.deserialize.ServiceResponseDeserializer;
@@ -36,7 +35,6 @@ public class TelevisionMQTTCallback implements MqttCallback {
     public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
         ServiceResponse operation = gson.fromJson(mqttMessage.toString(), ServiceResponse.class);
         service.updateUIOutput("Received mqtt message from " + operation.getType() + " Status " + operation.getStatus());
-        ((TelevisionControllerImpl) service.getController()).pickSong((MediaPlayerModel) operation.getModel());
     }
 
     @Override
