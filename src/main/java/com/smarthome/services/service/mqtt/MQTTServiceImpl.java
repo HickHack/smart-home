@@ -8,7 +8,9 @@ import com.smarthome.ui.service.ServiceUI;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 /**
- * @author Ian Cunningham, Graham Murray
+ * @author Graham Murray
+ * @descripion MQTT service implementation. See
+ * the implemented interfaces for comments
  */
 public class MQTTServiceImpl implements MQTTService, Service {
 

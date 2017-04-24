@@ -2,7 +2,9 @@ package com.smarthome.services.service;
 
 /**
  * @author Graham Murray
- * @descripion Enum for storing service types
+ * @descripion Enum for storing service types. In the
+ * case of a TCP service its the domain name while for
+ * an MQTT service it's the topic.
  */
 public enum ServiceType {
     TCP_JACUZZI("_jacuzzi._tcp.local."),

@@ -12,6 +12,8 @@ import java.lang.reflect.Type;
 
 /**
  * @author Graham Murray
+ * @description Custom Gson deserializer used to deserialize service
+ * models in a service response
  */
 public class ServiceResponseDeserializer implements JsonDeserializer<ServiceResponse> {
 

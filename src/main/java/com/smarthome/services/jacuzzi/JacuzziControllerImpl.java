@@ -105,9 +105,6 @@ public class JacuzziControllerImpl implements ServiceController {
         }
     }
 
-    /**
-     * Turn the water off along with the lights and television
-     */
     private Status turnOff() {
         model.setWaterDepth(0);
         model.setWaterRunning(false);
@@ -176,6 +173,10 @@ public class JacuzziControllerImpl implements ServiceController {
         return Status.FAILED;
     }
 
+    /**
+     * Timer task that increases the water and lighting
+     * brightness incrementally
+     */
     class WaterTask extends TimerTask {
 
         @Override

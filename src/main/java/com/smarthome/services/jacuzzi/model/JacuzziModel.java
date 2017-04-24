@@ -7,7 +7,8 @@ import java.util.Map;
 
 /**
  * @author Graham Murray
- * @descripion Jacuzzi service controller
+ * @descripion Jacuzzi model used to represent the current
+ * state of the jacuzzi
  */
 public class JacuzziModel extends BaseServiceModel {
 
