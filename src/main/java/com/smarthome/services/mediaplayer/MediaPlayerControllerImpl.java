@@ -5,8 +5,11 @@ import com.smarthome.services.mediaplayer.model.PlaylistModel;
 import com.smarthome.services.service.*;
 import com.smarthome.services.service.mqtt.MQTTService;
 import com.smarthome.services.service.tcp.ServiceType;
+import com.smarthome.services.television.TelevisionControllerImpl;
 
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 import static com.smarthome.services.service.ServiceResponse.Status;
@@ -17,11 +20,12 @@ public class MediaPlayerControllerImpl implements ServiceController {
 
     private MQTTService service;
     private MediaPlayerModel model;
-    private int volumeLevel;
+    private Timer timer;
 
     public MediaPlayerControllerImpl(MQTTService service) {
         this.service = service;
         model = new MediaPlayerModel(service.getName());
+        timer = new Timer();
     }
 
     @Override
@@ -36,28 +40,13 @@ public class MediaPlayerControllerImpl implements ServiceController {
                 status = turnMediaPlayerOff();
                 break;
             case 2:
-                status = turnMuteOn();
-                break;
-            case 3:
-                status = turnMuteOff();
-                break;
-            case 4:
                 status = decreaseVolume();
                 break;
-            case 5:
+            case 3:
                 status = increaseVolume();
                 break;
-            case 6:
-                status = previousTrack();
-                break;
-            case 7:
-                status = nextTrack();
-                break;
-            case 8:
-                status = randomTrack();
-                break;
             default:
-                status = Status.UNSUPPORTED_OPERATION;
+                status = selectTrack(request.getOperationCode());
                 break;
 
         }
@@ -73,9 +62,9 @@ public class MediaPlayerControllerImpl implements ServiceController {
     private Status turnMediaPlayerOn() {
         if (!model.isMediaPlayerOn()) {
             model.setMediaPlayerOn(true);
-            model.setMuteOn(false);
             model.setVolume(50);
 
+            service.updateUIOutput("Turning Media Player On");
             return Status.OK;
         }
 
@@ -87,29 +76,7 @@ public class MediaPlayerControllerImpl implements ServiceController {
             model.setMediaPlayerOn(false);
             model.setVolume(0);
 
-            return Status.OK;
-        }
-
-        return Status.FAILED;
-    }
-
-    private Status turnMuteOn() {
-        if (model.isMediaPlayerOn() && !model.isMuteOn()) {
-            model.setMuteOn(true);
-            volumeLevel = model.getVolume();
-            model.setVolume(0);
-
-            return Status.OK;
-        }
-
-        return Status.FAILED;
-    }
-
-    private Status turnMuteOff() {
-        if (model.isMediaPlayerOn() && model.isMuteOn()) {
-            model.setMuteOn(false);
-            model.setVolume(volumeLevel);
-
+            service.updateUIOutput("Turning Media Player Off");
             return Status.OK;
         }
 
@@ -146,38 +113,25 @@ public class MediaPlayerControllerImpl implements ServiceController {
         return Status.FAILED;
     }
 
-    private Status previousTrack() {
-        if (model.isMediaPlayerOn() && model.getTrack() > 0) {
-            if (model.getTrack() - 1 == 0) {
-                model.setTrack(20);
-                model.setVolume(50);
-            }
-        }
 
-        model.setTrack(model.getTrack() - 1);
-
-        return Status.OK;
-    }
-
-    private Status nextTrack() {
-        if (model.isMediaPlayerOn() && model.getTrack() <= 20) {
-            if (model.getTrack() + 1 > 20) {
-                model.setTrack(1);
-                model.setVolume(50);
-            }
-        }
-
-        model.setTrack(model.getTrack() + 1);
-
-        return Status.OK;
-    }
-
-    private Status randomTrack() {
+    private Status selectTrack(int code) {
         if (model.isMediaPlayerOn()) {
-            PlaylistModel playlist = new PlaylistModel();
-            model.setTrack(playlist.selectRandomTrack());
+            model.selectTrack(code);
+            timer.schedule(new MediaPlayerTask(), 0, 10000);
+
+            service.updateUIOutput("Selecting Track " + code);
         }
 
         return Status.OK;
+    }
+
+    class MediaPlayerTask extends TimerTask {
+
+        @Override
+        public void run() {
+            service.updateUIStatus();
+            service.updateUIOutput("Playing track " + model.getCurrentTrack());
+            service.publish(new ServiceResponse(Status.OK, model, ServiceType.MQTT_MEDIA_PLAYER));
+        }
     }
 }
