@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by graham on 28/03/17.
+ * @author Graham Murray
+ * @description Base service model that is extended
+ * by specific service models
  */
 public class BaseServiceModel {
 

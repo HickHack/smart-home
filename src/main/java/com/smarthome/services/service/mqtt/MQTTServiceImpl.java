@@ -1,16 +1,16 @@
 package com.smarthome.services.service.mqtt;
 
-import com.google.gson.Gson;
 import com.smarthome.services.mediaplayer.MediaPlayerMQTTCallback;
 import com.smarthome.services.service.Service;
 import com.smarthome.services.service.ServiceController;
-import com.smarthome.services.service.tcp.ServiceType;
-import com.smarthome.ui.ServiceUI;
-import org.eclipse.paho.client.mqttv3.MqttCallback;
+import com.smarthome.services.service.ServiceType;
+import com.smarthome.ui.service.ServiceUI;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 /**
- * @author Ian Cunningham, Graham Murray
+ * @author Graham Murray
+ * @descripion MQTT service implementation. See
+ * the implemented interfaces for comments
  */
 public class MQTTServiceImpl implements MQTTService, Service {
 

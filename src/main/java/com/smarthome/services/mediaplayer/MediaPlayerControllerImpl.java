@@ -1,11 +1,10 @@
 package com.smarthome.services.mediaplayer;
 
 import com.smarthome.services.mediaplayer.model.MediaPlayerModel;
-import com.smarthome.services.mediaplayer.model.PlaylistModel;
 import com.smarthome.services.service.*;
 import com.smarthome.services.service.mqtt.MQTTService;
-import com.smarthome.services.service.tcp.ServiceType;
-import com.smarthome.services.television.TelevisionControllerImpl;
+
+import com.smarthome.services.service.ServiceType;
 
 import java.util.Map;
 import java.util.Timer;
@@ -134,4 +133,6 @@ public class MediaPlayerControllerImpl implements ServiceController {
             service.publish(new ServiceResponse(Status.OK, model, ServiceType.MQTT_MEDIA_PLAYER));
         }
     }
+
+
 }

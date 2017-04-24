@@ -2,8 +2,7 @@ package com.smarthome.services.service.mqtt;
 
 import com.google.gson.Gson;
 import com.smarthome.services.service.Service;
-import com.smarthome.services.service.tcp.ServiceType;
-import com.smarthome.services.television.TelevisionMQTTCallback;
+import com.smarthome.services.service.ServiceType;
 import org.eclipse.paho.client.mqttv3.*;
 
 import static com.smarthome.services.service.config.Config.BROKER;
@@ -28,6 +27,9 @@ public class MQTTOperations {
         configureClient();
     }
 
+    /**
+     * Close connection to the broker
+     */
     public void disconnect() {
         try {
             client.disconnect();
@@ -36,6 +38,13 @@ public class MQTTOperations {
         }
     }
 
+    /**
+     * Publish a message to the specified topic
+     *
+     * @param message
+     * @param topic
+     * @throws MqttException
+     */
     public void publish(Object message, ServiceType topic) throws MqttException {
         String json = gson.toJson(message);
         MqttMessage mqttMessage = new MqttMessage(json.getBytes());
@@ -44,11 +53,24 @@ public class MQTTOperations {
         client.publish(topic.toString(), mqttMessage);
     }
 
+    /**
+     * Subscribe to a topic. This can be called
+     * multiple times
+     *
+     * @param topic
+     * @throws MqttException
+     */
     public void subscribe(ServiceType topic) throws MqttException {
+        service.updateUIOutput("Connected to broker: " + BROKER);
         service.updateUIOutput("Subscribing to " + topic);
         client.subscribe(topic.toString());
     }
 
+    /**
+     * Connect to the broker a set the callback
+     *
+     * @throws MqttException
+     */
     private void configureClient() throws MqttException {
         client = new MqttClient(BROKER, service.getName(), PERSISTENCE);
         MqttConnectOptions connOpts = new MqttConnectOptions();

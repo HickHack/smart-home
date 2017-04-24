@@ -2,7 +2,7 @@ package com.smarthome.services.jacuzzi;
 
 import com.smarthome.services.jacuzzi.model.JacuzziModel;
 import com.smarthome.services.service.*;
-import com.smarthome.services.service.tcp.ServiceType;
+import com.smarthome.services.service.ServiceType;
 import com.smarthome.services.service.tcp.TCPService;
 
 import java.util.Map;
@@ -65,6 +65,8 @@ public class JacuzziControllerImpl implements ServiceController {
             turnJetsOn();
             turnLightsOn();
             turnTVOn();
+
+            timer = new Timer();
             timer.schedule(new WaterTask(), 0, 2000);
 
             return Status.OK;
@@ -103,22 +105,15 @@ public class JacuzziControllerImpl implements ServiceController {
         }
     }
 
-    /**
-     * Turn the water off along with the lights and television
-     */
     private Status turnOff() {
-        if (model.isWaterRunning()) {
-            model.setWaterDepth(0);
-            model.setWaterRunning(false);
-            turnJetsOff();
-            turnLightsOff();
-            turnTVOff();
-            timer.cancel();
+        model.setWaterDepth(0);
+        model.setWaterRunning(false);
+        turnJetsOff();
+        turnLightsOff();
+        turnTVOff();
+        timer.cancel();
 
-            return Status.OK;
-        }
-
-        return Status.FAILED;
+        return Status.OK;
     }
 
     private void turnLightsOff() {
@@ -178,6 +173,10 @@ public class JacuzziControllerImpl implements ServiceController {
         return Status.FAILED;
     }
 
+    /**
+     * Timer task that increases the water and lighting
+     * brightness incrementally
+     */
     class WaterTask extends TimerTask {
 
         @Override
@@ -186,7 +185,6 @@ public class JacuzziControllerImpl implements ServiceController {
                 model.setWaterDepth(model.getWaterDepth() + 4);
                 increaseJetPower();
                 increaseLightBrightness();
-               // decreaseTvVolume();
                 service.updateUIStatus();
                 service.updateUIOutput("Filling water.");
             } else {

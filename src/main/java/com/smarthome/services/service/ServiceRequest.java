@@ -15,7 +15,6 @@ import static com.smarthome.services.service.config.Config.MAX_REQUEST_TIMEOUT;
 
 /**
  * @author Graham Murray
- * @descripion
  */
 public class ServiceRequest {
 
@@ -31,6 +30,11 @@ public class ServiceRequest {
         response = "";
     }
 
+    /**
+     * Send a serialized ServiceOperation to a
+     * specified service and set whether is was successful or not
+     * and whether request timed out.
+     */
     public void send() {
         Gson gson = new Gson();
         String json = gson.toJson(serviceOperation);

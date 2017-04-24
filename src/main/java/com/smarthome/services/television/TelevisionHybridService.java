@@ -2,7 +2,7 @@ package com.smarthome.services.television;
 
 import com.smarthome.services.service.mqtt.MQTTOperations;
 import com.smarthome.services.service.mqtt.MQTTService;
-import com.smarthome.services.service.tcp.ServiceType;
+import com.smarthome.services.service.ServiceType;
 import com.smarthome.services.service.tcp.TCPServiceImpl;
 import org.eclipse.paho.client.mqttv3.MqttException;
 

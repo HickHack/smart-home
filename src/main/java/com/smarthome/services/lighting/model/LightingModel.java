@@ -7,7 +7,8 @@ import java.util.Map;
 
 /**
  * @author Graham Murray
- * @descripion Lighting service controller
+ * @descripion Lighting model used to represent the current
+ * state of the lights
  */
 public class LightingModel extends BaseServiceModel {
 

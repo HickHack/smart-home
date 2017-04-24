@@ -1,15 +1,21 @@
 package com.smarthome.services.service;
 
 import com.smarthome.services.service.model.BaseServiceModel;
-import com.smarthome.services.service.tcp.ServiceType;
 
 import java.util.Date;
 
 /**
  * @author Graham Murray
+ * @description Service response model used when responding to
+ * a service.
  */
 public class ServiceResponse {
 
+    /**
+     * Status codes to used by the invoking
+     * service to decide if the operation
+     * performed was a success
+     */
     public enum Status {
         OK,
         FAILED,
