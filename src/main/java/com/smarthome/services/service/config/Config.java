@@ -4,7 +4,6 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 /**
  * @author Ian Cunningham
- * @date 07/04/2017
  */
 public class Config {
 

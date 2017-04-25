@@ -52,6 +52,10 @@ public class TelevisionControllerImpl implements ServiceController {
         return model.getValuesMap();
     }
 
+    /**
+     * picks a random song from the media player playlist
+     * if a track is not playing and the media player is currently on
+     */
     public void pickSong(ServiceResponse response) {
         if (ServiceHelper.isValidResponse(response)) {
             MediaPlayerModel model = (MediaPlayerModel) response.getModel();

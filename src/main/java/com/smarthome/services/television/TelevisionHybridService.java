@@ -33,6 +33,7 @@ public class TelevisionHybridService extends TCPServiceImpl implements MQTTServi
     /**
      *
      * @param message
+     * publish message to the broker
      *
      */
     @Override
@@ -44,6 +45,9 @@ public class TelevisionHybridService extends TCPServiceImpl implements MQTTServi
         }
     }
 
+    /**
+     * subscribe to the broker
+     */
     @Override
     public void subscribe() {
         try {

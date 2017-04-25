@@ -28,7 +28,7 @@ public class MediaPlayerControllerImpl implements ServiceController {
 
     @Override
     public ServiceResponse performOperation(ServiceOperation request) {
-        Status status = null;
+        Status status;
 
         switch (request.getOperationCode()) {
             case 0:
@@ -135,6 +135,9 @@ public class MediaPlayerControllerImpl implements ServiceController {
         return Status.OK;
     }
 
+    /**
+     * Timer task that increases the position of the current track playing
+     */
     class MediaPlayerTask extends TimerTask {
 
         @Override
