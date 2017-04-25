@@ -63,7 +63,7 @@ public class MediaPlayerModel extends BaseServiceModel {
     @Override
     public Map getValuesMap() {
         Map valuesMap = new HashMap();
-        valuesMap.put("Television On", isMediaPlayerOn);
+        valuesMap.put("Media Player On", isMediaPlayerOn);
         valuesMap.put("Volume", volume);
         valuesMap.put("Current track", currentTrack);
         valuesMap.put("Current Track Position", currentTrackPosition + "/10" + " secs");
