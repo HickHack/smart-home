@@ -24,7 +24,6 @@ public class MediaPlayerControllerImpl implements ServiceController {
     public MediaPlayerControllerImpl(MQTTService service) {
         this.service = service;
         model = new MediaPlayerModel(service.getName());
-        timer = new Timer();
     }
 
     @Override
@@ -72,8 +71,12 @@ public class MediaPlayerControllerImpl implements ServiceController {
 
     private Status turnMediaPlayerOff() {
         if (model.isMediaPlayerOn()) {
-            model.setMediaPlayerOn(false);
-            model.setVolume(0);
+            model = new MediaPlayerModel(service.getName());
+
+            if (timer != null) {
+                timer.cancel();
+                timer = null;
+            }
 
             service.updateUIOutput("Turning Media Player Off");
             return Status.OK;
@@ -91,6 +94,7 @@ public class MediaPlayerControllerImpl implements ServiceController {
 
             model.setVolume(model.getVolume() - 1);
 
+            service.updateUIOutput("Decreasing volume");
             return Status.OK;
         }
 
@@ -105,7 +109,7 @@ public class MediaPlayerControllerImpl implements ServiceController {
             }
 
             model.setVolume(model.getVolume() + 1);
-
+            service.updateUIOutput("Increasing volume");
             return Status.OK;
         }
 
@@ -114,11 +118,18 @@ public class MediaPlayerControllerImpl implements ServiceController {
 
     private Status selectTrack(int code) {
         if (model.isMediaPlayerOn() && !model.isTrackPlaying()) {
-            model.setTrackPlaying(true);
             model.selectTrack(code);
-            timer.schedule(new MediaPlayerTask(), 0, 10000);
+            service.updateUIStatus();
+            service.updateUIOutput("Playing track " + model.getCurrentTrack());
 
-            service.updateUIOutput("Selecting Track " + code);
+            if (timer != null) {
+                timer.cancel();
+            }
+
+            timer = new Timer();
+            timer.schedule(new MediaPlayerTask(), 0, 1000);
+            model.setTrackPlaying(true);
+
         }
 
         return Status.OK;
@@ -128,9 +139,18 @@ public class MediaPlayerControllerImpl implements ServiceController {
 
         @Override
         public void run() {
-            service.updateUIStatus();
-            service.updateUIOutput("Playing track " + model.getCurrentTrack());
-            service.publish(new ServiceResponse(Status.OK, model, ServiceType.MQTT_MEDIA_PLAYER));
+            if (model.getCurrentTrackPosition() <= 10 && model.isTrackPlaying()) {
+
+                if(model.getCurrentTrackPosition() == 10) {
+                    model.setTrackPlaying(false);
+                    model.setCurrentTrackPosition(0);
+                    service.publish(new ServiceResponse(Status.OK, model, ServiceType.MQTT_MEDIA_PLAYER));
+                } else {
+                    model.setCurrentTrackPosition(model.getCurrentTrackPosition() + 1);
+                }
+
+                service.updateUIStatus();
+            }
         }
 
     }

@@ -15,6 +15,7 @@ public class MediaPlayerModel extends BaseServiceModel {
     private int volume;
     private int currentTrack;
     private PlaylistModel playlist;
+    private int currentTrackPosition;
 
 
     public MediaPlayerModel(String name) {
@@ -65,7 +66,16 @@ public class MediaPlayerModel extends BaseServiceModel {
         valuesMap.put("Television On", isMediaPlayerOn);
         valuesMap.put("Volume", volume);
         valuesMap.put("Current track", currentTrack);
+        valuesMap.put("Current Track Position", currentTrackPosition + "/10" + " secs");
 
         return valuesMap;
+    }
+
+    public void setCurrentTrackPosition(int currentTrackPosition) {
+        this.currentTrackPosition = currentTrackPosition;
+    }
+
+    public int getCurrentTrackPosition() {
+        return currentTrackPosition;
     }
 }

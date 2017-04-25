@@ -16,6 +16,5 @@ public class ServiceHelper {
      */
     public static boolean isValidResponse(ServiceResponse response) {
         return response != null && response.getStatus().equals(ServiceResponse.Status.OK);
-
     }
 }
