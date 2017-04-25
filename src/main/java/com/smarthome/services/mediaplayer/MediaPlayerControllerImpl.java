@@ -29,7 +29,7 @@ public class MediaPlayerControllerImpl implements ServiceController {
 
     @Override
     public ServiceResponse performOperation(ServiceOperation request) {
-        Status status;
+        Status status = null;
 
         switch (request.getOperationCode()) {
             case 0:
@@ -112,9 +112,9 @@ public class MediaPlayerControllerImpl implements ServiceController {
         return Status.FAILED;
     }
 
-
     private Status selectTrack(int code) {
-        if (model.isMediaPlayerOn()) {
+        if (model.isMediaPlayerOn() && !model.isTrackPlaying()) {
+            model.setTrackPlaying(true);
             model.selectTrack(code);
             timer.schedule(new MediaPlayerTask(), 0, 10000);
 
@@ -132,7 +132,6 @@ public class MediaPlayerControllerImpl implements ServiceController {
             service.updateUIOutput("Playing track " + model.getCurrentTrack());
             service.publish(new ServiceResponse(Status.OK, model, ServiceType.MQTT_MEDIA_PLAYER));
         }
+
     }
-
-
 }

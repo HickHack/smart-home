@@ -11,6 +11,7 @@ import java.util.Map;
 public class MediaPlayerModel extends BaseServiceModel {
 
     private boolean isMediaPlayerOn;
+    private boolean isTrackPlaying;
     private int volume;
     private int currentTrack;
     private PlaylistModel playlist;
@@ -28,6 +29,14 @@ public class MediaPlayerModel extends BaseServiceModel {
 
     public void setMediaPlayerOn(boolean mediaPlayerOn) {
         isMediaPlayerOn = mediaPlayerOn;
+    }
+
+    public boolean isTrackPlaying() {
+        return isTrackPlaying;
+    }
+
+    public void setTrackPlaying(boolean trackPlaying) {
+        isTrackPlaying = trackPlaying;
     }
 
     public int getVolume() {
