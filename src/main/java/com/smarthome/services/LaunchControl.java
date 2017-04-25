@@ -102,7 +102,7 @@ public class LaunchControl {
             ServiceInfo info = serviceDiscovery.getServiceInfo(ServiceType.TCP_TELEVISION);
             ServiceRequest request = new ServiceRequest(info, operation);
             request.send();
-            System.out.println("Lighting Response: " + request.getResponse());
+            System.out.println("TV Response: " + request.getResponse());
         } else {
             JOptionPane.showMessageDialog(null, "Failed to trigger Television");
         }

@@ -77,6 +77,7 @@ public class MQTTServiceImpl implements MQTTService, Service {
 
     @Override
     public void updateUIOutput(String message) {
+        updateUIStatus();
         ui.updateOutput(message);
     }
 

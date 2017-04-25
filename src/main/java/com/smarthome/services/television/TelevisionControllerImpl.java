@@ -52,11 +52,23 @@ public class TelevisionControllerImpl implements ServiceController {
         return model.getValuesMap();
     }
 
-    public void pickSong(MediaPlayerModel mediaPlayerModel) {
-        List<Integer> tracks = mediaPlayerModel.getPlaylist().getTracks();
-        Random random = new Random();
-        int track = tracks.get(4) + random.nextInt(tracks.size());
-        service.publish(new ServiceOperation(track));
+    /**
+     * picks a random song from the media player playlist
+     * if a track is not playing and the media player is currently on
+     */
+    public void pickSong(ServiceResponse response) {
+        if (ServiceHelper.isValidResponse(response)) {
+            MediaPlayerModel model = (MediaPlayerModel) response.getModel();
+
+            if (!model.isTrackPlaying() && model.isMediaPlayerOn()) {
+                List<Integer> tracks = model.getPlaylist().getTracks();
+
+                Random random = new Random();
+                int track = tracks.get(4) + random.nextInt(tracks.size());
+                service.updateUIOutput("Selecting track " + track);
+                service.publish(new ServiceOperation(track));
+            }
+         }
     }
 
     private Status turnTelevisionOn() {
@@ -80,6 +92,8 @@ public class TelevisionControllerImpl implements ServiceController {
             model.setVolume(0);
             model.setScreenBrightness(0);
             service.updateUIOutput("Turning TV Off. Volume: " + model.getVolume());
+            service.updateUIOutput("Turning Off Media Player");
+            service.publish(new ServiceOperation(1));
 
             return Status.OK;
         }

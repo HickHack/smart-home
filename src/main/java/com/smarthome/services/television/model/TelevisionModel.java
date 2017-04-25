@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Ian C on 01/04/2017.
+ * @author Ian Cunningham
  */
 public class TelevisionModel extends BaseServiceModel {
 

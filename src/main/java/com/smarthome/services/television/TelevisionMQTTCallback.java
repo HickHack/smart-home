@@ -36,7 +36,7 @@ public class TelevisionMQTTCallback implements MqttCallback {
     public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
         ServiceResponse operation = gson.fromJson(mqttMessage.toString(), ServiceResponse.class);
         service.updateUIOutput("Received mqtt message from " + operation.getType() + " Status " + operation.getStatus());
-        ((TelevisionControllerImpl) service.getController()).pickSong((MediaPlayerModel) operation.getModel());
+        ((TelevisionControllerImpl) service.getController()).pickSong(operation);
     }
 
     @Override

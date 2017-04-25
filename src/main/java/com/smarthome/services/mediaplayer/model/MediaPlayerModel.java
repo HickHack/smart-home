@@ -11,9 +11,11 @@ import java.util.Map;
 public class MediaPlayerModel extends BaseServiceModel {
 
     private boolean isMediaPlayerOn;
+    private boolean isTrackPlaying;
     private int volume;
     private int currentTrack;
     private PlaylistModel playlist;
+    private int currentTrackPosition;
 
 
     public MediaPlayerModel(String name) {
@@ -28,6 +30,14 @@ public class MediaPlayerModel extends BaseServiceModel {
 
     public void setMediaPlayerOn(boolean mediaPlayerOn) {
         isMediaPlayerOn = mediaPlayerOn;
+    }
+
+    public boolean isTrackPlaying() {
+        return isTrackPlaying;
+    }
+
+    public void setTrackPlaying(boolean trackPlaying) {
+        isTrackPlaying = trackPlaying;
     }
 
     public int getVolume() {
@@ -53,10 +63,19 @@ public class MediaPlayerModel extends BaseServiceModel {
     @Override
     public Map getValuesMap() {
         Map valuesMap = new HashMap();
-        valuesMap.put("Television On", isMediaPlayerOn);
+        valuesMap.put("Media Player On", isMediaPlayerOn);
         valuesMap.put("Volume", volume);
         valuesMap.put("Current track", currentTrack);
+        valuesMap.put("Current Track Position", currentTrackPosition + "/10" + " secs");
 
         return valuesMap;
+    }
+
+    public void setCurrentTrackPosition(int currentTrackPosition) {
+        this.currentTrackPosition = currentTrackPosition;
+    }
+
+    public int getCurrentTrackPosition() {
+        return currentTrackPosition;
     }
 }
