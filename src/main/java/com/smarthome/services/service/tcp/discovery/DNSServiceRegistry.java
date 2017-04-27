@@ -10,7 +10,7 @@ import java.net.InetAddress;
 
 /**
  * @author Graham Murray
- * @descripion
+ * @descripion jmDNS Service registration
  */
 
 public class DNSServiceRegistry {
@@ -25,6 +25,10 @@ public class DNSServiceRegistry {
         }
     }
 
+    /**
+     * Register a service with jmDNS
+     * @param service
+     */
     public void register(TCPService service) {
         try {
             ServiceInfo serviceInfo = ServiceInfo.create(service.getType().toString(),
@@ -37,6 +41,10 @@ public class DNSServiceRegistry {
         }
     }
 
+    /**
+     * Unregister a service
+     * @param service
+     */
     public void unregister(TCPService service) {
         ServiceInfo serviceInfo = ServiceInfo.create(service.getType().toString(),
                                                      service.getName(),
