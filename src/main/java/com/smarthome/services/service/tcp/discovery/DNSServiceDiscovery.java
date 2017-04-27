@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * @author Graham Murray
- * @descripion Jacuzzi service discovery implementation
+ * @descripion Service discovery implementation
  * used to find other services.
  */
 public class DNSServiceDiscovery {
@@ -24,6 +24,13 @@ public class DNSServiceDiscovery {
         listeners = new ArrayList<>();
     }
 
+    /**
+     * Get the service information once it has been
+     * discovered.
+     *
+     * @param serviceType
+     * @return ServiceInfo
+     */
     public ServiceInfo getServiceInfo(ServiceType serviceType) {
         for (DNSListener listener : listeners) {
             if (listener.doesServiceExist(serviceType)) {
@@ -34,6 +41,13 @@ public class DNSServiceDiscovery {
         return null;
     }
 
+    /**
+     * Query all listeners to check if they
+     * have discovered a particular service type
+     *
+     * @param serviceType
+     * @return true if discovered false otherwise
+     */
     public boolean hasDiscoveredService(ServiceType serviceType) {
         for (DNSListener listener : listeners) {
             if (listener.doesServiceExist(serviceType)) {
@@ -44,6 +58,10 @@ public class DNSServiceDiscovery {
         return false;
     }
 
+    /**
+     * Register a listener for the specified ServiceType
+     * @param serviceType
+     */
     public void addServiceListener(ServiceType serviceType) {
         try {
             JmDNS jmdns = JmDNS.create(InetAddress.getLocalHost());
@@ -101,6 +119,10 @@ public class DNSServiceDiscovery {
             addService(event.getInfo());
         }
 
+        /**
+         * Add a resolved services info to a list of serviceInfos
+         * @param serviceInfo
+         */
         private void addService(ServiceInfo serviceInfo) {
 
             if (!doesServiceExist(ServiceType.fromString(serviceInfo.getType()))) {
@@ -108,6 +130,13 @@ public class DNSServiceDiscovery {
             }
         }
 
+        /**
+         * Check if a service has been discovered
+         * by the particular listener.
+         *
+         * @param serviceType
+         * @return
+         */
         private boolean doesServiceExist(ServiceType serviceType) {
 
             for(ServiceInfo discoveredService : services) {
