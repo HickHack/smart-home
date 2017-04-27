@@ -37,7 +37,7 @@ public class ServiceUI extends JFrame {
         this.setVisible(true);
     }
 
-    public synchronized void updateOutput(String text) {
+    public synchronized void updateOutput(final String text) {
         Runnable runnable = new Runnable() {
             public void run(){
                 if (!text.equals("")) {
@@ -52,7 +52,7 @@ public class ServiceUI extends JFrame {
         SwingUtilities.invokeLater(runnable);
     }
 
-    public synchronized void updateStatusAttributes(Map<Object, Object> valuesMap) {
+    public synchronized void updateStatusAttributes(final Map<Object, Object> valuesMap) {
         Runnable runnable = new Runnable() {
             public void run(){
                 String text = "";
